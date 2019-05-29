@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-   "github.com/uvalib/virgo4-parser"
+   "github.com/uvalib/virgo4-parser/v4parser"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
