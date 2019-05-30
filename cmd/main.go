@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr"
@@ -9,47 +10,52 @@ import (
 
 type v4Listener struct {
 	*v4parser.BaseVirgoQueryListener
+	searchStack []string
 }
 
 func (s *v4Listener) EnterSearch_string(ctx *v4parser.Search_stringContext) {
-	log.Printf("START Search String %s", ctx.GetPayload())
+	log.Printf("START Search String")
+	s.searchStack = append(s.searchStack, "")
+	log.Printf("search stack size %d", len(s.searchStack))
 }
 func (s *v4Listener) ExitSearch_string(ctx *v4parser.Search_stringContext) {
-	log.Printf("EXIT Search String %s", ctx.GetPayload())
+	log.Printf("EXIT Search String")
+	// pop last node from stack
+	out := s.searchStack[len(s.searchStack)-1]
+	s.searchStack = s.searchStack[:len(s.searchStack)-1]
+	log.Printf("SEARCH STRING: %s", out)
 }
 func (s *v4Listener) ExitSearch_part(ctx *v4parser.Search_partContext) {
-	// out
-	//  t := ctx.GetTokens(ctx.Get
-	// x := ctx.GetRuleIndex()
-	// t := ctx.GetChildren()
-	// log.Printf("COUNT %d", ctx.GetChildCount())
 	st := ctx.GetStop()
 	tt := st.GetTokenType()
 	// log.Printf("START %s STOP %s", st.GetText(), ctx.GetStop().GetText())
 	t := ctx.GetToken(tt, 0)
-	log.Printf("TOKEN %s:%s", t.GetText())
-	// ct
-	// for i := 0; i < ctx.GetChildCount(); i++ {
-	// 	if i > 0 {
-	// 		out += " "
-	// 	}
-	// 	out += ctx.GetChild(i)
-	// }
-	log.Printf("ExitSearch_part: %s", ctx.GetText())
+	val := t.GetText()
+	qs := s.searchStack[len(s.searchStack)-1]
+	s.searchStack = s.searchStack[:len(s.searchStack)-1]
+	if val != `"` {
+		if qs != "" {
+			qs += " "
+		}
+		qs += val
+	} else {
+		qs = fmt.Sprintf(`"%s"`, qs)
+	}
+	s.searchStack = append(s.searchStack, qs)
 }
 
-// func (s *v4Listener) ExitField_type(ctx *v4parser.Field_typeContext) {
-// 	log.Printf("ExitField_type: %s", ctx.GetText())
+// func (s *v4Listener) VisitErrorNode(node antlr.ErrorNode) {
+// 	log.Fatalf("ERROR!! %s", node.GetText())
 // }
-// func (s *v4Listener) ExitField_query(ctx *v4parser.Field_queryContext) {
-// 	log.Printf("ExitField_query: %s", ctx.GetText())
-// }
-// func (s *v4Listener) ExitBoolean_op(ctx *v4parser.Boolean_opContext) {
-// 	log.Printf("ExitBoolean_op: %s", ctx.GetText())
-// }
-// ExitEveryRule is called when any rule is exited.
-func (s *v4Listener) ExitEveryRule(ctx antlr.ParserRuleContext) {
-	// log.Printf("ExitEveryRule: %+v:%s", ctx.GetRuleContext().GetRuleIndex(), ctx.GetText())
+
+func (s *v4Listener) ExitField_type(ctx *v4parser.Field_typeContext) {
+	log.Printf("ExitField_type: %s", ctx.GetText())
+}
+func (s *v4Listener) ExitField_query(ctx *v4parser.Field_queryContext) {
+	log.Printf("ExitField_query: %s", ctx.GetText())
+}
+func (s *v4Listener) ExitBoolean_op(ctx *v4parser.Boolean_opContext) {
+	log.Printf("ExitBoolean_op: %s", ctx.GetText())
 }
 
 /**
