@@ -1,7 +1,6 @@
 // Generated from VirgoQuery.g4 by ANTLR 4.7.
 
 package v4parser // VirgoQuery
-
 import (
 	"fmt"
 	"reflect"
@@ -185,13 +184,15 @@ func (s *QueryContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) 
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *QueryContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case VirgoQueryVisitor:
-		return t.VisitQuery(s)
+func (s *QueryContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.EnterQuery(s)
+	}
+}
 
-	default:
-		return t.VisitChildren(s)
+func (s *QueryContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.ExitQuery(s)
 	}
 }
 
@@ -325,13 +326,15 @@ func (s *Query_partsContext) ToStringTree(ruleNames []string, recog antlr.Recogn
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *Query_partsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case VirgoQueryVisitor:
-		return t.VisitQuery_parts(s)
+func (s *Query_partsContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.EnterQuery_parts(s)
+	}
+}
 
-	default:
-		return t.VisitChildren(s)
+func (s *Query_partsContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.ExitQuery_parts(s)
 	}
 }
 
@@ -508,13 +511,15 @@ func (s *Field_queryContext) ToStringTree(ruleNames []string, recog antlr.Recogn
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *Field_queryContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case VirgoQueryVisitor:
-		return t.VisitField_query(s)
+func (s *Field_queryContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.EnterField_query(s)
+	}
+}
 
-	default:
-		return t.VisitChildren(s)
+func (s *Field_queryContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.ExitField_query(s)
 	}
 }
 
@@ -625,13 +630,15 @@ func (s *Field_typeContext) ToStringTree(ruleNames []string, recog antlr.Recogni
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *Field_typeContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case VirgoQueryVisitor:
-		return t.VisitField_type(s)
+func (s *Field_typeContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.EnterField_type(s)
+	}
+}
 
-	default:
-		return t.VisitChildren(s)
+func (s *Field_typeContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.ExitField_type(s)
 	}
 }
 
@@ -720,13 +727,15 @@ func (s *Boolean_opContext) ToStringTree(ruleNames []string, recog antlr.Recogni
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *Boolean_opContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case VirgoQueryVisitor:
-		return t.VisitBoolean_op(s)
+func (s *Boolean_opContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.EnterBoolean_op(s)
+	}
+}
 
-	default:
-		return t.VisitChildren(s)
+func (s *Boolean_opContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.ExitBoolean_op(s)
 	}
 }
 
@@ -856,13 +865,15 @@ func (s *Search_stringContext) ToStringTree(ruleNames []string, recog antlr.Reco
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *Search_stringContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case VirgoQueryVisitor:
-		return t.VisitSearch_string(s)
+func (s *Search_stringContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.EnterSearch_string(s)
+	}
+}
 
-	default:
-		return t.VisitChildren(s)
+func (s *Search_stringContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.ExitSearch_string(s)
 	}
 }
 
@@ -1048,13 +1059,15 @@ func (s *Search_partContext) ToStringTree(ruleNames []string, recog antlr.Recogn
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *Search_partContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case VirgoQueryVisitor:
-		return t.VisitSearch_part(s)
+func (s *Search_partContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.EnterSearch_part(s)
+	}
+}
 
-	default:
-		return t.VisitChildren(s)
+func (s *Search_partContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.ExitSearch_part(s)
 	}
 }
 
