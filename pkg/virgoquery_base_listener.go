@@ -1,6 +1,7 @@
 // Generated from VirgoQuery.g4 by ANTLR 4.7.
 
-package v4parser // VirgoQuery
+package v4parser
+
 import "github.com/antlr/antlr4/runtime/Go/antlr"
 
 // BaseVirgoQueryListener is a complete listener for a parse tree produced by VirgoQuery.
