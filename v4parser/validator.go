@@ -40,20 +40,21 @@ func (eh *lexerErrorLister) ReportContextSensitivity(recognizer antlr.Parser, df
 	eh.valid = false
 }
 
-// Validator is an implementation of the v4Parser that just checks for errors.
-type Validator struct {
+// validator is an implementation of the v4Parser that just checks for errors.
+type validator struct {
 	*BaseVirgoQueryListener
 	valid bool
 }
 
 // VisitErrorNode is called when the parser encounters an error
-func (v *Validator) VisitErrorNode(node antlr.ErrorNode) {
+func (v *validator) VisitErrorNode(node antlr.ErrorNode) {
 	v.valid = false
 }
 
 // Validate will validate an input string and return true or false
-func (v *Validator) Validate(src string) (bool, string) {
+func Validate(src string) (bool, string) {
 	log.Printf("Validate %s", src)
+	v := validator{}
 	v.valid = true
 	is := antlr.NewInputStream(src)
 	lexer := NewVirgoQueryLexer(is)
@@ -62,7 +63,7 @@ func (v *Validator) Validate(src string) (bool, string) {
 	lexer.AddErrorListener(&lel)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 	virgoQuery := NewVirgoQuery(stream)
-	antlr.ParseTreeWalkerDefault.Walk(v, virgoQuery.Query())
+	antlr.ParseTreeWalkerDefault.Walk(&v, virgoQuery.Query())
 	valid := v.valid && lel.valid
 	return valid, lel.Errors()
 }

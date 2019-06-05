@@ -12,8 +12,7 @@ import (
 func main() {
 	log.Printf("Testing out the validtaion behavior...")
 	simple := "title: {bannanas}"
-	validator := v4parser.Validator{}
-	valid, errors := validator.Validate(simple)
+	valid, errors := v4parser.Validate(simple)
 	if valid == false {
 		log.Printf("ERROR: [%s] is not valid, but is should be: %s", simple, errors)
 	} else {
@@ -21,7 +20,7 @@ func main() {
 	}
 
 	bad := "alligator: {bannana"
-	valid, errors = validator.Validate(bad)
+	valid, errors = v4parser.Validate(bad)
 	if valid == false {
 		log.Printf("SUCCESS: [%s] is not valid: %s", bad, errors)
 	} else {
@@ -29,7 +28,7 @@ func main() {
 	}
 
 	test := `( title : {"susan sontag" OR music title}   AND keyword:{ Maunsell } ) OR author:{ liberty }`
-	valid, errors = validator.Validate(test)
+	valid, errors = v4parser.Validate(test)
 	if valid == false {
 		log.Printf("ERROR: [%s] is not valid, but should be: %s", test, errors)
 	} else {
