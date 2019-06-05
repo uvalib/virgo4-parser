@@ -39,14 +39,12 @@ func (v *solrVisitor) visitRuleNode(rule antlr.RuleNode) interface{} {
 }
 
 func (v *solrVisitor) visitQuery(query antlr.RuleNode) interface{} {
-	log.Printf("VISIT QUERY")
 	first := query.GetChild(0)
 	result := v.Visit(first)
 	return (result)
 }
 
 func (v *solrVisitor) visitQueryParts(ctx antlr.RuleNode) interface{} {
-	log.Printf("VISIT QUERY PARTS")
 	//  query_parts : query_parts boolean_op query_parts
 	if ctx.GetChildCount() == 3 {
 		switch ctx.GetChild(1).(type) {
@@ -56,36 +54,39 @@ func (v *solrVisitor) visitQueryParts(ctx antlr.RuleNode) interface{} {
 			queryop := v.Visit(ctx.GetChild(1))
 			query2 := v.Visit(ctx.GetChild(2))
 			out := fmt.Sprintf(" (%s%s%s) ", query1, queryop, query2)
+			log.Printf("   QP Bool: %s", out)
 			return out
 		}
+
+		// query_parts : LPAREN query_parts RPAREN
 		switch ctx.GetChild(0).(type) {
 		case antlr.TerminalNode:
 			log.Printf("... terminal")
 			query1 := v.Visit(ctx.GetChild(1))
 			out := fmt.Sprintf(" (%s) ", query1)
+			log.Printf("   QP terminal: %s", out)
 			return out
 		}
 	}
 
 	// query_parts: field_query
-	log.Printf("... field")
 	first := ctx.GetChild(0)
 	result := v.Visit(first)
+	log.Printf("QueryPart: %s", result)
 	return result
 }
 
 func (v *solrVisitor) visitFieldQuery(ctx antlr.RuleNode) interface{} {
-	log.Printf("VISIT FIELD QUERY")
 	// field_query : field_type COLON LBRACE search_string RBRACE
 	//   (_query_:"{!edismax qf=$title_qf pf=$title_pf}(certification of teachers )"
 	fieldType := v.Visit(ctx.GetChild(0))
 	query := v.Visit(ctx.GetChild(3))
 	out := v.expand("", fieldType.(string), query)
+	log.Printf("Field Q: %s", out)
 	return out
 }
 
 func (v *solrVisitor) visitFieldType(ctx antlr.RuleNode) interface{} {
-	log.Printf("VISIT FIELD TYPE")
 	// field_type : TITLE | AUTHOR | SUBJECT | KEYWORD
 	childTree := ctx.GetChild(0)
 	t := childTree.GetPayload().(*antlr.CommonToken)
@@ -94,14 +95,14 @@ func (v *solrVisitor) visitFieldType(ctx antlr.RuleNode) interface{} {
 		qf := " qf=$" + fieldType + "_qf"
 		pf := " pf=$" + fieldType + "_pf"
 		out := qf + pf
-		log.Printf(" field type: %s", out)
+		log.Printf("FieldType: %s", out)
 		return out
 	}
 	return ""
 }
 
 func (v *solrVisitor) visitSearchString(ctx antlr.RuleNode) interface{} {
-	log.Printf("VISIT SEARCH %s", ctx)
+	log.Printf("VISIT SEARCH")
 	// search_string : search_string boolean_op search_string
 	// n.b.  this returns an array of three objects.
 	// the first or third of the objects could be either a string or an array of three objects
@@ -109,38 +110,42 @@ func (v *solrVisitor) visitSearchString(ctx antlr.RuleNode) interface{} {
 		switch ctx.GetChild(1).(type) {
 		case *v4parser.Boolean_opContext:
 			log.Printf("...boolen")
-			return ""
+			var out []interface{}
+			out = append(out, v.Visit(ctx.GetChild(0)))
+			out = append(out, v.Visit(ctx.GetChild(1)))
+			out = append(out, v.Visit(ctx.GetChild(2)))
+			log.Printf("Bool Str: %s", out)
+			return out
 		}
 	}
 
 	// search_string : LPAREN search_string RPAREN
 	//               | search_string search_part
 	//               | search_part
-	log.Printf("Non-Boolean string; children: %d", ctx.GetChildCount())
 	out := ""
 	for i := 0; i < ctx.GetChildCount(); i++ {
 		child := ctx.GetChild(i)
-		log.Printf("Child %d:%s", i, child)
 		if i > 0 {
 			out += " "
 		}
 		childResult := v.Visit(child).(string)
+		log.Printf("   SEARCH Child %d:%s", i, childResult)
 		out += childResult
 	}
-	log.Printf("search string: %s", out)
+	log.Printf("search string: [%s]", out)
 	return out
 }
 
 func (v *solrVisitor) visitChildren(node antlr.RuleNode) interface{} {
-	log.Printf("VISIT CHILDREN")
 	out := ""
 	for i := 0; i < node.GetChildCount(); i++ {
 		child := node.GetChild(i)
-		childResult := v.Visit(child)
-		if out != "" {
+		childResult := v.Visit(child).(string)
+		log.Printf("    visit children result: [%s]", childResult)
+		if out != "" && childResult != `"` && out != `"` {
 			out += " "
 		}
-		out += childResult.(string)
+		out += childResult
 	}
 
 	return out
@@ -189,7 +194,7 @@ func (v *solrVisitor) expand(inStr string, fieldType string, query interface{}) 
 func main() {
 	log.Printf("Testing out teh validtaion behavior...")
 	simple := "title: {bannanas}"
-	hard := `( title : {"susan sontag" OR music title}   AND keyword:{ Maunsell } ) OR author:{ liberty }`
+	hard := `title : {"susan sontag" OR music title}`
 	v := solrVisitor{}
 	is := antlr.NewInputStream(hard)
 	lexer := v4parser.NewVirgoQueryLexer(is)
@@ -197,6 +202,7 @@ func main() {
 	queryTree := v4parser.NewVirgoQuery(stream)
 	out := v.Visit(queryTree.Query())
 	log.Printf("RESULT: %s", out.(string))
+	log.Printf(" ==================================================== ")
 	log.Printf(" ==================================================== ")
 
 	validator := v4parser.Validator{}
