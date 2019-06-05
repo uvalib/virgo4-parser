@@ -36,7 +36,6 @@ func (v *solrVisitor) visitRuleNode(rule antlr.RuleNode) interface{} {
 	default:
 		return v.visitChildren(rule)
 	}
-	return ""
 }
 
 func (v *solrVisitor) visitQuery(query antlr.RuleNode) interface{} {
@@ -50,7 +49,7 @@ func (v *solrVisitor) visitQueryParts(ctx antlr.RuleNode) interface{} {
 	log.Printf("VISIT QUERY PARTS")
 	//  query_parts : query_parts boolean_op query_parts
 	if ctx.GetChildCount() == 3 {
-		switch ctx.(type) {
+		switch ctx.GetChild(1).(type) {
 		case *v4parser.Boolean_opContext:
 			log.Printf("... boolean")
 			query1 := v.Visit(ctx.GetChild(0))
@@ -58,6 +57,8 @@ func (v *solrVisitor) visitQueryParts(ctx antlr.RuleNode) interface{} {
 			query2 := v.Visit(ctx.GetChild(2))
 			out := fmt.Sprintf(" (%s%s%s) ", query1, queryop, query2)
 			return out
+		}
+		switch ctx.GetChild(0).(type) {
 		case antlr.TerminalNode:
 			log.Printf("... terminal")
 			query1 := v.Visit(ctx.GetChild(1))
@@ -100,23 +101,49 @@ func (v *solrVisitor) visitFieldType(ctx antlr.RuleNode) interface{} {
 }
 
 func (v *solrVisitor) visitSearchString(ctx antlr.RuleNode) interface{} {
-	log.Printf("VISIT SEARCH")
-	return ""
+	log.Printf("VISIT SEARCH %s", ctx)
+	// search_string : search_string boolean_op search_string
+	// n.b.  this returns an array of three objects.
+	// the first or third of the objects could be either a string or an array of three objects
+	if ctx.GetChildCount() == 3 {
+		switch ctx.GetChild(1).(type) {
+		case *v4parser.Boolean_opContext:
+			log.Printf("...boolen")
+			return ""
+		}
+	}
+
+	// search_string : LPAREN search_string RPAREN
+	//               | search_string search_part
+	//               | search_part
+	log.Printf("Non-Boolean string; children: %d", ctx.GetChildCount())
+	out := ""
+	for i := 0; i < ctx.GetChildCount(); i++ {
+		child := ctx.GetChild(i)
+		log.Printf("Child %d:%s", i, child)
+		if i > 0 {
+			out += " "
+		}
+		childResult := v.Visit(child).(string)
+		out += childResult
+	}
+	log.Printf("search string: %s", out)
+	return out
 }
 
-func (v *solrVisitor) visitChildren(ctx antlr.RuleNode) interface{} {
+func (v *solrVisitor) visitChildren(node antlr.RuleNode) interface{} {
 	log.Printf("VISIT CHILDREN")
-	// Value result = null;
-	//      int n = node.getChildCount();
-	//      for (int i=0; i<n; i++)
-	//      {
-	//          ParseTree c = node.getChild(i);
-	//          Value childResult = this.visit(c);
-	//          result = aggregateResult(result, childResult);
-	//      }
+	out := ""
+	for i := 0; i < node.GetChildCount(); i++ {
+		child := node.GetChild(i)
+		childResult := v.Visit(child)
+		if out != "" {
+			out += " "
+		}
+		out += childResult.(string)
+	}
 
-	//      return result;
-	return ""
+	return out
 }
 
 func (v *solrVisitor) visitTerminal(terminal antlr.TerminalNode) interface{} {
@@ -169,6 +196,7 @@ func main() {
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 	queryTree := v4parser.NewVirgoQuery(stream)
 	v.Visit(queryTree.Query())
+	log.Printf(" ==================================================== ")
 
 	validator := v4parser.Validator{}
 	valid, errors := validator.Validate(simple)
