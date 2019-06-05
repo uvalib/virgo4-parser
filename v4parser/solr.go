@@ -202,6 +202,7 @@ func ConvertToSolr(src string) (string, error) {
 	sp := solrParser{}
 	is := antlr.NewInputStream(src)
 	lexer := NewVirgoQueryLexer(is)
+	lexer.RemoveErrorListeners()
 	lel := lexerErrorLister{}
 	lel.valid = true
 	lexer.AddErrorListener(&lel)
