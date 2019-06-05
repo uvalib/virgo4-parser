@@ -168,15 +168,14 @@ func (v *solrVisitor) expand(inStr string, fieldType string, query interface{}) 
 	rt := reflect.TypeOf(query)
 	kind := rt.Kind()
 	if kind == reflect.Array || kind == reflect.Slice {
-		// Value[] parts = query.asArray();
-		// sb.append("(");
-		// expand(sb, fieldType, parts[0]);
-		// sb.append(parts[1].asString());
-		// expand(sb, fieldType, parts[2]);
-		// sb.append(")");
-		// TODO
-		log.Printf("EXPAND TYPE %s", kind)
-		return ""
+		parts := reflect.ValueOf(query)
+		out := fmt.Sprintf("%s(", inStr)
+		out = v.expand(out, fieldType, parts.Index(0))
+		out += fmt.Sprintf("%s", parts.Index(1))
+		out = v.expand(out, fieldType, parts.Index(2))
+		out = fmt.Sprintf("%s)", out)
+		log.Printf("EXPAND TYPE %s to %s", kind, out)
+		return out
 	}
 
 	out := fmt.Sprintf(`%s_query_:"{!edismax%s}(%s)"`, inStr, fieldType, query)
@@ -190,12 +189,14 @@ func (v *solrVisitor) expand(inStr string, fieldType string, query interface{}) 
 func main() {
 	log.Printf("Testing out teh validtaion behavior...")
 	simple := "title: {bannanas}"
+	hard := `( title : {"susan sontag" OR music title}   AND keyword:{ Maunsell } ) OR author:{ liberty }`
 	v := solrVisitor{}
-	is := antlr.NewInputStream(simple)
+	is := antlr.NewInputStream(hard)
 	lexer := v4parser.NewVirgoQueryLexer(is)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 	queryTree := v4parser.NewVirgoQuery(stream)
-	v.Visit(queryTree.Query())
+	out := v.Visit(queryTree.Query())
+	log.Printf("RESULT: %s", out.(string))
 	log.Printf(" ==================================================== ")
 
 	validator := v4parser.Validator{}
