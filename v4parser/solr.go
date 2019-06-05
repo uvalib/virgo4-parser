@@ -1,6 +1,7 @@
 package v4parser
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"reflect"
@@ -139,7 +140,7 @@ func (v *solrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 	if ctx.GetChildCount() == 3 {
 		switch ctx.GetChild(1).(type) {
 		case *Boolean_opContext:
-			log.Printf("...boolen")
+			// log.Printf("...boolen")
 			var out []interface{}
 			out = append(out, v.visit(ctx.GetChild(0)))
 			out = append(out, v.visit(ctx.GetChild(1)))
@@ -191,7 +192,7 @@ func (v *solrParser) visitTerminal(terminal antlr.TerminalNode) interface{} {
 }
 
 // ConvertToSolr convert a v4 query string into solr
-func ConvertToSolr(src string) string {
+func ConvertToSolr(src string) (string, error) {
 	// EXAMPLE: `( title : {"susan sontag" OR music title}   AND keyword:{ Maunsell } ) OR author:{ liberty }`
 	// SOLR: ( ( ((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
 	//              AND _query_:"{!edismax}(Maunsell)") )  OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")
@@ -201,9 +202,17 @@ func ConvertToSolr(src string) string {
 	sp := solrParser{}
 	is := antlr.NewInputStream(src)
 	lexer := NewVirgoQueryLexer(is)
+	lel := lexerErrorLister{}
+	lel.valid = true
+	lexer.AddErrorListener(&lel)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 	queryTree := NewVirgoQuery(stream)
 	raw := sp.visit(queryTree.Query())
+
+	if lel.valid == false {
+		return "", errors.New(lel.Errors())
+	}
+
 	out := strings.TrimSpace(raw.(string))
 	var re = regexp.MustCompile(`\s+`)
 	out = re.ReplaceAllString(out, " ")
@@ -211,5 +220,5 @@ func ConvertToSolr(src string) string {
 	out = re.ReplaceAllString(out, "((")
 	re = regexp.MustCompile(`\s*\)\s*\)`)
 	out = re.ReplaceAllString(out, "))")
-	return out
+	return out, nil
 }

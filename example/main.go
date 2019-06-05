@@ -36,6 +36,17 @@ func main() {
 	}
 
 	log.Printf("Testing out SOLR conversion behavior...")
-	solrOut := v4parser.ConvertToSolr(test)
-	log.Printf("Result: %s", solrOut)
+	solrOut, err := v4parser.ConvertToSolr(test)
+	if err != nil {
+		log.Printf("FAIL: %s", err.Error())
+	} else {
+		log.Printf("Result: %s", solrOut)
+	}
+
+	solrOut, err = v4parser.ConvertToSolr(bad)
+	if err != nil {
+		log.Printf("SUCCESS: Detected error %s", err.Error())
+	} else {
+		log.Printf("FAIL: Parsed invalid string to %s", solrOut)
+	}
 }
