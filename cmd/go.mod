@@ -5,6 +5,6 @@ require (
 	github.com/uvalib/virgo4-parser/v4parser v0.0.0
 )
 
-replace github.com/uvalib/virgo4-parser/v4parser => ../pkg
+replace github.com/uvalib/virgo4-parser/v4parser => ../v4parser
 
 go 1.12
