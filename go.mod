@@ -1,4 +1,4 @@
-module github.com/uvalib/virgo4-parser/v4parser
+module github.com/uvalib/virgo4-parser
 
 go 1.12
 
