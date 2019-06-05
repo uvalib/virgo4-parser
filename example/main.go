@@ -86,6 +86,36 @@ func (v *solrVisitor) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 	return out
 }
 
+// This expands the search_string inside a field_query
+// if there are no boolean operators in the search_string it merely takes the words and characters
+// of the search_string and adds the proper query fragment syntax as required by Solr.
+// e.g. going from this:     title : {susan sontag}
+//      to this:             _query_:"{!edismax qf=$title_qf pf=$title_pf}(susan sontag)"
+// if there ARE boolean operators in the search_string they need to be (recursively) expanded and
+// wrapped with parentheses to ensure proper operator precedence
+// e.g. this field_query :   title : {"susan sontag" OR music title}
+//expands to this:           (_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
+func (v *solrVisitor) expand(inStr string, fieldType string, query interface{}) string {
+	log.Printf("==> Expand inStr %s for field %s, q: %s", inStr, fieldType, query)
+	rt := reflect.TypeOf(query)
+	kind := rt.Kind()
+	if kind == reflect.Array || kind == reflect.Slice {
+		log.Printf("ARRAY")
+		parts := reflect.ValueOf(query)
+		out := fmt.Sprintf("%s(", inStr)
+		out = v.expand(out, fieldType, parts.Index(0))
+		out += fmt.Sprintf("%s", parts.Index(1))
+		out = v.expand(out, fieldType, parts.Index(2))
+		out = fmt.Sprintf("%s)", out)
+		log.Printf("EXPAND TYPE %s to %s", kind, out)
+		return out
+	}
+
+	out := fmt.Sprintf(`%s_query_:"{!edismax%s}(%s)"`, inStr, fieldType, query)
+	log.Printf("EXPANDED: %s", out)
+	return out
+}
+
 func (v *solrVisitor) visitFieldType(ctx antlr.RuleNode) interface{} {
 	// field_type : TITLE | AUTHOR | SUBJECT | KEYWORD
 	childTree := ctx.GetChild(0)
@@ -153,39 +183,11 @@ func (v *solrVisitor) visitChildren(node antlr.RuleNode) interface{} {
 
 func (v *solrVisitor) visitTerminal(terminal antlr.TerminalNode) interface{} {
 	if terminal.GetSymbol().GetTokenType() == v4parser.VirgoQueryLexerQUOTE {
-		return `"`
+		return `\"`
 	} else if terminal.GetSymbol().GetTokenType() == v4parser.VirgoQueryLexerBOOLEAN {
 		return fmt.Sprintf(" %s ", terminal.GetText())
 	}
 	return terminal.GetText()
-}
-
-// This expands the search_string inside a field_query
-// if there are no boolean operators in the search_string it merely takes the words and characters
-// of the search_string and adds the proper query fragment syntax as required by Solr.
-// e.g. going from this:     title : {susan sontag}
-//      to this:             _query_:"{!edismax qf=$title_qf pf=$title_pf}(susan sontag)"
-// if there ARE boolean operators in the search_string they need to be (recursively) expanded and
-// wrapped with parentheses to ensure proper operator precedence
-// e.g. this field_query :   title : {"susan sontag" OR music title}
-//expands to this:           (_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
-func (v *solrVisitor) expand(inStr string, fieldType string, query interface{}) string {
-	rt := reflect.TypeOf(query)
-	kind := rt.Kind()
-	if kind == reflect.Array || kind == reflect.Slice {
-		parts := reflect.ValueOf(query)
-		out := fmt.Sprintf("%s(", inStr)
-		out = v.expand(out, fieldType, parts.Index(0))
-		out += fmt.Sprintf("%s", parts.Index(1))
-		out = v.expand(out, fieldType, parts.Index(2))
-		out = fmt.Sprintf("%s)", out)
-		log.Printf("EXPAND TYPE %s to %s", kind, out)
-		return out
-	}
-
-	out := fmt.Sprintf(`%s_query_:"{!edismax%s}(%s)"`, inStr, fieldType, query)
-	log.Printf("EXPANDED: %s", out)
-	return out
 }
 
 /**
