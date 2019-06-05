@@ -1,10 +1,77 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
+	"github.com/antlr/antlr4/runtime/Go/antlr"
 	"github.com/uvalib/virgo4-parser/v4parser"
 )
+
+type solrVisitor struct{}
+
+func (v *solrVisitor) Visit(tree antlr.Tree) interface{} {
+	switch val := tree.(type) {
+	case antlr.RuleNode:
+		return v.visitRuleNode(val)
+	case antlr.TerminalNode:
+		return v.visitTerminal(val)
+	}
+	return nil
+}
+
+func (v *solrVisitor) visitRuleNode(rule antlr.RuleNode) interface{} {
+	switch rule.(type) {
+	case *v4parser.QueryContext:
+		return v.visitQuery(rule)
+	case *v4parser.Query_partsContext:
+		return v.visitQueryParts(rule)
+	}
+	return ""
+}
+
+func (v *solrVisitor) visitQuery(query antlr.RuleNode) interface{} {
+	log.Printf("VISIT QUERY")
+	first := query.GetChild(0)
+	result := v.Visit(first)
+	return (result)
+}
+
+func (v *solrVisitor) visitQueryParts(ctx antlr.RuleNode) interface{} {
+	log.Printf("VISIT QUERY PARTS")
+	//  query_parts : query_parts boolean_op query_parts
+	if ctx.GetChildCount() == 3 {
+		switch ctx.(type) {
+		case *v4parser.Boolean_opContext:
+			log.Printf("... boolean")
+			query1 := v.Visit(ctx.GetChild(0))
+			queryop := v.Visit(ctx.GetChild(1))
+			query2 := v.Visit(ctx.GetChild(2))
+			out := fmt.Sprintf(" (%s%s%s) ", query1, queryop, query2)
+			return out
+		case antlr.TerminalNode:
+			log.Printf("... terminal")
+			query1 := v.Visit(ctx.GetChild(1))
+			out := fmt.Sprintf(" (%s) ", query1)
+			return out
+		}
+	}
+
+	// query_parts: field_query
+	log.Printf("... field")
+	first := ctx.GetChild(0)
+	result := v.Visit(first)
+	return result
+}
+
+func (v *solrVisitor) visitTerminal(terminal antlr.TerminalNode) interface{} {
+	if terminal.GetSymbol().GetTokenType() == v4parser.VirgoQueryLexerQUOTE {
+		return `"`
+	} else if terminal.GetSymbol().GetTokenType() == v4parser.VirgoQueryLexerBOOLEAN {
+		return fmt.Sprintf(" %s ", terminal.GetText())
+	}
+	return terminal.GetText()
+}
 
 /**
  * MAIN
@@ -12,6 +79,13 @@ import (
 func main() {
 	log.Printf("Testing out teh validtaion behavior...")
 	simple := "title: {bannanas}"
+	v := solrVisitor{}
+	is := antlr.NewInputStream(simple)
+	lexer := v4parser.NewVirgoQueryLexer(is)
+	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+	queryTree := v4parser.NewVirgoQuery(stream)
+	v.Visit(queryTree.Query())
+
 	validator := v4parser.Validator{}
 	valid, errors := validator.Validate(simple)
 	if valid == false {
