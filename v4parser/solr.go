@@ -101,6 +101,9 @@ func (v *solrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 func (v *solrParser) expand(inStr string, fieldType string, query interface{}) string {
 	// log.Printf("==> Expand inStr %s for field %s, q: %s", inStr, fieldType, query)
 	rt := reflect.TypeOf(query)
+	if rt == nil {
+		return ""
+	}
 	kind := rt.Kind()
 	if kind == reflect.Array || kind == reflect.Slice {
 		parts := reflect.ValueOf(query)

@@ -35,8 +35,15 @@ func main() {
 		log.Printf("SUCCESS: [%s] is valid", test)
 	}
 
-	log.Printf("Testing out SOLR conversion behavior...")
-	solrOut, err := v4parser.ConvertToSolr(test)
+	log.Printf("\n\nTesting out SOLR conversion behavior...")
+	solrOut, err := v4parser.ConvertToSolr(simple)
+	if err != nil {
+		log.Printf("FAIL: %s", err.Error())
+	} else {
+		log.Printf("Result: %s", solrOut)
+	}
+
+	solrOut, err = v4parser.ConvertToSolr(test)
 	if err != nil {
 		log.Printf("FAIL: %s", err.Error())
 	} else {
