@@ -14,10 +14,10 @@ import (
 // SolrParser will parse the query string into a format compatable with a solr search
 type SolrParser struct {
 	// basic info about the parsed query, can be useful to the caller (e.g. checking for title-only searches)
-	titles int
-	authors int
-	subjects int
-	keywords int
+	Titles int
+	Authors int
+	Subjects int
+	Keywords int
 }
 
 func (v *SolrParser) visit(tree antlr.Tree) interface{} {
@@ -135,14 +135,14 @@ func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
 
 	switch fieldType {
 	case "title":
-		v.titles++
+		v.Titles++
 	case "author":
-		v.authors++
+		v.Authors++
 	case "subject":
-		v.subjects++
+		v.Subjects++
 	case "keyword":
 		// return now as keyword does not use qf/pf
-		v.keywords++
+		v.Keywords++
 		return ""
 	default:
 		return ""
