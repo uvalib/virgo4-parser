@@ -3,7 +3,7 @@ package v4parser
 import (
 	"errors"
 	"fmt"
-	"log"
+	//"log"
 	"reflect"
 	"regexp"
 	"strings"
@@ -13,11 +13,11 @@ import (
 
 // SolrParser will parse the query string into a format compatable with a solr search
 type SolrParser struct {
-	// basic info about the parsed query, can be useful to the caller (e.g. checking for title-only searches)
-	Titles int
-	Authors int
-	Subjects int
-	Keywords int
+	// basic info about the parsed query, can be useful to the caller
+	Titles []string
+	Authors []string
+	Subjects []string
+	Keywords []string
 }
 
 func (v *SolrParser) visit(tree antlr.Tree) interface{} {
@@ -88,9 +88,12 @@ func (v *SolrParser) visitQueryParts(ctx antlr.RuleNode) interface{} {
 func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 	// field_query : field_type COLON LBRACE search_string RBRACE
 	//   (_query_:"{!edismax qf=$title_qf pf=$title_pf}(certification of teachers )"
-	fieldType := v.visit(ctx.GetChild(0))
+
+	// grey magic to get field name so we can populate per-field query slices in expand()
+	fieldType := ctx.GetChild(0).GetChild(0).GetPayload().(*antlr.CommonToken).GetText()
+	fieldAttr := v.visit(ctx.GetChild(0))
 	query := v.visit(ctx.GetChild(3))
-	out := v.expand("", fieldType.(string), query)
+	out := v.expand("", fieldType, fieldAttr.(string), query)
 	// log.Printf("Field Q: %s", out)
 	return out
 }
@@ -104,7 +107,7 @@ func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 // wrapped with parentheses to ensure proper operator precedence
 // e.g. this field_query :   title : {"susan sontag" OR music title}
 //expands to this:           (_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
-func (v *SolrParser) expand(inStr string, fieldType string, query interface{}) string {
+func (v *SolrParser) expand(inStr string, fieldType string, fieldAttr string, query interface{}) string {
 	// log.Printf("==> Expand inStr %s for field %s, q: %s", inStr, fieldType, query)
 	rt := reflect.TypeOf(query)
 	if rt == nil {
@@ -114,15 +117,29 @@ func (v *SolrParser) expand(inStr string, fieldType string, query interface{}) s
 	if kind == reflect.Array || kind == reflect.Slice {
 		parts := reflect.ValueOf(query)
 		out := fmt.Sprintf("%s(", inStr)
-		out = v.expand(out, fieldType, parts.Index(0))
+		out = v.expand(out, fieldType, fieldAttr, parts.Index(0))
 		out += fmt.Sprintf("%s", parts.Index(1))
-		out = v.expand(out, fieldType, parts.Index(2))
+		out = v.expand(out, fieldType, fieldAttr, parts.Index(2))
 		out = fmt.Sprintf("%s)", out)
 		// log.Printf("EXPAND TYPE %s to %s", kind, out)
 		return out
 	}
 
-	out := fmt.Sprintf(`%s_query_:"{!edismax%s}(%s)"`, inStr, fieldType, query)
+	val := fmt.Sprintf("%s", query)
+	//log.Printf("fieldType = [%s]  query = [%s]  kind = [%s]  val = [%s]", fieldType, query, kind, val)
+
+	switch fieldType {
+	case "title":
+		v.Titles = append(v.Titles, val)
+	case "author":
+		v.Authors = append(v.Authors, val)
+	case "subject":
+		v.Subjects = append(v.Subjects, val)
+	case "keyword":
+		v.Keywords = append(v.Keywords, val)
+	}
+
+	out := fmt.Sprintf(`%s_query_:"{!edismax%s}(%s)"`, inStr, fieldAttr, query)
 	// log.Printf("EXPANDED: %s", out)
 	return out
 }
@@ -132,28 +149,14 @@ func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
 	childTree := ctx.GetChild(0)
 	t := childTree.GetPayload().(*antlr.CommonToken)
 	fieldType := t.GetText()
-
-	switch fieldType {
-	case "title":
-		v.Titles++
-	case "author":
-		v.Authors++
-	case "subject":
-		v.Subjects++
-	case "keyword":
-		// return now as keyword does not use qf/pf
-		v.Keywords++
-		return ""
-	default:
-		return ""
+	if fieldType == "title" || fieldType == "author" || fieldType == "subject" {
+		qf := " qf=$" + fieldType + "_qf"
+		pf := " pf=$" + fieldType + "_pf"
+		out := qf + pf
+		// log.Printf("FieldType: %s", out)
+		return out
 	}
-
-	// should just be title/author/subject at this point
-	qf := " qf=$" + fieldType + "_qf"
-	pf := " pf=$" + fieldType + "_pf"
-	out := qf + pf
-	// log.Printf("FieldType: %s", out)
-	return out
+	return ""
 }
 
 func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
@@ -211,6 +214,7 @@ func (v *SolrParser) visitTerminal(terminal antlr.TerminalNode) interface{} {
 	} else if terminal.GetSymbol().GetTokenType() == VirgoQueryLexerBOOLEAN {
 		return fmt.Sprintf(" %s ", terminal.GetText())
 	}
+
 	return terminal.GetText()
 }
 
@@ -220,7 +224,7 @@ func ConvertToSolrWithParser(sp *SolrParser, src string) (string, error) {
 	// SOLR: ( ( ((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
 	//              AND _query_:"{!edismax}(Maunsell)") )  OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")
 	//
-	log.Printf("Convert to Solr: %s", src)
+	//log.Printf("Convert to Solr: %s", src)
 
 	is := antlr.NewInputStream(src)
 	lexer := NewVirgoQueryLexer(is)

@@ -39,26 +39,26 @@ func TestSolrValid(t *testing.T) {
 }
 
 func TestSolrValidCounts(t *testing.T) {
-	q := `( title: {pepperoni OR "artichoke hearts"} AND subject:{pizza} ) OR (subject:{calzone} AND (keyword:{italian} NOT author:{fieri}))`
+	q := `( title: {pepperoni OR artichoke hearts} AND subject:{pizza} ) OR (subject:{calzone} AND (keyword:{italian} NOT author:{fieri}))`
 	sp := v4parser.SolrParser{}
 	_, err := v4parser.ConvertToSolrWithParser(&sp, q)
 	if err != nil {
 		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
 	}
-	tcnt := 1
+	tcnt := 2
 	acnt := 1
 	scnt := 2
 	kcnt := 1
-	if sp.Titles != tcnt {
-		t.Errorf("%s title count fail. Expected %d, Actual: %d", q, tcnt, sp.Titles)
+	if len(sp.Titles) != tcnt {
+		t.Errorf("%s title count fail. Expected %d, Actual: %d, List: %v", q, tcnt, len(sp.Titles), sp.Titles)
 	}
-	if sp.Authors != acnt {
-		t.Errorf("%s author count fail. Expected %d, Actual: %d", q, acnt, sp.Authors)
+	if len(sp.Authors) != acnt {
+		t.Errorf("%s author count fail. Expected %d, Actual: %d, List: %v", q, acnt, len(sp.Authors), sp.Authors)
 	}
-	if sp.Subjects != scnt {
-		t.Errorf("%s subject count fail. Expected %d, Actual: %d", q, scnt, sp.Subjects)
+	if len(sp.Subjects) != scnt {
+		t.Errorf("%s subject count fail. Expected %d, Actual: %d, List: %v", q, scnt, len(sp.Subjects), sp.Subjects)
 	}
-	if sp.Keywords != kcnt {
-		t.Errorf("%s keyword count fail. Expected %d, Actual: %d", q, kcnt, sp.Keywords)
+	if len(sp.Keywords) != kcnt {
+		t.Errorf("%s keyword count fail. Expected %d, Actual: %d, List: %v", q, kcnt, len(sp.Keywords), sp.Keywords)
 	}
 }
