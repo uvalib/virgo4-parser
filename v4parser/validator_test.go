@@ -14,6 +14,30 @@ func TestSimpleValid(t *testing.T) {
 	}
 }
 
+func TestSpecialCharsValid(t *testing.T) {
+	q := "title:{A = B}"
+	valid, errors := v4parser.Validate(q)
+	if valid == false {
+		t.Errorf("%s did not validate, but should have: %s", q, errors)
+	}
+}
+
+func TestIdentifierValid(t *testing.T) {
+	q := `identifier:{35007007606860  OR 9780754645733 OR 38083649 OR 2001020407  OR u5670758 OR "KJE5602.C73 2012"}`
+	valid, errors := v4parser.Validate(q)
+	if valid == false {
+		t.Errorf("%s did not validate, but should have: %s", q, errors)
+	}
+}
+
+func TestIdentifierInvalid(t *testing.T) {
+	q := `identifier:{35007007606860  OR 9780754645733 OR 38083649 OR 2001020407  OR u5670758 OR KJE5602.C73 2012"}`
+	valid, _ := v4parser.Validate(q)
+	if valid == true {
+		t.Errorf("%s validate, but should not have", q)
+	}
+}
+
 func TestSimpleInvalidCrash(t *testing.T) {
 	q := "title: bannanas"
 	valid, _ := v4parser.Validate(q)

@@ -18,6 +18,32 @@ func TestSolrSimpleValid(t *testing.T) {
 	}
 }
 
+func TestSolrSpecialCharsValid(t *testing.T) {
+	q := "title:{A = B}"
+	expect := `_query_:"{!edismax qf=$title_qf pf=$title_pf}(A = B)"`
+
+	solr, err := v4parser.ConvertToSolr(q)
+	if err != nil {
+		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
+	}
+	if solr != expect {
+		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
+	}
+}
+
+func TestSolrIdentifierValid(t *testing.T) {
+	q := `identifier:{35007007606860}`
+	expect := `_query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(35007007606860)"`
+
+	solr, err := v4parser.ConvertToSolr(q)
+	if err != nil {
+		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
+	}
+	if solr != expect {
+		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
+	}
+}
+
 func TestSolrSimpleInvalid(t *testing.T) {
 	q := "title: {bannanas} OR author: bad"
 	solr, err := v4parser.ConvertToSolr(q)

@@ -15,7 +15,7 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 18, 81, 4,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 19, 81, 4,
 	2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7, 4,
 	8, 9, 8, 3, 2, 3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 26,
 	10, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 3, 32, 10, 3, 12, 3, 14, 3, 35, 11, 3,
@@ -24,7 +24,7 @@ var parserATN = []uint16{
 	3, 7, 7, 7, 61, 10, 7, 12, 7, 14, 7, 64, 11, 7, 3, 8, 3, 8, 3, 8, 3, 8,
 	3, 8, 3, 8, 5, 8, 72, 10, 8, 3, 8, 3, 8, 7, 8, 76, 10, 8, 12, 8, 14, 8,
 	79, 11, 8, 3, 8, 2, 5, 4, 12, 14, 9, 2, 4, 6, 8, 10, 12, 14, 2, 3, 3, 2,
-	7, 10, 2, 80, 2, 16, 3, 2, 2, 2, 4, 25, 3, 2, 2, 2, 6, 36, 3, 2, 2, 2,
+	7, 11, 2, 80, 2, 16, 3, 2, 2, 2, 4, 25, 3, 2, 2, 2, 6, 36, 3, 2, 2, 2,
 	8, 42, 3, 2, 2, 2, 10, 44, 3, 2, 2, 2, 12, 52, 3, 2, 2, 2, 14, 71, 3, 2,
 	2, 2, 16, 17, 5, 4, 3, 2, 17, 18, 7, 2, 2, 3, 18, 3, 3, 2, 2, 2, 19, 20,
 	8, 3, 1, 2, 20, 21, 7, 3, 2, 2, 21, 22, 5, 4, 3, 2, 22, 23, 7, 4, 2, 2,
@@ -32,8 +32,8 @@ var parserATN = []uint16{
 	2, 2, 2, 26, 33, 3, 2, 2, 2, 27, 28, 12, 5, 2, 2, 28, 29, 5, 10, 6, 2,
 	29, 30, 5, 4, 3, 6, 30, 32, 3, 2, 2, 2, 31, 27, 3, 2, 2, 2, 32, 35, 3,
 	2, 2, 2, 33, 31, 3, 2, 2, 2, 33, 34, 3, 2, 2, 2, 34, 5, 3, 2, 2, 2, 35,
-	33, 3, 2, 2, 2, 36, 37, 5, 8, 5, 2, 37, 38, 7, 6, 2, 2, 38, 39, 7, 11,
-	2, 2, 39, 40, 5, 12, 7, 2, 40, 41, 7, 16, 2, 2, 41, 7, 3, 2, 2, 2, 42,
+	33, 3, 2, 2, 2, 36, 37, 5, 8, 5, 2, 37, 38, 7, 6, 2, 2, 38, 39, 7, 12,
+	2, 2, 39, 40, 5, 12, 7, 2, 40, 41, 7, 17, 2, 2, 41, 7, 3, 2, 2, 2, 42,
 	43, 9, 2, 2, 2, 43, 9, 3, 2, 2, 2, 44, 45, 7, 5, 2, 2, 45, 11, 3, 2, 2,
 	2, 46, 47, 8, 7, 1, 2, 47, 48, 7, 3, 2, 2, 48, 49, 5, 12, 7, 2, 49, 50,
 	7, 4, 2, 2, 50, 53, 3, 2, 2, 2, 51, 53, 5, 14, 8, 2, 52, 46, 3, 2, 2, 2,
@@ -41,10 +41,10 @@ var parserATN = []uint16{
 	10, 6, 2, 56, 57, 5, 12, 7, 6, 57, 61, 3, 2, 2, 2, 58, 59, 12, 4, 2, 2,
 	59, 61, 5, 14, 8, 2, 60, 54, 3, 2, 2, 2, 60, 58, 3, 2, 2, 2, 61, 64, 3,
 	2, 2, 2, 62, 60, 3, 2, 2, 2, 62, 63, 3, 2, 2, 2, 63, 13, 3, 2, 2, 2, 64,
-	62, 3, 2, 2, 2, 65, 66, 8, 8, 1, 2, 66, 67, 7, 13, 2, 2, 67, 68, 5, 14,
-	8, 2, 68, 69, 7, 13, 2, 2, 69, 72, 3, 2, 2, 2, 70, 72, 7, 17, 2, 2, 71,
+	62, 3, 2, 2, 2, 65, 66, 8, 8, 1, 2, 66, 67, 7, 14, 2, 2, 67, 68, 5, 14,
+	8, 2, 68, 69, 7, 14, 2, 2, 69, 72, 3, 2, 2, 2, 70, 72, 7, 18, 2, 2, 71,
 	65, 3, 2, 2, 2, 71, 70, 3, 2, 2, 2, 72, 77, 3, 2, 2, 2, 73, 74, 12, 4,
-	2, 2, 74, 76, 7, 17, 2, 2, 75, 73, 3, 2, 2, 2, 76, 79, 3, 2, 2, 2, 77,
+	2, 2, 74, 76, 7, 18, 2, 2, 75, 73, 3, 2, 2, 2, 76, 79, 3, 2, 2, 2, 77,
 	75, 3, 2, 2, 2, 77, 78, 3, 2, 2, 2, 78, 15, 3, 2, 2, 2, 79, 77, 3, 2, 2,
 	2, 9, 25, 33, 52, 60, 62, 71, 77,
 }
@@ -53,12 +53,12 @@ var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
 
 var literalNames = []string{
 	"", "", "", "", "':'", "'title'", "'author'", "'subject'", "'keyword'",
-	"'{'", "", "'\"'", "'['", "']'", "'}'",
+	"'identifier'", "'{'", "", "'\"'", "'['", "']'", "'}'",
 }
 var symbolicNames = []string{
 	"", "LPAREN", "RPAREN", "BOOLEAN", "COLON", "TITLE", "AUTHOR", "SUBJECT",
-	"KEYWORD", "LBRACE", "WS1", "QUOTE", "LBRACKET", "RBRACKET", "RBRACE",
-	"SEARCH_WORD", "WS2",
+	"KEYWORD", "IDENTIFIER", "LBRACE", "WS1", "QUOTE", "LBRACKET", "RBRACKET",
+	"RBRACE", "SEARCH_WORD", "WS2",
 }
 
 var ruleNames = []string{
@@ -102,14 +102,15 @@ const (
 	VirgoQueryAUTHOR      = 6
 	VirgoQuerySUBJECT     = 7
 	VirgoQueryKEYWORD     = 8
-	VirgoQueryLBRACE      = 9
-	VirgoQueryWS1         = 10
-	VirgoQueryQUOTE       = 11
-	VirgoQueryLBRACKET    = 12
-	VirgoQueryRBRACKET    = 13
-	VirgoQueryRBRACE      = 14
-	VirgoQuerySEARCH_WORD = 15
-	VirgoQueryWS2         = 16
+	VirgoQueryIDENTIFIER  = 9
+	VirgoQueryLBRACE      = 10
+	VirgoQueryWS1         = 11
+	VirgoQueryQUOTE       = 12
+	VirgoQueryLBRACKET    = 13
+	VirgoQueryRBRACKET    = 14
+	VirgoQueryRBRACE      = 15
+	VirgoQuerySEARCH_WORD = 16
+	VirgoQueryWS2         = 17
 )
 
 // VirgoQuery rules.
@@ -407,7 +408,7 @@ func (p *VirgoQuery) query_parts(_p int) (localctx IQuery_partsContext) {
 			p.Match(VirgoQueryRPAREN)
 		}
 
-	case VirgoQueryTITLE, VirgoQueryAUTHOR, VirgoQuerySUBJECT, VirgoQueryKEYWORD:
+	case VirgoQueryTITLE, VirgoQueryAUTHOR, VirgoQuerySUBJECT, VirgoQueryKEYWORD, VirgoQueryIDENTIFIER:
 		{
 			p.SetState(22)
 			p.Field_query()
@@ -651,6 +652,10 @@ func (s *Field_typeContext) KEYWORD() antlr.TerminalNode {
 	return s.GetToken(VirgoQueryKEYWORD, 0)
 }
 
+func (s *Field_typeContext) IDENTIFIER() antlr.TerminalNode {
+	return s.GetToken(VirgoQueryIDENTIFIER, 0)
+}
+
 func (s *Field_typeContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -706,7 +711,7 @@ func (p *VirgoQuery) Field_type() (localctx IField_typeContext) {
 	p.SetState(40)
 	_la = p.GetTokenStream().LA(1)
 
-	if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<VirgoQueryTITLE)|(1<<VirgoQueryAUTHOR)|(1<<VirgoQuerySUBJECT)|(1<<VirgoQueryKEYWORD))) != 0) {
+	if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<VirgoQueryTITLE)|(1<<VirgoQueryAUTHOR)|(1<<VirgoQuerySUBJECT)|(1<<VirgoQueryKEYWORD)|(1<<VirgoQueryIDENTIFIER))) != 0) {
 		p.GetErrorHandler().RecoverInline(p)
 	} else {
 		p.GetErrorHandler().ReportMatch(p)
