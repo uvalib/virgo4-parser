@@ -18,6 +18,7 @@ type SolrParser struct {
 	Authors []string
 	Subjects []string
 	Keywords []string
+	Identifiers []string
 }
 
 func (v *SolrParser) visit(tree antlr.Tree) interface{} {
@@ -137,6 +138,8 @@ func (v *SolrParser) expand(inStr string, fieldType string, fieldAttr string, qu
 		v.Subjects = append(v.Subjects, val)
 	case "keyword":
 		v.Keywords = append(v.Keywords, val)
+	case "identifier":
+		v.Identifiers = append(v.Identifiers, val)
 	}
 
 	out := fmt.Sprintf(`%s_query_:"{!edismax%s}(%s)"`, inStr, fieldAttr, query)
@@ -145,18 +148,22 @@ func (v *SolrParser) expand(inStr string, fieldType string, fieldAttr string, qu
 }
 
 func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
-	// field_type : TITLE | AUTHOR | SUBJECT | KEYWORD
+	// field_type : TITLE | AUTHOR | SUBJECT | KEYWORD | IDENTIFIER
 	childTree := ctx.GetChild(0)
 	t := childTree.GetPayload().(*antlr.CommonToken)
 	fieldType := t.GetText()
-	if fieldType == "title" || fieldType == "author" || fieldType == "subject" {
-		qf := " qf=$" + fieldType + "_qf"
-		pf := " pf=$" + fieldType + "_pf"
-		out := qf + pf
-		// log.Printf("FieldType: %s", out)
-		return out
+
+	// keyword field type doesn't need qf/pf parameter
+	if fieldType == "keyword" {
+		return ""
 	}
-	return ""
+
+	// all other field types need qf/pf parameters based on their names
+	qf := " qf=$" + fieldType + "_qf"
+	pf := " pf=$" + fieldType + "_pf"
+	out := qf + pf
+	// log.Printf("FieldType: %s", out)
+	return out
 }
 
 func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
