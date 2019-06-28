@@ -153,4 +153,3 @@ func TestSolrDateMixed(t *testing.T) {
 		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
 	}
 }
-
