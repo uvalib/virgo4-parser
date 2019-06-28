@@ -1,4 +1,4 @@
-// Generated from VirgoQuery.g4 by ANTLR 4.7.
+// Code generated from VirgoQuery.g4 by ANTLR 4.7.2. DO NOT EDIT.
 
 package v4parser // VirgoQuery
 import "github.com/antlr/antlr4/runtime/Go/antlr"
@@ -23,7 +23,19 @@ func (v *BaseVirgoQueryVisitor) VisitField_type(ctx *Field_typeContext) interfac
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseVirgoQueryVisitor) VisitRange_field_type(ctx *Range_field_typeContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseVirgoQueryVisitor) VisitBoolean_op(ctx *Boolean_opContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseVirgoQueryVisitor) VisitRange_search_string(ctx *Range_search_stringContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseVirgoQueryVisitor) VisitDate_string(ctx *Date_stringContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

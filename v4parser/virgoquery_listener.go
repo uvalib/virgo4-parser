@@ -1,4 +1,4 @@
-// Generated from VirgoQuery.g4 by ANTLR 4.7.
+// Code generated from VirgoQuery.g4 by ANTLR 4.7.2. DO NOT EDIT.
 
 package v4parser // VirgoQuery
 import "github.com/antlr/antlr4/runtime/Go/antlr"
@@ -19,8 +19,17 @@ type VirgoQueryListener interface {
 	// EnterField_type is called when entering the field_type production.
 	EnterField_type(c *Field_typeContext)
 
+	// EnterRange_field_type is called when entering the range_field_type production.
+	EnterRange_field_type(c *Range_field_typeContext)
+
 	// EnterBoolean_op is called when entering the boolean_op production.
 	EnterBoolean_op(c *Boolean_opContext)
+
+	// EnterRange_search_string is called when entering the range_search_string production.
+	EnterRange_search_string(c *Range_search_stringContext)
+
+	// EnterDate_string is called when entering the date_string production.
+	EnterDate_string(c *Date_stringContext)
 
 	// EnterSearch_string is called when entering the search_string production.
 	EnterSearch_string(c *Search_stringContext)
@@ -40,8 +49,17 @@ type VirgoQueryListener interface {
 	// ExitField_type is called when exiting the field_type production.
 	ExitField_type(c *Field_typeContext)
 
+	// ExitRange_field_type is called when exiting the range_field_type production.
+	ExitRange_field_type(c *Range_field_typeContext)
+
 	// ExitBoolean_op is called when exiting the boolean_op production.
 	ExitBoolean_op(c *Boolean_opContext)
+
+	// ExitRange_search_string is called when exiting the range_search_string production.
+	ExitRange_search_string(c *Range_search_stringContext)
+
+	// ExitDate_string is called when exiting the date_string production.
+	ExitDate_string(c *Date_stringContext)
 
 	// ExitSearch_string is called when exiting the search_string production.
 	ExitSearch_string(c *Search_stringContext)

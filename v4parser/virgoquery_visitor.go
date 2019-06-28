@@ -1,4 +1,4 @@
-// Generated from VirgoQuery.g4 by ANTLR 4.7.
+// Code generated from VirgoQuery.g4 by ANTLR 4.7.2. DO NOT EDIT.
 
 package v4parser // VirgoQuery
 import "github.com/antlr/antlr4/runtime/Go/antlr"
@@ -19,8 +19,17 @@ type VirgoQueryVisitor interface {
 	// Visit a parse tree produced by VirgoQuery#field_type.
 	VisitField_type(ctx *Field_typeContext) interface{}
 
+	// Visit a parse tree produced by VirgoQuery#range_field_type.
+	VisitRange_field_type(ctx *Range_field_typeContext) interface{}
+
 	// Visit a parse tree produced by VirgoQuery#boolean_op.
 	VisitBoolean_op(ctx *Boolean_opContext) interface{}
+
+	// Visit a parse tree produced by VirgoQuery#range_search_string.
+	VisitRange_search_string(ctx *Range_search_stringContext) interface{}
+
+	// Visit a parse tree produced by VirgoQuery#date_string.
+	VisitDate_string(ctx *Date_stringContext) interface{}
 
 	// Visit a parse tree produced by VirgoQuery#search_string.
 	VisitSearch_string(ctx *Search_stringContext) interface{}

@@ -1,4 +1,4 @@
-// Generated from VirgoQuery.g4 by ANTLR 4.7.
+// Code generated from VirgoQuery.g4 by ANTLR 4.7.2. DO NOT EDIT.
 
 package v4parser // VirgoQuery
 import (
@@ -15,55 +15,68 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 19, 81, 4,
-	2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7, 4,
-	8, 9, 8, 3, 2, 3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 26,
-	10, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 3, 32, 10, 3, 12, 3, 14, 3, 35, 11, 3,
-	3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 5, 3, 5, 3, 6, 3, 6, 3, 7, 3, 7,
-	3, 7, 3, 7, 3, 7, 3, 7, 5, 7, 53, 10, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7,
-	3, 7, 7, 7, 61, 10, 7, 12, 7, 14, 7, 64, 11, 7, 3, 8, 3, 8, 3, 8, 3, 8,
-	3, 8, 3, 8, 5, 8, 72, 10, 8, 3, 8, 3, 8, 7, 8, 76, 10, 8, 12, 8, 14, 8,
-	79, 11, 8, 3, 8, 2, 5, 4, 12, 14, 9, 2, 4, 6, 8, 10, 12, 14, 2, 3, 3, 2,
-	7, 11, 2, 80, 2, 16, 3, 2, 2, 2, 4, 25, 3, 2, 2, 2, 6, 36, 3, 2, 2, 2,
-	8, 42, 3, 2, 2, 2, 10, 44, 3, 2, 2, 2, 12, 52, 3, 2, 2, 2, 14, 71, 3, 2,
-	2, 2, 16, 17, 5, 4, 3, 2, 17, 18, 7, 2, 2, 3, 18, 3, 3, 2, 2, 2, 19, 20,
-	8, 3, 1, 2, 20, 21, 7, 3, 2, 2, 21, 22, 5, 4, 3, 2, 22, 23, 7, 4, 2, 2,
-	23, 26, 3, 2, 2, 2, 24, 26, 5, 6, 4, 2, 25, 19, 3, 2, 2, 2, 25, 24, 3,
-	2, 2, 2, 26, 33, 3, 2, 2, 2, 27, 28, 12, 5, 2, 2, 28, 29, 5, 10, 6, 2,
-	29, 30, 5, 4, 3, 6, 30, 32, 3, 2, 2, 2, 31, 27, 3, 2, 2, 2, 32, 35, 3,
-	2, 2, 2, 33, 31, 3, 2, 2, 2, 33, 34, 3, 2, 2, 2, 34, 5, 3, 2, 2, 2, 35,
-	33, 3, 2, 2, 2, 36, 37, 5, 8, 5, 2, 37, 38, 7, 6, 2, 2, 38, 39, 7, 12,
-	2, 2, 39, 40, 5, 12, 7, 2, 40, 41, 7, 17, 2, 2, 41, 7, 3, 2, 2, 2, 42,
-	43, 9, 2, 2, 2, 43, 9, 3, 2, 2, 2, 44, 45, 7, 5, 2, 2, 45, 11, 3, 2, 2,
-	2, 46, 47, 8, 7, 1, 2, 47, 48, 7, 3, 2, 2, 48, 49, 5, 12, 7, 2, 49, 50,
-	7, 4, 2, 2, 50, 53, 3, 2, 2, 2, 51, 53, 5, 14, 8, 2, 52, 46, 3, 2, 2, 2,
-	52, 51, 3, 2, 2, 2, 53, 62, 3, 2, 2, 2, 54, 55, 12, 5, 2, 2, 55, 56, 5,
-	10, 6, 2, 56, 57, 5, 12, 7, 6, 57, 61, 3, 2, 2, 2, 58, 59, 12, 4, 2, 2,
-	59, 61, 5, 14, 8, 2, 60, 54, 3, 2, 2, 2, 60, 58, 3, 2, 2, 2, 61, 64, 3,
-	2, 2, 2, 62, 60, 3, 2, 2, 2, 62, 63, 3, 2, 2, 2, 63, 13, 3, 2, 2, 2, 64,
-	62, 3, 2, 2, 2, 65, 66, 8, 8, 1, 2, 66, 67, 7, 14, 2, 2, 67, 68, 5, 14,
-	8, 2, 68, 69, 7, 14, 2, 2, 69, 72, 3, 2, 2, 2, 70, 72, 7, 18, 2, 2, 71,
-	65, 3, 2, 2, 2, 71, 70, 3, 2, 2, 2, 72, 77, 3, 2, 2, 2, 73, 74, 12, 4,
-	2, 2, 74, 76, 7, 18, 2, 2, 75, 73, 3, 2, 2, 2, 76, 79, 3, 2, 2, 2, 77,
-	75, 3, 2, 2, 2, 77, 78, 3, 2, 2, 2, 78, 15, 3, 2, 2, 2, 79, 77, 3, 2, 2,
-	2, 9, 25, 33, 52, 60, 62, 71, 77,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 25, 110,
+	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
+	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 3, 2, 3, 2, 3, 2, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 32, 10, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 7, 3, 38, 10, 3, 12, 3, 14, 3, 41, 11, 3, 3, 4, 3, 4, 3, 4, 3, 4, 3,
+	4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 5, 4, 55, 10, 4, 3, 5, 3,
+	5, 3, 6, 3, 6, 3, 7, 3, 7, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3,
+	8, 3, 8, 5, 8, 72, 10, 8, 3, 9, 3, 9, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10,
+	3, 10, 5, 10, 82, 10, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 7,
+	10, 90, 10, 10, 12, 10, 14, 10, 93, 11, 10, 3, 11, 3, 11, 3, 11, 3, 11,
+	3, 11, 3, 11, 5, 11, 101, 10, 11, 3, 11, 3, 11, 7, 11, 105, 10, 11, 12,
+	11, 14, 11, 108, 11, 11, 3, 11, 2, 5, 4, 18, 20, 12, 2, 4, 6, 8, 10, 12,
+	14, 16, 18, 20, 2, 3, 3, 2, 7, 11, 2, 110, 2, 22, 3, 2, 2, 2, 4, 31, 3,
+	2, 2, 2, 6, 54, 3, 2, 2, 2, 8, 56, 3, 2, 2, 2, 10, 58, 3, 2, 2, 2, 12,
+	60, 3, 2, 2, 2, 14, 71, 3, 2, 2, 2, 16, 73, 3, 2, 2, 2, 18, 81, 3, 2, 2,
+	2, 20, 100, 3, 2, 2, 2, 22, 23, 5, 4, 3, 2, 23, 24, 7, 2, 2, 3, 24, 3,
+	3, 2, 2, 2, 25, 26, 8, 3, 1, 2, 26, 27, 7, 3, 2, 2, 27, 28, 5, 4, 3, 2,
+	28, 29, 7, 4, 2, 2, 29, 32, 3, 2, 2, 2, 30, 32, 5, 6, 4, 2, 31, 25, 3,
+	2, 2, 2, 31, 30, 3, 2, 2, 2, 32, 39, 3, 2, 2, 2, 33, 34, 12, 5, 2, 2, 34,
+	35, 5, 12, 7, 2, 35, 36, 5, 4, 3, 6, 36, 38, 3, 2, 2, 2, 37, 33, 3, 2,
+	2, 2, 38, 41, 3, 2, 2, 2, 39, 37, 3, 2, 2, 2, 39, 40, 3, 2, 2, 2, 40, 5,
+	3, 2, 2, 2, 41, 39, 3, 2, 2, 2, 42, 43, 5, 8, 5, 2, 43, 44, 7, 6, 2, 2,
+	44, 45, 7, 13, 2, 2, 45, 46, 5, 18, 10, 2, 46, 47, 7, 18, 2, 2, 47, 55,
+	3, 2, 2, 2, 48, 49, 5, 10, 6, 2, 49, 50, 7, 6, 2, 2, 50, 51, 7, 13, 2,
+	2, 51, 52, 5, 14, 8, 2, 52, 53, 7, 18, 2, 2, 53, 55, 3, 2, 2, 2, 54, 42,
+	3, 2, 2, 2, 54, 48, 3, 2, 2, 2, 55, 7, 3, 2, 2, 2, 56, 57, 9, 2, 2, 2,
+	57, 9, 3, 2, 2, 2, 58, 59, 7, 12, 2, 2, 59, 11, 3, 2, 2, 2, 60, 61, 7,
+	5, 2, 2, 61, 13, 3, 2, 2, 2, 62, 63, 5, 16, 9, 2, 63, 64, 7, 21, 2, 2,
+	64, 65, 5, 16, 9, 2, 65, 72, 3, 2, 2, 2, 66, 67, 7, 23, 2, 2, 67, 72, 5,
+	16, 9, 2, 68, 69, 7, 22, 2, 2, 69, 72, 5, 16, 9, 2, 70, 72, 5, 16, 9, 2,
+	71, 62, 3, 2, 2, 2, 71, 66, 3, 2, 2, 2, 71, 68, 3, 2, 2, 2, 71, 70, 3,
+	2, 2, 2, 72, 15, 3, 2, 2, 2, 73, 74, 7, 24, 2, 2, 74, 17, 3, 2, 2, 2, 75,
+	76, 8, 10, 1, 2, 76, 77, 7, 3, 2, 2, 77, 78, 5, 18, 10, 2, 78, 79, 7, 4,
+	2, 2, 79, 82, 3, 2, 2, 2, 80, 82, 5, 20, 11, 2, 81, 75, 3, 2, 2, 2, 81,
+	80, 3, 2, 2, 2, 82, 91, 3, 2, 2, 2, 83, 84, 12, 5, 2, 2, 84, 85, 5, 12,
+	7, 2, 85, 86, 5, 18, 10, 6, 86, 90, 3, 2, 2, 2, 87, 88, 12, 4, 2, 2, 88,
+	90, 5, 20, 11, 2, 89, 83, 3, 2, 2, 2, 89, 87, 3, 2, 2, 2, 90, 93, 3, 2,
+	2, 2, 91, 89, 3, 2, 2, 2, 91, 92, 3, 2, 2, 2, 92, 19, 3, 2, 2, 2, 93, 91,
+	3, 2, 2, 2, 94, 95, 8, 11, 1, 2, 95, 96, 7, 15, 2, 2, 96, 97, 5, 20, 11,
+	2, 97, 98, 7, 15, 2, 2, 98, 101, 3, 2, 2, 2, 99, 101, 7, 19, 2, 2, 100,
+	94, 3, 2, 2, 2, 100, 99, 3, 2, 2, 2, 101, 106, 3, 2, 2, 2, 102, 103, 12,
+	4, 2, 2, 103, 105, 7, 19, 2, 2, 104, 102, 3, 2, 2, 2, 105, 108, 3, 2, 2,
+	2, 106, 104, 3, 2, 2, 2, 106, 107, 3, 2, 2, 2, 107, 21, 3, 2, 2, 2, 108,
+	106, 3, 2, 2, 2, 11, 31, 39, 54, 71, 81, 89, 91, 100, 106,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
 
 var literalNames = []string{
-	"", "", "", "", "':'", "'title'", "'author'", "'subject'", "'keyword'",
-	"'identifier'", "'{'", "", "'\"'", "'['", "']'", "'}'",
+	"", "", "", "", "", "'title'", "'author'", "'subject'", "'keyword'", "'identifier'",
+	"'date'", "", "", "'\"'", "'['", "']'",
 }
 var symbolicNames = []string{
 	"", "LPAREN", "RPAREN", "BOOLEAN", "COLON", "TITLE", "AUTHOR", "SUBJECT",
-	"KEYWORD", "IDENTIFIER", "LBRACE", "WS1", "QUOTE", "LBRACKET", "RBRACKET",
-	"RBRACE", "SEARCH_WORD", "WS2",
+	"KEYWORD", "IDENTIFIER", "DATE", "LBRACE", "WS1", "QUOTE", "LBRACKET",
+	"RBRACKET", "RBRACE", "SEARCH_WORD", "WS2", "TO", "AFTER", "BEFORE", "DATE_STRING",
+	"WS3",
 }
 
 var ruleNames = []string{
-	"query", "query_parts", "field_query", "field_type", "boolean_op", "search_string",
-	"search_part",
+	"query", "query_parts", "field_query", "field_type", "range_field_type",
+	"boolean_op", "range_search_string", "date_string", "search_string", "search_part",
 }
 var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
 
@@ -103,25 +116,34 @@ const (
 	VirgoQuerySUBJECT     = 7
 	VirgoQueryKEYWORD     = 8
 	VirgoQueryIDENTIFIER  = 9
-	VirgoQueryLBRACE      = 10
-	VirgoQueryWS1         = 11
-	VirgoQueryQUOTE       = 12
-	VirgoQueryLBRACKET    = 13
-	VirgoQueryRBRACKET    = 14
-	VirgoQueryRBRACE      = 15
-	VirgoQuerySEARCH_WORD = 16
-	VirgoQueryWS2         = 17
+	VirgoQueryDATE        = 10
+	VirgoQueryLBRACE      = 11
+	VirgoQueryWS1         = 12
+	VirgoQueryQUOTE       = 13
+	VirgoQueryLBRACKET    = 14
+	VirgoQueryRBRACKET    = 15
+	VirgoQueryRBRACE      = 16
+	VirgoQuerySEARCH_WORD = 17
+	VirgoQueryWS2         = 18
+	VirgoQueryTO          = 19
+	VirgoQueryAFTER       = 20
+	VirgoQueryBEFORE      = 21
+	VirgoQueryDATE_STRING = 22
+	VirgoQueryWS3         = 23
 )
 
 // VirgoQuery rules.
 const (
-	VirgoQueryRULE_query         = 0
-	VirgoQueryRULE_query_parts   = 1
-	VirgoQueryRULE_field_query   = 2
-	VirgoQueryRULE_field_type    = 3
-	VirgoQueryRULE_boolean_op    = 4
-	VirgoQueryRULE_search_string = 5
-	VirgoQueryRULE_search_part   = 6
+	VirgoQueryRULE_query               = 0
+	VirgoQueryRULE_query_parts         = 1
+	VirgoQueryRULE_field_query         = 2
+	VirgoQueryRULE_field_type          = 3
+	VirgoQueryRULE_range_field_type    = 4
+	VirgoQueryRULE_boolean_op          = 5
+	VirgoQueryRULE_range_search_string = 6
+	VirgoQueryRULE_date_string         = 7
+	VirgoQueryRULE_search_string       = 8
+	VirgoQueryRULE_search_part         = 9
 )
 
 // IQueryContext is an interface to support dynamic dispatch.
@@ -228,11 +250,11 @@ func (p *VirgoQuery) Query() (localctx IQueryContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(14)
+		p.SetState(20)
 		p.query_parts(0)
 	}
 	{
-		p.SetState(15)
+		p.SetState(21)
 		p.Match(VirgoQueryEOF)
 	}
 
@@ -390,27 +412,27 @@ func (p *VirgoQuery) query_parts(_p int) (localctx IQuery_partsContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(23)
+	p.SetState(29)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case VirgoQueryLPAREN:
 		{
-			p.SetState(18)
+			p.SetState(24)
 			p.Match(VirgoQueryLPAREN)
 		}
 		{
-			p.SetState(19)
+			p.SetState(25)
 			p.query_parts(0)
 		}
 		{
-			p.SetState(20)
+			p.SetState(26)
 			p.Match(VirgoQueryRPAREN)
 		}
 
-	case VirgoQueryTITLE, VirgoQueryAUTHOR, VirgoQuerySUBJECT, VirgoQueryKEYWORD, VirgoQueryIDENTIFIER:
+	case VirgoQueryTITLE, VirgoQueryAUTHOR, VirgoQuerySUBJECT, VirgoQueryKEYWORD, VirgoQueryIDENTIFIER, VirgoQueryDATE:
 		{
-			p.SetState(22)
+			p.SetState(28)
 			p.Field_query()
 		}
 
@@ -418,7 +440,7 @@ func (p *VirgoQuery) query_parts(_p int) (localctx IQuery_partsContext) {
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(31)
+	p.SetState(37)
 	p.GetErrorHandler().Sync(p)
 	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 1, p.GetParserRuleContext())
 
@@ -430,22 +452,22 @@ func (p *VirgoQuery) query_parts(_p int) (localctx IQuery_partsContext) {
 			_prevctx = localctx
 			localctx = NewQuery_partsContext(p, _parentctx, _parentState)
 			p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_query_parts)
-			p.SetState(25)
+			p.SetState(31)
 
 			if !(p.Precpred(p.GetParserRuleContext(), 3)) {
 				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 3)", ""))
 			}
 			{
-				p.SetState(26)
+				p.SetState(32)
 				p.Boolean_op()
 			}
 			{
-				p.SetState(27)
+				p.SetState(33)
 				p.query_parts(4)
 			}
 
 		}
-		p.SetState(33)
+		p.SetState(39)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 1, p.GetParserRuleContext())
 	}
@@ -523,6 +545,26 @@ func (s *Field_queryContext) RBRACE() antlr.TerminalNode {
 	return s.GetToken(VirgoQueryRBRACE, 0)
 }
 
+func (s *Field_queryContext) Range_field_type() IRange_field_typeContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IRange_field_typeContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IRange_field_typeContext)
+}
+
+func (s *Field_queryContext) Range_search_string() IRange_search_stringContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IRange_search_stringContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IRange_search_stringContext)
+}
+
 func (s *Field_queryContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -573,26 +615,58 @@ func (p *VirgoQuery) Field_query() (localctx IField_queryContext) {
 		}
 	}()
 
-	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(34)
-		p.Field_type()
-	}
-	{
-		p.SetState(35)
-		p.Match(VirgoQueryCOLON)
-	}
-	{
-		p.SetState(36)
-		p.Match(VirgoQueryLBRACE)
-	}
-	{
-		p.SetState(37)
-		p.search_string(0)
-	}
-	{
-		p.SetState(38)
-		p.Match(VirgoQueryRBRACE)
+	p.SetState(52)
+	p.GetErrorHandler().Sync(p)
+
+	switch p.GetTokenStream().LA(1) {
+	case VirgoQueryTITLE, VirgoQueryAUTHOR, VirgoQuerySUBJECT, VirgoQueryKEYWORD, VirgoQueryIDENTIFIER:
+		p.EnterOuterAlt(localctx, 1)
+		{
+			p.SetState(40)
+			p.Field_type()
+		}
+		{
+			p.SetState(41)
+			p.Match(VirgoQueryCOLON)
+		}
+		{
+			p.SetState(42)
+			p.Match(VirgoQueryLBRACE)
+		}
+		{
+			p.SetState(43)
+			p.search_string(0)
+		}
+		{
+			p.SetState(44)
+			p.Match(VirgoQueryRBRACE)
+		}
+
+	case VirgoQueryDATE:
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(46)
+			p.Range_field_type()
+		}
+		{
+			p.SetState(47)
+			p.Match(VirgoQueryCOLON)
+		}
+		{
+			p.SetState(48)
+			p.Match(VirgoQueryLBRACE)
+		}
+		{
+			p.SetState(49)
+			p.Range_search_string()
+		}
+		{
+			p.SetState(50)
+			p.Match(VirgoQueryRBRACE)
+		}
+
+	default:
+		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 
 	return localctx
@@ -708,14 +782,117 @@ func (p *VirgoQuery) Field_type() (localctx IField_typeContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(40)
-	_la = p.GetTokenStream().LA(1)
+	{
+		p.SetState(54)
+		_la = p.GetTokenStream().LA(1)
 
-	if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<VirgoQueryTITLE)|(1<<VirgoQueryAUTHOR)|(1<<VirgoQuerySUBJECT)|(1<<VirgoQueryKEYWORD)|(1<<VirgoQueryIDENTIFIER))) != 0) {
-		p.GetErrorHandler().RecoverInline(p)
-	} else {
-		p.GetErrorHandler().ReportMatch(p)
-		p.Consume()
+		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<VirgoQueryTITLE)|(1<<VirgoQueryAUTHOR)|(1<<VirgoQuerySUBJECT)|(1<<VirgoQueryKEYWORD)|(1<<VirgoQueryIDENTIFIER))) != 0) {
+			p.GetErrorHandler().RecoverInline(p)
+		} else {
+			p.GetErrorHandler().ReportMatch(p)
+			p.Consume()
+		}
+	}
+
+	return localctx
+}
+
+// IRange_field_typeContext is an interface to support dynamic dispatch.
+type IRange_field_typeContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsRange_field_typeContext differentiates from other interfaces.
+	IsRange_field_typeContext()
+}
+
+type Range_field_typeContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyRange_field_typeContext() *Range_field_typeContext {
+	var p = new(Range_field_typeContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = VirgoQueryRULE_range_field_type
+	return p
+}
+
+func (*Range_field_typeContext) IsRange_field_typeContext() {}
+
+func NewRange_field_typeContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Range_field_typeContext {
+	var p = new(Range_field_typeContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = VirgoQueryRULE_range_field_type
+
+	return p
+}
+
+func (s *Range_field_typeContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Range_field_typeContext) DATE() antlr.TerminalNode {
+	return s.GetToken(VirgoQueryDATE, 0)
+}
+
+func (s *Range_field_typeContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Range_field_typeContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *Range_field_typeContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.EnterRange_field_type(s)
+	}
+}
+
+func (s *Range_field_typeContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.ExitRange_field_type(s)
+	}
+}
+
+func (s *Range_field_typeContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case VirgoQueryVisitor:
+		return t.VisitRange_field_type(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *VirgoQuery) Range_field_type() (localctx IRange_field_typeContext) {
+	localctx = NewRange_field_typeContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 8, VirgoQueryRULE_range_field_type)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(56)
+		p.Match(VirgoQueryDATE)
 	}
 
 	return localctx
@@ -795,7 +972,7 @@ func (s *Boolean_opContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *VirgoQuery) Boolean_op() (localctx IBoolean_opContext) {
 	localctx = NewBoolean_opContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, VirgoQueryRULE_boolean_op)
+	p.EnterRule(localctx, 10, VirgoQueryRULE_boolean_op)
 
 	defer func() {
 		p.ExitRule()
@@ -815,8 +992,284 @@ func (p *VirgoQuery) Boolean_op() (localctx IBoolean_opContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(42)
+		p.SetState(58)
 		p.Match(VirgoQueryBOOLEAN)
+	}
+
+	return localctx
+}
+
+// IRange_search_stringContext is an interface to support dynamic dispatch.
+type IRange_search_stringContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsRange_search_stringContext differentiates from other interfaces.
+	IsRange_search_stringContext()
+}
+
+type Range_search_stringContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyRange_search_stringContext() *Range_search_stringContext {
+	var p = new(Range_search_stringContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = VirgoQueryRULE_range_search_string
+	return p
+}
+
+func (*Range_search_stringContext) IsRange_search_stringContext() {}
+
+func NewRange_search_stringContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Range_search_stringContext {
+	var p = new(Range_search_stringContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = VirgoQueryRULE_range_search_string
+
+	return p
+}
+
+func (s *Range_search_stringContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Range_search_stringContext) AllDate_string() []IDate_stringContext {
+	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*IDate_stringContext)(nil)).Elem())
+	var tst = make([]IDate_stringContext, len(ts))
+
+	for i, t := range ts {
+		if t != nil {
+			tst[i] = t.(IDate_stringContext)
+		}
+	}
+
+	return tst
+}
+
+func (s *Range_search_stringContext) Date_string(i int) IDate_stringContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IDate_stringContext)(nil)).Elem(), i)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IDate_stringContext)
+}
+
+func (s *Range_search_stringContext) TO() antlr.TerminalNode {
+	return s.GetToken(VirgoQueryTO, 0)
+}
+
+func (s *Range_search_stringContext) BEFORE() antlr.TerminalNode {
+	return s.GetToken(VirgoQueryBEFORE, 0)
+}
+
+func (s *Range_search_stringContext) AFTER() antlr.TerminalNode {
+	return s.GetToken(VirgoQueryAFTER, 0)
+}
+
+func (s *Range_search_stringContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Range_search_stringContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *Range_search_stringContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.EnterRange_search_string(s)
+	}
+}
+
+func (s *Range_search_stringContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.ExitRange_search_string(s)
+	}
+}
+
+func (s *Range_search_stringContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case VirgoQueryVisitor:
+		return t.VisitRange_search_string(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *VirgoQuery) Range_search_string() (localctx IRange_search_stringContext) {
+	localctx = NewRange_search_stringContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 12, VirgoQueryRULE_range_search_string)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.SetState(69)
+	p.GetErrorHandler().Sync(p)
+	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) {
+	case 1:
+		p.EnterOuterAlt(localctx, 1)
+		{
+			p.SetState(60)
+			p.Date_string()
+		}
+		{
+			p.SetState(61)
+			p.Match(VirgoQueryTO)
+		}
+		{
+			p.SetState(62)
+			p.Date_string()
+		}
+
+	case 2:
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(64)
+			p.Match(VirgoQueryBEFORE)
+		}
+		{
+			p.SetState(65)
+			p.Date_string()
+		}
+
+	case 3:
+		p.EnterOuterAlt(localctx, 3)
+		{
+			p.SetState(66)
+			p.Match(VirgoQueryAFTER)
+		}
+		{
+			p.SetState(67)
+			p.Date_string()
+		}
+
+	case 4:
+		p.EnterOuterAlt(localctx, 4)
+		{
+			p.SetState(68)
+			p.Date_string()
+		}
+
+	}
+
+	return localctx
+}
+
+// IDate_stringContext is an interface to support dynamic dispatch.
+type IDate_stringContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsDate_stringContext differentiates from other interfaces.
+	IsDate_stringContext()
+}
+
+type Date_stringContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyDate_stringContext() *Date_stringContext {
+	var p = new(Date_stringContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = VirgoQueryRULE_date_string
+	return p
+}
+
+func (*Date_stringContext) IsDate_stringContext() {}
+
+func NewDate_stringContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Date_stringContext {
+	var p = new(Date_stringContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = VirgoQueryRULE_date_string
+
+	return p
+}
+
+func (s *Date_stringContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Date_stringContext) DATE_STRING() antlr.TerminalNode {
+	return s.GetToken(VirgoQueryDATE_STRING, 0)
+}
+
+func (s *Date_stringContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Date_stringContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *Date_stringContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.EnterDate_string(s)
+	}
+}
+
+func (s *Date_stringContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.ExitDate_string(s)
+	}
+}
+
+func (s *Date_stringContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case VirgoQueryVisitor:
+		return t.VisitDate_string(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *VirgoQuery) Date_string() (localctx IDate_stringContext) {
+	localctx = NewDate_stringContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 14, VirgoQueryRULE_date_string)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(71)
+		p.Match(VirgoQueryDATE_STRING)
 	}
 
 	return localctx
@@ -951,8 +1404,8 @@ func (p *VirgoQuery) search_string(_p int) (localctx ISearch_stringContext) {
 	localctx = NewSearch_stringContext(p, p.GetParserRuleContext(), _parentState)
 	var _prevctx ISearch_stringContext = localctx
 	var _ antlr.ParserRuleContext = _prevctx // TODO: To prevent unused variable warning.
-	_startState := 10
-	p.EnterRecursionRule(localctx, 10, VirgoQueryRULE_search_string, _p)
+	_startState := 16
+	p.EnterRecursionRule(localctx, 16, VirgoQueryRULE_search_string, _p)
 
 	defer func() {
 		p.UnrollRecursionContexts(_parentctx)
@@ -973,27 +1426,27 @@ func (p *VirgoQuery) search_string(_p int) (localctx ISearch_stringContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(50)
+	p.SetState(79)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case VirgoQueryLPAREN:
 		{
-			p.SetState(45)
+			p.SetState(74)
 			p.Match(VirgoQueryLPAREN)
 		}
 		{
-			p.SetState(46)
+			p.SetState(75)
 			p.search_string(0)
 		}
 		{
-			p.SetState(47)
+			p.SetState(76)
 			p.Match(VirgoQueryRPAREN)
 		}
 
 	case VirgoQueryQUOTE, VirgoQuerySEARCH_WORD:
 		{
-			p.SetState(49)
+			p.SetState(78)
 			p.search_part(0)
 		}
 
@@ -1001,9 +1454,9 @@ func (p *VirgoQuery) search_string(_p int) (localctx ISearch_stringContext) {
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(60)
+	p.SetState(89)
 	p.GetErrorHandler().Sync(p)
-	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext())
+	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 6, p.GetParserRuleContext())
 
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
@@ -1011,45 +1464,45 @@ func (p *VirgoQuery) search_string(_p int) (localctx ISearch_stringContext) {
 				p.TriggerExitRuleEvent()
 			}
 			_prevctx = localctx
-			p.SetState(58)
+			p.SetState(87)
 			p.GetErrorHandler().Sync(p)
-			switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) {
+			switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 5, p.GetParserRuleContext()) {
 			case 1:
 				localctx = NewSearch_stringContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_search_string)
-				p.SetState(52)
+				p.SetState(81)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 3)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 3)", ""))
 				}
 				{
-					p.SetState(53)
+					p.SetState(82)
 					p.Boolean_op()
 				}
 				{
-					p.SetState(54)
+					p.SetState(83)
 					p.search_string(4)
 				}
 
 			case 2:
 				localctx = NewSearch_stringContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_search_string)
-				p.SetState(56)
+				p.SetState(85)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 2)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 				}
 				{
-					p.SetState(57)
+					p.SetState(86)
 					p.search_part(0)
 				}
 
 			}
 
 		}
-		p.SetState(62)
+		p.SetState(91)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 6, p.GetParserRuleContext())
 	}
 
 	return localctx
@@ -1155,8 +1608,8 @@ func (p *VirgoQuery) search_part(_p int) (localctx ISearch_partContext) {
 	localctx = NewSearch_partContext(p, p.GetParserRuleContext(), _parentState)
 	var _prevctx ISearch_partContext = localctx
 	var _ antlr.ParserRuleContext = _prevctx // TODO: To prevent unused variable warning.
-	_startState := 12
-	p.EnterRecursionRule(localctx, 12, VirgoQueryRULE_search_part, _p)
+	_startState := 18
+	p.EnterRecursionRule(localctx, 18, VirgoQueryRULE_search_part, _p)
 
 	defer func() {
 		p.UnrollRecursionContexts(_parentctx)
@@ -1177,27 +1630,27 @@ func (p *VirgoQuery) search_part(_p int) (localctx ISearch_partContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(69)
+	p.SetState(98)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case VirgoQueryQUOTE:
 		{
-			p.SetState(64)
+			p.SetState(93)
 			p.Match(VirgoQueryQUOTE)
 		}
 		{
-			p.SetState(65)
+			p.SetState(94)
 			p.search_part(0)
 		}
 		{
-			p.SetState(66)
+			p.SetState(95)
 			p.Match(VirgoQueryQUOTE)
 		}
 
 	case VirgoQuerySEARCH_WORD:
 		{
-			p.SetState(68)
+			p.SetState(97)
 			p.Match(VirgoQuerySEARCH_WORD)
 		}
 
@@ -1205,9 +1658,9 @@ func (p *VirgoQuery) search_part(_p int) (localctx ISearch_partContext) {
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(75)
+	p.SetState(104)
 	p.GetErrorHandler().Sync(p)
-	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 6, p.GetParserRuleContext())
+	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 8, p.GetParserRuleContext())
 
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
@@ -1217,20 +1670,20 @@ func (p *VirgoQuery) search_part(_p int) (localctx ISearch_partContext) {
 			_prevctx = localctx
 			localctx = NewSearch_partContext(p, _parentctx, _parentState)
 			p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_search_part)
-			p.SetState(71)
+			p.SetState(100)
 
 			if !(p.Precpred(p.GetParserRuleContext(), 2)) {
 				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 			}
 			{
-				p.SetState(72)
+				p.SetState(101)
 				p.Match(VirgoQuerySEARCH_WORD)
 			}
 
 		}
-		p.SetState(77)
+		p.SetState(106)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 6, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 8, p.GetParserRuleContext())
 	}
 
 	return localctx
@@ -1245,14 +1698,14 @@ func (p *VirgoQuery) Sempred(localctx antlr.RuleContext, ruleIndex, predIndex in
 		}
 		return p.Query_parts_Sempred(t, predIndex)
 
-	case 5:
+	case 8:
 		var t *Search_stringContext = nil
 		if localctx != nil {
 			t = localctx.(*Search_stringContext)
 		}
 		return p.Search_string_Sempred(t, predIndex)
 
-	case 6:
+	case 9:
 		var t *Search_partContext = nil
 		if localctx != nil {
 			t = localctx.(*Search_partContext)

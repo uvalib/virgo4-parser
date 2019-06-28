@@ -1,4 +1,4 @@
-// Generated from VirgoQuery.g4 by ANTLR 4.7.
+// Code generated from VirgoQuery.g4 by ANTLR 4.7.2. DO NOT EDIT.
 
 package v4parser // VirgoQuery
 import "github.com/antlr/antlr4/runtime/Go/antlr"
@@ -44,11 +44,29 @@ func (s *BaseVirgoQueryListener) EnterField_type(ctx *Field_typeContext) {}
 // ExitField_type is called when production field_type is exited.
 func (s *BaseVirgoQueryListener) ExitField_type(ctx *Field_typeContext) {}
 
+// EnterRange_field_type is called when production range_field_type is entered.
+func (s *BaseVirgoQueryListener) EnterRange_field_type(ctx *Range_field_typeContext) {}
+
+// ExitRange_field_type is called when production range_field_type is exited.
+func (s *BaseVirgoQueryListener) ExitRange_field_type(ctx *Range_field_typeContext) {}
+
 // EnterBoolean_op is called when production boolean_op is entered.
 func (s *BaseVirgoQueryListener) EnterBoolean_op(ctx *Boolean_opContext) {}
 
 // ExitBoolean_op is called when production boolean_op is exited.
 func (s *BaseVirgoQueryListener) ExitBoolean_op(ctx *Boolean_opContext) {}
+
+// EnterRange_search_string is called when production range_search_string is entered.
+func (s *BaseVirgoQueryListener) EnterRange_search_string(ctx *Range_search_stringContext) {}
+
+// ExitRange_search_string is called when production range_search_string is exited.
+func (s *BaseVirgoQueryListener) ExitRange_search_string(ctx *Range_search_stringContext) {}
+
+// EnterDate_string is called when production date_string is entered.
+func (s *BaseVirgoQueryListener) EnterDate_string(ctx *Date_stringContext) {}
+
+// ExitDate_string is called when production date_string is exited.
+func (s *BaseVirgoQueryListener) ExitDate_string(ctx *Date_stringContext) {}
 
 // EnterSearch_string is called when production search_string is entered.
 func (s *BaseVirgoQueryListener) EnterSearch_string(ctx *Search_stringContext) {}
