@@ -88,3 +88,69 @@ func TestSolrValidCounts(t *testing.T) {
 		t.Errorf("%s keyword count fail. Expected %d, Actual: %d, List: %v", q, kcnt, len(sp.Keywords), sp.Keywords)
 	}
 }
+
+func TestSolrDateSingle(t *testing.T) {
+	q := `date:{1945}`
+	expect := `_query_:"{!lucene df=published_daterange}(1945)"`
+
+	solr, err := v4parser.ConvertToSolr(q)
+	if err != nil {
+		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
+	}
+	if solr != expect {
+		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
+	}
+}
+
+func TestSolrDateRange(t *testing.T) {
+	q := `date:{1945/12/07 TO 1949}`
+	expect := `_query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"`
+
+	solr, err := v4parser.ConvertToSolr(q)
+	if err != nil {
+		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
+	}
+	if solr != expect {
+		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
+	}
+}
+
+func TestSolrDateBefore(t *testing.T) {
+	q := `date:{BEFORE 1945-12-06}`
+	expect := `_query_:"{!lucene df=published_daterange}([* TO 1945-12-06])"`
+
+	solr, err := v4parser.ConvertToSolr(q)
+	if err != nil {
+		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
+	}
+	if solr != expect {
+		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
+	}
+}
+
+func TestSolrDateAfter(t *testing.T) {
+	q := `date:{AFTER 1945}`
+	expect := `_query_:"{!lucene df=published_daterange}([1945 TO *])"`
+
+	solr, err := v4parser.ConvertToSolr(q)
+	if err != nil {
+		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
+	}
+	if solr != expect {
+		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
+	}
+}
+
+func TestSolrDateMixed(t *testing.T) {
+	q := `date:{<1945} AND date:{>1932} AND author:{Shelly}`
+	expect := `((_query_:"{!lucene df=published_daterange}([* TO 1945])" AND _query_:"{!lucene df=published_daterange}([1932 TO *])") AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)")`
+
+	solr, err := v4parser.ConvertToSolr(q)
+	if err != nil {
+		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
+	}
+	if solr != expect {
+		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
+	}
+}
+

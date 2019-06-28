@@ -14,10 +14,10 @@ import (
 // SolrParser will parse the query string into a format compatable with a solr search
 type SolrParser struct {
 	// basic info about the parsed query, can be useful to the caller
-	Titles []string
-	Authors []string
-	Subjects []string
-	Keywords []string
+	Titles      []string
+	Authors     []string
+	Subjects    []string
+	Keywords    []string
 	Identifiers []string
 }
 
@@ -41,6 +41,10 @@ func (v *SolrParser) visitRuleNode(rule antlr.RuleNode) interface{} {
 		return v.visitFieldQuery(rule)
 	case *Field_typeContext:
 		return v.visitFieldType(rule)
+	case *Range_field_typeContext:
+		return v.visitRangeFieldType(rule)
+	case *Range_search_stringContext:
+		return v.visitRangeSearchString(rule)
 	case *Search_stringContext:
 		return v.visitSearchString(rule)
 	default:
@@ -88,6 +92,7 @@ func (v *SolrParser) visitQueryParts(ctx antlr.RuleNode) interface{} {
 
 func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 	// field_query : field_type COLON LBRACE search_string RBRACE
+	//             | range_field_type COLON LBRACE range_search_string RBRACE
 	//   (_query_:"{!edismax qf=$title_qf pf=$title_pf}(certification of teachers )"
 
 	// grey magic to get field name so we can populate per-field query slices in expand()
@@ -142,7 +147,7 @@ func (v *SolrParser) expand(inStr string, fieldType string, fieldAttr string, qu
 		v.Identifiers = append(v.Identifiers, val)
 	}
 
-	out := fmt.Sprintf(`%s_query_:"{!edismax%s}(%s)"`, inStr, fieldAttr, query)
+	out := fmt.Sprintf(`%s_query_:"{%s}(%s)"`, inStr, fieldAttr, query)
 	// log.Printf("EXPANDED: %s", out)
 	return out
 }
@@ -153,16 +158,68 @@ func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
 	t := childTree.GetPayload().(*antlr.CommonToken)
 	fieldType := t.GetText()
 
+	out := "!edismax"
+
 	// keyword field type doesn't need qf/pf parameter
 	if fieldType == "keyword" {
-		return ""
+		return out
 	}
 
 	// all other field types need qf/pf parameters based on their names
-	qf := " qf=$" + fieldType + "_qf"
-	pf := " pf=$" + fieldType + "_pf"
-	out := qf + pf
+	qf := "qf=$" + fieldType + "_qf"
+	pf := "pf=$" + fieldType + "_pf"
+	out = out + " " + qf + " " + pf
 	// log.Printf("FieldType: %s", out)
+	return out
+}
+
+func (v *SolrParser) visitRangeFieldType(ctx antlr.RuleNode) interface{} {
+	// range_field_type : DATE
+	childTree := ctx.GetChild(0)
+	t := childTree.GetPayload().(*antlr.CommonToken)
+	fieldType := t.GetText()
+
+	out := ""
+
+	if fieldType == "date" {
+		df := "published_daterange"
+		out = "!lucene df=" + df
+	}
+
+	return out
+}
+
+func (v *SolrParser) visitRangeSearchString(ctx antlr.RuleNode) interface{} {
+	//    range_search_string : date_string TO date_string
+	//                        | BEFORE date_string
+	//                        | AFTER date_string
+	//                        | date_string
+
+	if ctx.GetChildCount() == 1 {
+		return v.visit(ctx.GetChild(0))
+	}
+
+	rangeStart := "*"
+	rangeEnd := "*"
+
+	if ctx.GetChildCount() == 3 {
+		rangeStart = v.visit(ctx.GetChild(0)).(string)
+		rangeEnd = v.visit(ctx.GetChild(2)).(string)
+	} else if ctx.GetChildCount() == 2 {
+		value := v.visit(ctx.GetChild(1)).(string)
+		switch ctx.GetChild(0).(type) {
+		case antlr.TerminalNode:
+			terminal := ctx.GetChild(0).(antlr.TerminalNode)
+			if terminal.GetSymbol().GetTokenType() == VirgoQueryLexerBEFORE {
+				rangeEnd = value
+			} else {
+				rangeStart = value
+			}
+		}
+	}
+
+	out := "[" + rangeStart + " TO " + rangeEnd + "]"
+
 	return out
 }
 
@@ -220,6 +277,8 @@ func (v *SolrParser) visitTerminal(terminal antlr.TerminalNode) interface{} {
 		return `\"`
 	} else if terminal.GetSymbol().GetTokenType() == VirgoQueryLexerBOOLEAN {
 		return fmt.Sprintf(" %s ", terminal.GetText())
+	} else if terminal.GetSymbol().GetTokenType() == VirgoQueryLexerDATE_STRING {
+		return fmt.Sprintf("%s", strings.ReplaceAll(terminal.GetText(), "/", "-"))
 	}
 
 	return terminal.GetText()
