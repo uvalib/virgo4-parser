@@ -3,6 +3,7 @@ package v4parser
 import (
 	"errors"
 	"fmt"
+
 	//"log"
 	"reflect"
 	"regexp"
@@ -284,7 +285,8 @@ func (v *SolrParser) visitTerminal(terminal antlr.TerminalNode) interface{} {
 	return terminal.GetText()
 }
 
-// ConvertToSolr convert a v4 query string into solr
+// ConvertToSolrWithParser will convert a v4 query string into solr query string. The passed SolrPaser struct will be
+// poulated with details about the items parsed into the resulting string
 func ConvertToSolrWithParser(sp *SolrParser, src string) (string, error) {
 	// EXAMPLE: `( title : {"susan sontag" OR music title}   AND keyword:{ Maunsell } ) OR author:{ liberty }`
 	// SOLR: ( ( ((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
@@ -316,6 +318,7 @@ func ConvertToSolrWithParser(sp *SolrParser, src string) (string, error) {
 	return out, nil
 }
 
+// ConvertToSolr will convert a v4 query string into solr query string.
 func ConvertToSolr(src string) (string, error) {
 	sp := SolrParser{}
 	return ConvertToSolrWithParser(&sp, src)

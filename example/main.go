@@ -27,7 +27,7 @@ func main() {
 		log.Printf("ERROR: [%s] is valid, but it is not", bad)
 	}
 
-	test := `( title : {"susan sontag" OR music title}   AND keyword:{ Maunsell } ) OR author:{ liberty }`
+	test := `( date:{1945/12/07 TO 1949} AND title : {"susan sontag" OR music title} AND keyword:{ Maunsell } ) OR author:{ liberty }`
 	valid, errors = v4parser.Validate(test)
 	if valid == false {
 		log.Printf("ERROR: [%s] is not valid, but should be: %s", test, errors)
