@@ -153,3 +153,11 @@ func TestSolrDateMixed(t *testing.T) {
 		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
 	}
 }
+
+func TestSolrEmptyQuery(t *testing.T) {
+	q := ""
+	solr, err := v4parser.ConvertToSolr(q)
+	if err == nil {
+		t.Errorf("%s converted to %s, but should have failed", q, solr)
+	}
+}

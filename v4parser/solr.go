@@ -308,6 +308,10 @@ func ConvertToSolrWithParser(sp *SolrParser, src string) (string, error) {
 		return "", errors.New(lel.Errors())
 	}
 
+	if raw == nil {
+		return "", errors.New("Empty query")
+	}
+
 	out := strings.TrimSpace(raw.(string))
 	var re = regexp.MustCompile(`\s+`)
 	out = re.ReplaceAllString(out, " ")
