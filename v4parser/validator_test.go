@@ -78,3 +78,43 @@ func TestNotOpInvalid(t *testing.T) {
 		t.Errorf("%s validatef, but should not have", q)
 	}
 }
+
+func TestEmptyKeyword(t *testing.T) {
+	q := `keyword:{}`
+	valid, _ := v4parser.Validate(q)
+	if valid == true {
+		t.Errorf("%s validated, but should not have", q)
+	}
+}
+
+func TestEmptyQuotedKeyword(t *testing.T) {
+	q := `keyword:{""}`
+	valid, _ := v4parser.Validate(q)
+	if valid == true {
+		t.Errorf("%s validated, but should not have", q)
+	}
+}
+
+func TestMismatchedBracket(t *testing.T) {
+	q := `keyword:{`
+	valid, _ := v4parser.Validate(q)
+	if valid == true {
+		t.Errorf("%s validated, but should not have", q)
+	}
+}
+
+func TestExtraBracket(t *testing.T) {
+	q := `keyword:{{}`
+	valid, _ := v4parser.Validate(q)
+	if valid == true {
+		t.Errorf("%s validated, but should not have", q)
+	}
+}
+
+func TestUnsupportedType(t *testing.T) {
+	q := `color:{blue}`
+	valid, _ := v4parser.Validate(q)
+	if valid == true {
+		t.Errorf("%s validated, but should not have", q)
+	}
+}

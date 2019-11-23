@@ -8,36 +8,41 @@ import (
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
-//lexerErrorLister implements the antlr.ErrorListener interface
-type lexerErrorLister struct {
+//virgoErrorListener implements the antlr.ErrorListener interface
+//and is used by both the lexer and the parser
+type virgoErrorListener struct {
 	valid  bool
 	errors []string
 }
 
-func (eh *lexerErrorLister) Errors() string {
+func (eh *virgoErrorListener) Errors() string {
 	return strings.Join(eh.errors, ", ")
 }
 
-func (eh *lexerErrorLister) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{},
+func (eh *virgoErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{},
 	line, column int, msg string, e antlr.RecognitionException) {
 	eh.valid = false
 	eh.errors = append(eh.errors, fmt.Sprintf("Line %d, Column %d: %s", line, column, msg))
 }
-func (eh *lexerErrorLister) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex,
+
+func (eh *virgoErrorListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex,
 	stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
-	eh.valid = false
-	eh.errors = append(eh.errors, "Ambiguous query")
+	msg := "Ambiguous query"
+	log.Printf(msg)
+//	eh.valid = false
+	eh.errors = append(eh.errors, msg)
 }
 
-func (eh *lexerErrorLister) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA,
+func (eh *virgoErrorListener) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA,
 	startIndex, stopIndex int, conflictingAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
 	log.Printf("LEXER FULL CONTEXT?")
-	eh.valid = false
+//	eh.valid = false
 }
-func (eh *lexerErrorLister) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA,
+
+func (eh *virgoErrorListener) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA,
 	startIndex, stopIndex, prediction int, configs antlr.ATNConfigSet) {
 	log.Printf("LEXER CONTEXT SENSITIVITY")
-	eh.valid = false
+//	eh.valid = false
 }
 
 // validator is an implementation of the v4Parser that just checks for errors.
@@ -54,17 +59,32 @@ func (v *validator) VisitErrorNode(node antlr.ErrorNode) {
 // Validate will validate an input string and return true or false
 func Validate(src string) (bool, string) {
 	log.Printf("Validate %s", src)
+
 	v := validator{}
 	v.valid = true
+
 	is := antlr.NewInputStream(src)
+
 	lexer := NewVirgoQueryLexer(is)
 	lexer.RemoveErrorListeners()
-	lel := lexerErrorLister{}
+
+	lel := virgoErrorListener{}
 	lel.valid = true
 	lexer.AddErrorListener(&lel)
+
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-	virgoQuery := NewVirgoQuery(stream)
-	antlr.ParseTreeWalkerDefault.Walk(&v, virgoQuery.Query())
-	valid := v.valid && lel.valid
-	return valid, lel.Errors()
+
+	parser := NewVirgoQuery(stream)
+	parser.RemoveErrorListeners()
+
+	pel := virgoErrorListener{}
+	pel.valid = true
+	parser.AddErrorListener(&pel)
+
+	antlr.ParseTreeWalkerDefault.Walk(&v, parser.Query())
+
+	valid := v.valid && lel.valid && pel.valid
+	errors := strings.Join([]string{ "lexer: [" + lel.Errors() + "]", "parser: [" + pel.Errors() + "]" }, "; ")
+
+	return valid, errors
 }

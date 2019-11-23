@@ -155,7 +155,7 @@ func TestSolrDateMixed(t *testing.T) {
 }
 
 func TestSolrEmptyQuery(t *testing.T) {
-	q := ""
+	q := ``
 	solr, err := v4parser.ConvertToSolr(q)
 	if err == nil {
 		t.Errorf("%s converted to %s, but should have failed", q, solr)

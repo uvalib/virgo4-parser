@@ -295,17 +295,31 @@ func ConvertToSolrWithParser(sp *SolrParser, src string) (string, error) {
 	//log.Printf("Convert to Solr: %s", src)
 
 	is := antlr.NewInputStream(src)
+
 	lexer := NewVirgoQueryLexer(is)
 	lexer.RemoveErrorListeners()
-	lel := lexerErrorLister{}
+
+	lel := virgoErrorListener{}
 	lel.valid = true
 	lexer.AddErrorListener(&lel)
+
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-	queryTree := NewVirgoQuery(stream)
-	raw := sp.visit(queryTree.Query())
+
+	parser := NewVirgoQuery(stream)
+	parser.RemoveErrorListeners()
+
+	pel := virgoErrorListener{}
+	pel.valid = true
+	parser.AddErrorListener(&lel)
+
+	raw := sp.visit(parser.Query())
 
 	if lel.valid == false {
 		return "", errors.New(lel.Errors())
+	}
+
+	if pel.valid == false {
+		return "", errors.New(pel.Errors())
 	}
 
 	if raw == nil {
