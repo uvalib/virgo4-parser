@@ -29,20 +29,20 @@ func (eh *virgoErrorListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antl
 	stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
 	msg := "Ambiguous query"
 	log.Printf(msg)
-//	eh.valid = false
+	//eh.valid = false
 	eh.errors = append(eh.errors, msg)
 }
 
 func (eh *virgoErrorListener) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA,
 	startIndex, stopIndex int, conflictingAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
 	log.Printf("LEXER FULL CONTEXT?")
-//	eh.valid = false
+	//eh.valid = false
 }
 
 func (eh *virgoErrorListener) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA,
 	startIndex, stopIndex, prediction int, configs antlr.ATNConfigSet) {
 	log.Printf("LEXER CONTEXT SENSITIVITY")
-//	eh.valid = false
+	//eh.valid = false
 }
 
 // validator is an implementation of the v4Parser that just checks for errors.
@@ -84,7 +84,7 @@ func Validate(src string) (bool, string) {
 	antlr.ParseTreeWalkerDefault.Walk(&v, parser.Query())
 
 	valid := v.valid && lel.valid && pel.valid
-	errors := strings.Join([]string{ "lexer: [" + lel.Errors() + "]", "parser: [" + pel.Errors() + "]" }, "; ")
+	errors := strings.Join([]string{"lexer: [" + lel.Errors() + "]", "parser: [" + pel.Errors() + "]"}, "; ")
 
 	return valid, errors
 }
