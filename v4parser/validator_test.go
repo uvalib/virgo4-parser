@@ -118,3 +118,19 @@ func TestUnsupportedType(t *testing.T) {
 		t.Errorf("%s validated, but should not have", q)
 	}
 }
+
+func TestStarQuery(t *testing.T) {
+	q := `keyword:{"*"}`
+	valid, errors := v4parser.Validate(q)
+	if valid == false {
+		t.Errorf("%s did not validate, but should have: %s", q, errors)
+	}
+}
+
+func TestStarQueryNoQuotes(t *testing.T) {
+	q := `keyword:{*}`
+	valid, errors := v4parser.Validate(q)
+	if valid == false {
+		t.Errorf("%s did not validate, but should have: %s", q, errors)
+	}
+}
