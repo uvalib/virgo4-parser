@@ -13,36 +13,46 @@ import (
 type virgoErrorListener struct {
 	valid  bool
 	errors []string
+	warnings []string
+}
+
+func (eh *virgoErrorListener) LogError(msg string) {
+	log.Printf("ERROR: %s", msg)
+	eh.errors = append(eh.errors, msg)
+	eh.valid = false
+}
+
+func (eh *virgoErrorListener) LogWarning(msg string) {
+	log.Printf("WARNING: %s", msg)
+	eh.warnings = append(eh.warnings, msg)
 }
 
 func (eh *virgoErrorListener) Errors() string {
 	return strings.Join(eh.errors, ", ")
 }
 
+func (eh *virgoErrorListener) Warnings() string {
+	return strings.Join(eh.warnings, ", ")
+}
+
 func (eh *virgoErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{},
 	line, column int, msg string, e antlr.RecognitionException) {
-	eh.valid = false
-	eh.errors = append(eh.errors, fmt.Sprintf("Line %d, Column %d: %s", line, column, msg))
+	eh.LogError(fmt.Sprintf("Line %d, Column %d: %s", line, column, msg))
 }
 
 func (eh *virgoErrorListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex,
 	stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
-	msg := "Ambiguous query"
-	log.Printf(msg)
-	//eh.valid = false
-	eh.errors = append(eh.errors, msg)
+	eh.LogWarning("Ambiguous query")
 }
 
 func (eh *virgoErrorListener) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA,
 	startIndex, stopIndex int, conflictingAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
-	log.Printf("LEXER FULL CONTEXT?")
-	//eh.valid = false
+	eh.LogWarning("Lexer full context")
 }
 
 func (eh *virgoErrorListener) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA,
 	startIndex, stopIndex, prediction int, configs antlr.ATNConfigSet) {
-	log.Printf("LEXER CONTEXT SENSITIVITY")
-	//eh.valid = false
+	eh.LogWarning("Lexer context sensitivity")
 }
 
 // validator is an implementation of the v4Parser that just checks for errors.

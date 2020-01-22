@@ -4,9 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	//"log"
+	"log"
 	"reflect"
-	"regexp"
 	"strings"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr"
@@ -14,6 +13,9 @@ import (
 
 // SolrParser will parse the query string into a format compatable with a solr search
 type SolrParser struct {
+	// options
+	Verbose bool
+
 	// basic info about the parsed query, can be useful to the caller
 	Titles      []string
 	Authors     []string
@@ -64,22 +66,24 @@ func (v *SolrParser) visitQueryParts(ctx antlr.RuleNode) interface{} {
 	if ctx.GetChildCount() == 3 {
 		switch ctx.GetChild(1).(type) {
 		case *Boolean_opContext:
-			// log.Printf("... boolean")
 			query1 := v.visit(ctx.GetChild(0))
 			queryop := v.visit(ctx.GetChild(1))
 			query2 := v.visit(ctx.GetChild(2))
-			out := fmt.Sprintf(" (%s%s%s) ", query1, queryop, query2)
-			// log.Printf("   QP Bool: %s", out)
+			out := fmt.Sprintf("(%s%s%s)", query1, queryop, query2)
+			if v.Verbose {
+				log.Printf("\tquery part (boolean): %s", out)
+			}
 			return out
 		}
 
 		// query_parts : LPAREN query_parts RPAREN
 		switch ctx.GetChild(0).(type) {
 		case antlr.TerminalNode:
-			// log.Printf("... terminal")
 			query1 := v.visit(ctx.GetChild(1))
-			out := fmt.Sprintf(" (%s) ", query1)
-			// log.Printf("   QP terminal: %s", out)
+			out := fmt.Sprintf("(%s)", query1)
+			if v.Verbose {
+				log.Printf("\tquery part (terminal): %s", out)
+			}
 			return out
 		}
 	}
@@ -87,7 +91,10 @@ func (v *SolrParser) visitQueryParts(ctx antlr.RuleNode) interface{} {
 	// query_parts: field_query
 	first := ctx.GetChild(0)
 	result := v.visit(first)
-	// log.Printf("QueryPart: %s", result)
+	if v.Verbose {
+		log.Printf("\tquery part: %s", result)
+	}
+
 	return result
 }
 
@@ -97,15 +104,31 @@ func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 	//   (_query_:"{!edismax qf=$title_qf pf=$title_pf}(certification of teachers )"
 
 	// grey magic to get field name so we can populate per-field query slices in expand()
+
+	if ctx.GetChild(0).GetChild(0) == nil {
+		return ""
+	}
+
 	fieldType := ctx.GetChild(0).GetChild(0).GetPayload().(*antlr.CommonToken).GetText()
 	fieldAttr := v.visit(ctx.GetChild(0))
-	if ctx.GetChild(3).(type) == antlr.TerminalNode {
-	   out := v.expand("", fieldType, fieldAttr.(string), "*")
-	} else { 
-	   query := v.visit(ctx.GetChild(3))
-	   out := v.expand("", fieldType, fieldAttr.(string), query)
+
+	if v.Verbose {
+		log.Printf("\tfield type: %s", fieldType)
+		log.Printf("\tfield attr: %s", fieldAttr)
 	}
-	// log.Printf("Field Q: %s", out)
+
+	var out string
+
+	switch ctx.GetChild(3).(type) {
+	case antlr.TerminalNode:
+		out = v.expand("", fieldType, fieldAttr.(string), "*")
+	default:
+		query := v.visit(ctx.GetChild(3))
+		out = v.expand("", fieldType, fieldAttr.(string), query)
+	}
+	if v.Verbose {
+		log.Printf("\tfield query: %s", out)
+	}
 	return out
 }
 
@@ -119,7 +142,9 @@ func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 // e.g. this field_query :   title : {"susan sontag" OR music title}
 //expands to this:           (_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
 func (v *SolrParser) expand(inStr string, fieldType string, fieldAttr string, query interface{}) string {
-	// log.Printf("==> Expand inStr %s for field %s, q: %s", inStr, fieldType, query)
+	if v.Verbose {
+		log.Printf("\t==> Expand inStr %s for field %s, q: %s", inStr, fieldType, query)
+	}
 	rt := reflect.TypeOf(query)
 	if rt == nil {
 		return ""
@@ -132,12 +157,16 @@ func (v *SolrParser) expand(inStr string, fieldType string, fieldAttr string, qu
 		out += fmt.Sprintf("%s", parts.Index(1))
 		out = v.expand(out, fieldType, fieldAttr, parts.Index(2))
 		out = fmt.Sprintf("%s)", out)
-		// log.Printf("EXPAND TYPE %s to %s", kind, out)
+		if v.Verbose {
+			log.Printf("\texpand type %s to %s", kind, out)
+		}
 		return out
 	}
 
 	val := fmt.Sprintf("%s", query)
-	//log.Printf("fieldType = [%s]  query = [%s]  kind = [%s]  val = [%s]", fieldType, query, kind, val)
+	if v.Verbose {
+		log.Printf("\tfieldType = [%s]  query = [%s]  kind = [%s]  val = [%s]", fieldType, query, kind, val)
+	}
 
 	switch fieldType {
 	case "title":
@@ -153,7 +182,9 @@ func (v *SolrParser) expand(inStr string, fieldType string, fieldAttr string, qu
 	}
 
 	out := fmt.Sprintf(`%s_query_:"{%s}(%s)"`, inStr, fieldAttr, query)
-	// log.Printf("EXPANDED: %s", out)
+	if v.Verbose {
+		log.Printf("\texpanded: %s", out)
+	}
 	return out
 }
 
@@ -174,7 +205,9 @@ func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
 	qf := "qf=$" + fieldType + "_qf"
 	pf := "pf=$" + fieldType + "_pf"
 	out = out + " " + qf + " " + pf
-	// log.Printf("FieldType: %s", out)
+	if v.Verbose {
+		log.Printf("\tfield type: %s", out)
+	}
 	return out
 }
 
@@ -235,23 +268,38 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 	if ctx.GetChildCount() == 3 {
 		switch ctx.GetChild(1).(type) {
 		case *Boolean_opContext:
-			// log.Printf("...boolen")
 			var out []interface{}
 			out = append(out, v.visit(ctx.GetChild(0)))
 			out = append(out, v.visit(ctx.GetChild(1)))
 			out = append(out, v.visit(ctx.GetChild(2)))
-			// log.Printf("Bool Str: %s", out)
+			if v.Verbose {
+				log.Printf("\tsearch string (boolean): %s", out)
+			}
 			return out
 		}
 	}
 
 	// search_string : LPAREN search_string RPAREN
-	if ctx.GetChildCount() == 3 && 
-		ctx.getChild(0).GetSymbol().GetTokenType() == VirgoQueryLexerLPAREN  &&
- 		ctx.getChild(2).GetSymbol().GetTokenType() == VirgoQueryLexerRPAREN {
-			child := ctx.GetChild(i)
-			childResult := v.visit(child).(string)
-			return(childResult);
+	if ctx.GetChildCount() == 3 {
+		switch child0 := ctx.GetChild(0).(type) {
+		case antlr.TerminalNode:
+			if child0.GetSymbol().GetTokenType() != VirgoQueryLexerLPAREN {
+				break
+			}
+
+			switch child2 := ctx.GetChild(2).(type) {
+			case antlr.TerminalNode:
+				if child2.GetSymbol().GetTokenType() != VirgoQueryLexerRPAREN {
+					break
+				}
+
+				child1 := ctx.GetChild(1)
+
+				childResult := v.visit(child1).(string)
+
+				return childResult;
+			}
+		}
 	}
 
 	//               | search_string search_part
@@ -263,10 +311,14 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 			out += " "
 		}
 		childResult := v.visit(child).(string)
-		// log.Printf("   SEARCH Child %d:%s", i, childResult)
+		if v.Verbose {
+			log.Printf("\tsearch child %d: %s", i, childResult)
+		}
 		out += childResult
 	}
-	// log.Printf("search string: [%s]", out)
+	if v.Verbose {
+		log.Printf("\tsearch string: %s", out)
+	}
 	return out
 }
 
@@ -275,7 +327,9 @@ func (v *SolrParser) visitChildren(node antlr.RuleNode) interface{} {
 	for i := 0; i < node.GetChildCount(); i++ {
 		child := node.GetChild(i)
 		childResult := v.visit(child).(string)
-		// log.Printf("    visit children result: [%s]", childResult)
+		if v.Verbose {
+			log.Printf("\tvisit children result: [%s]", childResult)
+		}
 		if out != "" && childResult != `\"` && out != `\"` {
 			out += " "
 		}
@@ -304,7 +358,9 @@ func ConvertToSolrWithParser(sp *SolrParser, src string) (string, error) {
 	// SOLR: ( ( ((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
 	//              AND _query_:"{!edismax}(Maunsell)") )  OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")
 	//
-	//log.Printf("Convert to Solr: %s", src)
+	if sp.Verbose {
+		log.Printf("Convert to Solr: %s", src)
+	}
 
 	is := antlr.NewInputStream(src)
 
@@ -327,29 +383,40 @@ func ConvertToSolrWithParser(sp *SolrParser, src string) (string, error) {
 	raw := sp.visit(parser.Query())
 
 	if lel.valid == false {
-		return "", errors.New(lel.Errors())
+		err := errors.New(lel.Errors())
+		if sp.Verbose {
+			log.Printf("ERROR: LEXER: %s", err.Error())
+		}
+		return "", err
 	}
 
 	if pel.valid == false {
-		return "", errors.New(pel.Errors())
+		err := errors.New(pel.Errors())
+		if sp.Verbose {
+			log.Printf("ERROR: PARSER: %s", err.Error())
+		}
+		return "", err
 	}
 
 	if raw == nil {
-		return "", errors.New("Empty query")
+		err := errors.New("Empty query")
+		if sp.Verbose {
+			log.Printf("ERROR: %s", err.Error())
+		}
+		return "", err
 	}
 
 	out := strings.TrimSpace(raw.(string))
-	var re = regexp.MustCompile(`\s+`)
-	out = re.ReplaceAllString(out, " ")
-	re = regexp.MustCompile(`\s*\(\s*\(`)
-	out = re.ReplaceAllString(out, "((")
-	re = regexp.MustCompile(`\s*\)\s*\)`)
-	out = re.ReplaceAllString(out, "))")
+
+	if sp.Verbose {
+		log.Printf("SUCCESS: QUERY: %s", out)
+	}
+
 	return out, nil
 }
 
 // ConvertToSolr will convert a v4 query string into solr query string.
 func ConvertToSolr(src string) (string, error) {
-	sp := SolrParser{}
+	sp := SolrParser{ Verbose: false }
 	return ConvertToSolrWithParser(&sp, src)
 }
