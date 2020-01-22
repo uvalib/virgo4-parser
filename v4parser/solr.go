@@ -99,8 +99,12 @@ func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 	// grey magic to get field name so we can populate per-field query slices in expand()
 	fieldType := ctx.GetChild(0).GetChild(0).GetPayload().(*antlr.CommonToken).GetText()
 	fieldAttr := v.visit(ctx.GetChild(0))
-	query := v.visit(ctx.GetChild(3))
-	out := v.expand("", fieldType, fieldAttr.(string), query)
+	if ctx.GetChild(3).(type) == antlr.TerminalNode {
+	   out := v.expand("", fieldType, fieldAttr.(string), "*")
+	} else { 
+	   query := v.visit(ctx.GetChild(3))
+	   out := v.expand("", fieldType, fieldAttr.(string), query)
+	}
 	// log.Printf("Field Q: %s", out)
 	return out
 }
@@ -242,6 +246,14 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 	}
 
 	// search_string : LPAREN search_string RPAREN
+	if ctx.GetChildCount() == 3 && 
+		ctx.getChild(0).GetSymbol().GetTokenType() == VirgoQueryLexerLPAREN  &&
+ 		ctx.getChild(2).GetSymbol().GetTokenType() == VirgoQueryLexerRPAREN {
+			child := ctx.GetChild(i)
+			childResult := v.visit(child).(string)
+			return(childResult);
+	}
+
 	//               | search_string search_part
 	//               | search_part
 	out := ""
