@@ -6,158 +6,127 @@ import (
 	"github.com/uvalib/virgo4-parser/v4parser"
 )
 
+func convert(query string) (v4parser.SolrParser, string, error) {
+	sp := v4parser.SolrParser{Debug: true}
+
+	solr, err := v4parser.ConvertToSolrWithParser(&sp, query)
+
+	return sp, solr, err
+}
+
+func expectSolrCoversionSuccess(t *testing.T, query string, expected string) v4parser.SolrParser {
+	sp, solr, err := convert(query)
+
+	if err != nil {
+		t.Errorf("%s couldn't convert, but should have: %s", query, err.Error())
+	}
+
+	if solr != expected {
+		t.Errorf("%s convert fail. Expected %s, Actual: %s", query, expected, solr)
+	}
+
+	return sp
+}
+
+func expectSolrCoversionFailure(t *testing.T, query string) {
+	_, solr, err := convert(query)
+
+	if err == nil {
+		t.Errorf("%s converted to %s, but should have failed", query, solr)
+	}
+}
+
+func expectCounts(t *testing.T, label string, values []string, want int) {
+	got := len(values)
+
+	if len(values) != want {
+		t.Errorf("%s count fail. Expected %d, Actual: %d, List: %v", label, want, got, values)
+	}
+}
+
 func TestSolrSimpleValid(t *testing.T) {
 	q := "title: {bannanas}"
-	solr, err := v4parser.ConvertToSolr(q)
-	if err != nil {
-		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
-	}
-	expected := `_query_:"{!edismax qf=$title_qf pf=$title_pf}(bannanas)"`
-	if solr != expected {
-		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expected, solr)
-	}
+	e := `_query_:"{!edismax qf=$title_qf pf=$title_pf}(bannanas)"`
+
+	expectSolrCoversionSuccess(t, q, e)
 }
 
 func TestSolrSpecialCharsValid(t *testing.T) {
 	q := "title:{A = B}"
-	expect := `_query_:"{!edismax qf=$title_qf pf=$title_pf}(A = B)"`
+	e := `_query_:"{!edismax qf=$title_qf pf=$title_pf}(A = B)"`
 
-	solr, err := v4parser.ConvertToSolr(q)
-	if err != nil {
-		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
-	}
-	if solr != expect {
-		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
-	}
+	expectSolrCoversionSuccess(t, q, e)
 }
 
 func TestSolrIdentifierValid(t *testing.T) {
 	q := `identifier:{35007007606860}`
-	expect := `_query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(35007007606860)"`
+	e := `_query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(35007007606860)"`
 
-	solr, err := v4parser.ConvertToSolr(q)
-	if err != nil {
-		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
-	}
-	if solr != expect {
-		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
-	}
+	expectSolrCoversionSuccess(t, q, e)
 }
 
 func TestSolrSimpleInvalid(t *testing.T) {
 	q := "title: {bannanas} OR author: bad"
-	solr, err := v4parser.ConvertToSolr(q)
-	if err == nil {
-		t.Errorf("%s converted to %s, but should have failed", q, solr)
-	}
+
+	expectSolrCoversionFailure(t, q)
 }
 
 func TestSolrValid(t *testing.T) {
 	q := `( title : {"susan sontag" OR music title}   AND keyword:{ Maunsell } ) OR author:{ liberty }`
-	solr, err := v4parser.ConvertToSolr(q)
-	if err != nil {
-		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
-	}
-	expected := `((((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\"susan sontag\")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)") AND _query_:"{!edismax}(Maunsell)")) OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")`
-	if solr != expected {
-		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expected, solr)
-	}
+	e := `((((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\"susan sontag\")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)") AND _query_:"{!edismax}(Maunsell)")) OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")`
+
+	expectSolrCoversionSuccess(t, q, e)
 }
 
 func TestSolrValidCounts(t *testing.T) {
 	q := `( title: {pepperoni OR artichoke hearts} AND subject:{pizza} ) OR (subject:{calzone} AND (keyword:{italian} NOT author:{fieri}))`
-	sp := v4parser.SolrParser{}
-	_, err := v4parser.ConvertToSolrWithParser(&sp, q)
-	if err != nil {
-		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
-	}
-	tcnt := 2
-	acnt := 1
-	scnt := 2
-	kcnt := 1
-	if len(sp.Titles) != tcnt {
-		t.Errorf("%s title count fail. Expected %d, Actual: %d, List: %v", q, tcnt, len(sp.Titles), sp.Titles)
-	}
-	if len(sp.Authors) != acnt {
-		t.Errorf("%s author count fail. Expected %d, Actual: %d, List: %v", q, acnt, len(sp.Authors), sp.Authors)
-	}
-	if len(sp.Subjects) != scnt {
-		t.Errorf("%s subject count fail. Expected %d, Actual: %d, List: %v", q, scnt, len(sp.Subjects), sp.Subjects)
-	}
-	if len(sp.Keywords) != kcnt {
-		t.Errorf("%s keyword count fail. Expected %d, Actual: %d, List: %v", q, kcnt, len(sp.Keywords), sp.Keywords)
-	}
+	e := `((((_query_:"{!edismax qf=$title_qf pf=$title_pf}(pepperoni)" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(artichoke hearts)") AND _query_:"{!edismax qf=$subject_qf pf=$subject_pf}(pizza)")) OR ((_query_:"{!edismax qf=$subject_qf pf=$subject_pf}(calzone)" AND ((_query_:"{!edismax}(italian)" NOT _query_:"{!edismax qf=$author_qf pf=$author_pf}(fieri)")))))`
+
+	sp := expectSolrCoversionSuccess(t, q, e)
+
+	expectCounts(t, "title", sp.Titles, 2)
+	expectCounts(t, "author", sp.Authors, 1)
+	expectCounts(t, "subject", sp.Subjects, 2)
+	expectCounts(t, "keyword", sp.Keywords, 1)
 }
 
 func TestSolrDateSingle(t *testing.T) {
 	q := `date:{1945}`
-	expect := `_query_:"{!lucene df=published_daterange}(1945)"`
+	e := `_query_:"{!lucene df=published_daterange}(1945)"`
 
-	solr, err := v4parser.ConvertToSolr(q)
-	if err != nil {
-		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
-	}
-	if solr != expect {
-		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
-	}
+	expectSolrCoversionSuccess(t, q, e)
 }
 
 func TestSolrDateRange(t *testing.T) {
 	q := `date:{1945/12/07 TO 1949}`
-	expect := `_query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"`
+	e := `_query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"`
 
-	solr, err := v4parser.ConvertToSolr(q)
-	if err != nil {
-		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
-	}
-	if solr != expect {
-		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
-	}
+	expectSolrCoversionSuccess(t, q, e)
 }
 
 func TestSolrDateBefore(t *testing.T) {
 	q := `date:{BEFORE 1945-12-06}`
-	expect := `_query_:"{!lucene df=published_daterange}([* TO 1945-12-06])"`
+	e := `_query_:"{!lucene df=published_daterange}([* TO 1945-12-06])"`
 
-	solr, err := v4parser.ConvertToSolr(q)
-	if err != nil {
-		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
-	}
-	if solr != expect {
-		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
-	}
+	expectSolrCoversionSuccess(t, q, e)
 }
 
 func TestSolrDateAfter(t *testing.T) {
 	q := `date:{AFTER 1945}`
-	expect := `_query_:"{!lucene df=published_daterange}([1945 TO *])"`
+	e := `_query_:"{!lucene df=published_daterange}([1945 TO *])"`
 
-	solr, err := v4parser.ConvertToSolr(q)
-	if err != nil {
-		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
-	}
-	if solr != expect {
-		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
-	}
+	expectSolrCoversionSuccess(t, q, e)
 }
 
 func TestSolrDateMixed(t *testing.T) {
 	q := `date:{<1945} AND date:{>1932} AND author:{Shelly}`
-	expect := `((_query_:"{!lucene df=published_daterange}([* TO 1945])" AND _query_:"{!lucene df=published_daterange}([1932 TO *])") AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)")`
+	e := `((_query_:"{!lucene df=published_daterange}([* TO 1945])" AND _query_:"{!lucene df=published_daterange}([1932 TO *])") AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)")`
 
-	solr, err := v4parser.ConvertToSolr(q)
-	if err != nil {
-		t.Errorf("%s couldn't convert, but should have: %s", q, err.Error())
-	}
-	if solr != expect {
-		t.Errorf("%s convert fail. Expected %s, Actual: %s", q, expect, solr)
-	}
+	expectSolrCoversionSuccess(t, q, e)
 }
 
 func TestSolrEmptyQuery(t *testing.T) {
 	q := ``
-	solr, err := v4parser.ConvertToSolr(q)
-	if err == nil {
-		t.Errorf("%s converted to %s, but should have failed", q, solr)
-	}
+
+	expectSolrCoversionFailure(t, q)
 }
