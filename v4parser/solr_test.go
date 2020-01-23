@@ -14,7 +14,7 @@ func convert(query string) (v4parser.SolrParser, string, error) {
 	return sp, solr, err
 }
 
-func expectSolrCoversionSuccess(t *testing.T, query string, expected string) v4parser.SolrParser {
+func expectSolrConversionSuccess(t *testing.T, query string, expected string) v4parser.SolrParser {
 	sp, solr, err := convert(query)
 
 	if err != nil {
@@ -28,7 +28,7 @@ func expectSolrCoversionSuccess(t *testing.T, query string, expected string) v4p
 	return sp
 }
 
-func expectSolrCoversionFailure(t *testing.T, query string) {
+func expectSolrConversionFailure(t *testing.T, query string) {
 	_, solr, err := convert(query)
 
 	if err == nil {
@@ -48,41 +48,41 @@ func TestSolrSimpleValid(t *testing.T) {
 	q := "title: {bannanas}"
 	e := `_query_:"{!edismax qf=$title_qf pf=$title_pf}(bannanas)"`
 
-	expectSolrCoversionSuccess(t, q, e)
+	expectSolrConversionSuccess(t, q, e)
 }
 
 func TestSolrSpecialCharsValid(t *testing.T) {
 	q := "title:{A = B}"
 	e := `_query_:"{!edismax qf=$title_qf pf=$title_pf}(A = B)"`
 
-	expectSolrCoversionSuccess(t, q, e)
+	expectSolrConversionSuccess(t, q, e)
 }
 
 func TestSolrIdentifierValid(t *testing.T) {
 	q := `identifier:{35007007606860}`
 	e := `_query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(35007007606860)"`
 
-	expectSolrCoversionSuccess(t, q, e)
+	expectSolrConversionSuccess(t, q, e)
 }
 
 func TestSolrSimpleInvalid(t *testing.T) {
 	q := "title: {bannanas} OR author: bad"
 
-	expectSolrCoversionFailure(t, q)
+	expectSolrConversionFailure(t, q)
 }
 
 func TestSolrValid(t *testing.T) {
 	q := `( title : {"susan sontag" OR music title}   AND keyword:{ Maunsell } ) OR author:{ liberty }`
 	e := `((((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\"susan sontag\")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)") AND _query_:"{!edismax}(Maunsell)")) OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")`
 
-	expectSolrCoversionSuccess(t, q, e)
+	expectSolrConversionSuccess(t, q, e)
 }
 
 func TestSolrValidCounts(t *testing.T) {
 	q := `( title: {pepperoni OR artichoke hearts} AND subject:{pizza} ) OR (subject:{calzone} AND (keyword:{italian} NOT author:{fieri}))`
 	e := `((((_query_:"{!edismax qf=$title_qf pf=$title_pf}(pepperoni)" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(artichoke hearts)") AND _query_:"{!edismax qf=$subject_qf pf=$subject_pf}(pizza)")) OR ((_query_:"{!edismax qf=$subject_qf pf=$subject_pf}(calzone)" AND ((_query_:"{!edismax}(italian)" NOT _query_:"{!edismax qf=$author_qf pf=$author_pf}(fieri)")))))`
 
-	sp := expectSolrCoversionSuccess(t, q, e)
+	sp := expectSolrConversionSuccess(t, q, e)
 
 	expectCounts(t, "title", sp.Titles, 2)
 	expectCounts(t, "author", sp.Authors, 1)
@@ -94,39 +94,88 @@ func TestSolrDateSingle(t *testing.T) {
 	q := `date:{1945}`
 	e := `_query_:"{!lucene df=published_daterange}(1945)"`
 
-	expectSolrCoversionSuccess(t, q, e)
+	expectSolrConversionSuccess(t, q, e)
 }
 
 func TestSolrDateRange(t *testing.T) {
 	q := `date:{1945/12/07 TO 1949}`
 	e := `_query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"`
 
-	expectSolrCoversionSuccess(t, q, e)
+	expectSolrConversionSuccess(t, q, e)
 }
 
 func TestSolrDateBefore(t *testing.T) {
 	q := `date:{BEFORE 1945-12-06}`
 	e := `_query_:"{!lucene df=published_daterange}([* TO 1945-12-06])"`
 
-	expectSolrCoversionSuccess(t, q, e)
+	expectSolrConversionSuccess(t, q, e)
 }
 
 func TestSolrDateAfter(t *testing.T) {
 	q := `date:{AFTER 1945}`
 	e := `_query_:"{!lucene df=published_daterange}([1945 TO *])"`
 
-	expectSolrCoversionSuccess(t, q, e)
+	expectSolrConversionSuccess(t, q, e)
 }
 
 func TestSolrDateMixed(t *testing.T) {
 	q := `date:{<1945} AND date:{>1932} AND author:{Shelly}`
 	e := `((_query_:"{!lucene df=published_daterange}([* TO 1945])" AND _query_:"{!lucene df=published_daterange}([1932 TO *])") AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)")`
 
-	expectSolrCoversionSuccess(t, q, e)
+	expectSolrConversionSuccess(t, q, e)
 }
 
 func TestSolrEmptyQuery(t *testing.T) {
 	q := ``
 
-	expectSolrCoversionFailure(t, q)
+	expectSolrConversionFailure(t, q)
+}
+
+func TestSolrEmptyKeyword(t *testing.T) {
+	q := `keyword:{}`
+	e := `_query_:"{!edismax}(*)"`
+
+	expectSolrConversionSuccess(t, q, e)
+}
+
+func TestSolrBobRandomQuery(t *testing.T) {
+	q := `keyword:{cincinnati, ohio (home of the :reds:)}`
+	e := `_query_:"{!edismax}(cincinnati, ohio [home of the :reds:])"`
+
+	expectSolrConversionSuccess(t, q, e)
+}
+
+func TestSolrSearchTip1(t *testing.T) {
+	q := `keyword: {"grapes of wrath"}`
+	e := `_query_:"{!edismax}(\"grapes of wrath\")"`
+
+	expectSolrConversionSuccess(t, q, e)
+}
+
+func TestSolrSearchTip2(t *testing.T) {
+	q := `keyword: {kyoto NOT protocol}`
+	e := `(_query_:"{!edismax}(kyoto)" NOT _query_:"{!edismax}(protocol)")`
+
+	expectSolrConversionSuccess(t, q, e)
+}
+
+func TestSolrSearchTip3(t *testing.T) {
+	q := `keyword: {"frida kahlo" AND exhibitions}`
+	e := `(_query_:"{!edismax}(\"frida kahlo\")" AND _query_:"{!edismax}(exhibitions)")`
+
+	expectSolrConversionSuccess(t, q, e)
+}
+
+func TestSolrSearchTip4a(t *testing.T) {
+	q := `keyword: {(calico OR "tortoise shell") AND cats}`
+	e := `(_query_:"{!edismax}([[calico  OR  \"tortoise shell\"]])" AND _query_:"{!edismax}(cats)")`
+
+	expectSolrConversionSuccess(t, q, e)
+}
+
+func TestSolrSearchTip4b(t *testing.T) {
+	q := `(keyword: {calico OR "tortoise shell"})  AND keyword: {cats}`
+	e := `(((_query_:"{!edismax}(calico)" OR _query_:"{!edismax}(\"tortoise shell\")")) AND _query_:"{!edismax}(cats)")`
+
+	expectSolrConversionSuccess(t, q, e)
 }

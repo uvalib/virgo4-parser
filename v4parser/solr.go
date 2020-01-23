@@ -116,7 +116,6 @@ func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 
 	// grey magic to get field name so we can populate per-field query slices in expand()
 
-	v.debug("\tvisitFieldQuery(): child count: %d", ctx.GetChildCount())
 	// if this is nil, the query isn't going to parse anyway, so bail now to avoid crashing
 	if ctx.GetChild(0).GetChild(0) == nil {
 		return ""
@@ -308,11 +307,11 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 					break
 				}
 
-				child1 := ctx.GetChild(1)
+				var out []interface{}
 
-				childResult := v.visit(child1).(string)
+				out = append(out, v.visit(ctx.GetChild(1)))
 
-				return childResult
+				return out
 			}
 		}
 	}
@@ -328,11 +327,24 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 			out += " "
 		}
 
-		childResult := v.visit(child).(string)
+		childResult := v.visit(child)
 
-		v.debug("\tsearch child %d: %s", i, childResult)
+		str := ""
 
-		out += childResult
+		switch t := childResult.(type) {
+		case string:
+			v.debug("\tchild %d type: string", i)
+			str = t
+		case interface{}:
+			v.debug("\tchild %d type: interface{}", i)
+			str = fmt.Sprintf("%v", t)
+		default:
+			v.debug("\tchild %d type: unknown", i)
+		}
+
+		v.debug("\tchild %d value: %s", i, str)
+
+		out += str
 	}
 
 	v.debug("\tsearch string: %s", out)
