@@ -11,8 +11,8 @@ import (
 //virgoErrorListener implements the antlr.ErrorListener interface
 //and is used by both the lexer and the parser
 type virgoErrorListener struct {
-	valid  bool
-	errors []string
+	valid    bool
+	errors   []string
 	warnings []string
 }
 
@@ -94,7 +94,11 @@ func Validate(src string) (bool, string) {
 	antlr.ParseTreeWalkerDefault.Walk(&v, parser.Query())
 
 	valid := v.valid && lel.valid && pel.valid
-	errors := strings.Join([]string{"lexer: [" + lel.Errors() + "]", "parser: [" + pel.Errors() + "]"}, "; ")
+
+	errors := ""
+	if valid == false {
+		errors = strings.Join([]string{"lexer: [" + lel.Errors() + "]", "parser: [" + pel.Errors() + "]"}, "; ")
+	}
 
 	return valid, errors
 }
