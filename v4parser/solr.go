@@ -14,7 +14,7 @@ import (
 // SolrParser will parse the query string into a format compatable with a solr search
 type SolrParser struct {
 	// options
-	Verbose bool
+	Debug bool
 
 	// basic info about the parsed query, can be useful to the caller
 	Titles      []string
@@ -24,6 +24,14 @@ type SolrParser struct {
 	Identifiers []string
 }
 
+func (v *SolrParser) debug(format string, args ...interface{}) {
+	if v.Debug == false {
+		return
+	}
+
+	log.Printf(format, args...)
+}
+
 func (v *SolrParser) visit(tree antlr.Tree) interface{} {
 	switch val := tree.(type) {
 	case antlr.RuleNode:
@@ -31,6 +39,7 @@ func (v *SolrParser) visit(tree antlr.Tree) interface{} {
 	case antlr.TerminalNode:
 		return v.visitTerminal(val)
 	}
+
 	return nil
 }
 
@@ -58,7 +67,8 @@ func (v *SolrParser) visitRuleNode(rule antlr.RuleNode) interface{} {
 func (v *SolrParser) visitQuery(query antlr.RuleNode) interface{} {
 	first := query.GetChild(0)
 	result := v.visit(first)
-	return (result)
+
+	return result
 }
 
 func (v *SolrParser) visitQueryParts(ctx antlr.RuleNode) interface{} {
@@ -69,10 +79,11 @@ func (v *SolrParser) visitQueryParts(ctx antlr.RuleNode) interface{} {
 			query1 := v.visit(ctx.GetChild(0))
 			queryop := v.visit(ctx.GetChild(1))
 			query2 := v.visit(ctx.GetChild(2))
+
 			out := fmt.Sprintf("(%s%s%s)", query1, queryop, query2)
-			if v.Verbose {
-				log.Printf("\tquery part (boolean): %s", out)
-			}
+
+			v.debug("\tquery part (boolean): %s", out)
+
 			return out
 		}
 
@@ -80,10 +91,11 @@ func (v *SolrParser) visitQueryParts(ctx antlr.RuleNode) interface{} {
 		switch ctx.GetChild(0).(type) {
 		case antlr.TerminalNode:
 			query1 := v.visit(ctx.GetChild(1))
+
 			out := fmt.Sprintf("(%s)", query1)
-			if v.Verbose {
-				log.Printf("\tquery part (terminal): %s", out)
-			}
+
+			v.debug("\tquery part (terminal): %s", out)
+
 			return out
 		}
 	}
@@ -91,9 +103,8 @@ func (v *SolrParser) visitQueryParts(ctx antlr.RuleNode) interface{} {
 	// query_parts: field_query
 	first := ctx.GetChild(0)
 	result := v.visit(first)
-	if v.Verbose {
-		log.Printf("\tquery part: %s", result)
-	}
+
+	v.debug("\tquery part: %s", result)
 
 	return result
 }
@@ -105,6 +116,8 @@ func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 
 	// grey magic to get field name so we can populate per-field query slices in expand()
 
+	v.debug("\tvisitFieldQuery(): child count: %d", ctx.GetChildCount())
+	// if this is nil, the query isn't going to parse anyway, so bail now to avoid crashing
 	if ctx.GetChild(0).GetChild(0) == nil {
 		return ""
 	}
@@ -112,10 +125,8 @@ func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 	fieldType := ctx.GetChild(0).GetChild(0).GetPayload().(*antlr.CommonToken).GetText()
 	fieldAttr := v.visit(ctx.GetChild(0))
 
-	if v.Verbose {
-		log.Printf("\tfield type: %s", fieldType)
-		log.Printf("\tfield attr: %s", fieldAttr)
-	}
+	v.debug("\tfield type: %s", fieldType)
+	v.debug("\tfield attr: %s", fieldAttr)
 
 	var out string
 
@@ -126,9 +137,9 @@ func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 		query := v.visit(ctx.GetChild(3))
 		out = v.expand("", fieldType, fieldAttr.(string), query)
 	}
-	if v.Verbose {
-		log.Printf("\tfield query: %s", out)
-	}
+
+	v.debug("\tfield query: %s", out)
+
 	return out
 }
 
@@ -140,33 +151,34 @@ func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 // if there ARE boolean operators in the search_string they need to be (recursively) expanded and
 // wrapped with parentheses to ensure proper operator precedence
 // e.g. this field_query :   title : {"susan sontag" OR music title}
-//expands to this:           (_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
+// expands to this:           (_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
 func (v *SolrParser) expand(inStr string, fieldType string, fieldAttr string, query interface{}) string {
-	if v.Verbose {
-		log.Printf("\t==> Expand inStr %s for field %s, q: %s", inStr, fieldType, query)
-	}
+	v.debug("\t==> Expand inStr %s for field %s, q: %s", inStr, fieldType, query)
+
 	rt := reflect.TypeOf(query)
 	if rt == nil {
 		return ""
 	}
+
 	kind := rt.Kind()
+
 	if kind == reflect.Array || kind == reflect.Slice {
 		parts := reflect.ValueOf(query)
+
 		out := fmt.Sprintf("%s(", inStr)
 		out = v.expand(out, fieldType, fieldAttr, parts.Index(0))
 		out += fmt.Sprintf("%s", parts.Index(1))
 		out = v.expand(out, fieldType, fieldAttr, parts.Index(2))
 		out = fmt.Sprintf("%s)", out)
-		if v.Verbose {
-			log.Printf("\texpand type %s to %s", kind, out)
-		}
+
+		v.debug("\texpand type %s to %s", kind, out)
+
 		return out
 	}
 
 	val := fmt.Sprintf("%s", query)
-	if v.Verbose {
-		log.Printf("\tfieldType = [%s]  query = [%s]  kind = [%s]  val = [%s]", fieldType, query, kind, val)
-	}
+
+	v.debug("\tfieldType = [%s]  query = [%s]  kind = [%s]  val = [%s]", fieldType, query, kind, val)
 
 	switch fieldType {
 	case "title":
@@ -182,9 +194,9 @@ func (v *SolrParser) expand(inStr string, fieldType string, fieldAttr string, qu
 	}
 
 	out := fmt.Sprintf(`%s_query_:"{%s}(%s)"`, inStr, fieldAttr, query)
-	if v.Verbose {
-		log.Printf("\texpanded: %s", out)
-	}
+
+	v.debug("\texpanded: %s", out)
+
 	return out
 }
 
@@ -204,10 +216,11 @@ func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
 	// all other field types need qf/pf parameters based on their names
 	qf := "qf=$" + fieldType + "_qf"
 	pf := "pf=$" + fieldType + "_pf"
+
 	out = out + " " + qf + " " + pf
-	if v.Verbose {
-		log.Printf("\tfield type: %s", out)
-	}
+
+	v.debug("\tfield type: %s", out)
+
 	return out
 }
 
@@ -245,6 +258,7 @@ func (v *SolrParser) visitRangeSearchString(ctx antlr.RuleNode) interface{} {
 		rangeEnd = v.visit(ctx.GetChild(2)).(string)
 	} else if ctx.GetChildCount() == 2 {
 		value := v.visit(ctx.GetChild(1)).(string)
+
 		switch ctx.GetChild(0).(type) {
 		case antlr.TerminalNode:
 			terminal := ctx.GetChild(0).(antlr.TerminalNode)
@@ -269,12 +283,13 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 		switch ctx.GetChild(1).(type) {
 		case *Boolean_opContext:
 			var out []interface{}
+
 			out = append(out, v.visit(ctx.GetChild(0)))
 			out = append(out, v.visit(ctx.GetChild(1)))
 			out = append(out, v.visit(ctx.GetChild(2)))
-			if v.Verbose {
-				log.Printf("\tsearch string (boolean): %s", out)
-			}
+
+			v.debug("\tsearch string (boolean): %s", out)
+
 			return out
 		}
 	}
@@ -297,7 +312,7 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 
 				childResult := v.visit(child1).(string)
 
-				return childResult;
+				return childResult
 			}
 		}
 	}
@@ -305,34 +320,39 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 	//               | search_string search_part
 	//               | search_part
 	out := ""
+
 	for i := 0; i < ctx.GetChildCount(); i++ {
 		child := ctx.GetChild(i)
+
 		if i > 0 {
 			out += " "
 		}
+
 		childResult := v.visit(child).(string)
-		if v.Verbose {
-			log.Printf("\tsearch child %d: %s", i, childResult)
-		}
+
+		v.debug("\tsearch child %d: %s", i, childResult)
+
 		out += childResult
 	}
-	if v.Verbose {
-		log.Printf("\tsearch string: %s", out)
-	}
+
+	v.debug("\tsearch string: %s", out)
+
 	return out
 }
 
 func (v *SolrParser) visitChildren(node antlr.RuleNode) interface{} {
 	out := ""
+
 	for i := 0; i < node.GetChildCount(); i++ {
 		child := node.GetChild(i)
 		childResult := v.visit(child).(string)
-		if v.Verbose {
-			log.Printf("\tvisit children result: [%s]", childResult)
-		}
+
+		v.debug("\tvisit children result: [%s]", childResult)
+
 		if out != "" && childResult != `\"` && out != `\"` {
 			out += " "
 		}
+
 		out += childResult
 	}
 
@@ -357,10 +377,8 @@ func ConvertToSolrWithParser(sp *SolrParser, src string) (string, error) {
 	// EXAMPLE: `( title : {"susan sontag" OR music title}   AND keyword:{ Maunsell } ) OR author:{ liberty }`
 	// SOLR: ( ( ((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
 	//              AND _query_:"{!edismax}(Maunsell)") )  OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")
-	//
-	if sp.Verbose {
-		log.Printf("Convert to Solr: %s", src)
-	}
+
+	sp.debug("Convert to Solr: %s", src)
 
 	is := antlr.NewInputStream(src)
 
@@ -384,39 +402,31 @@ func ConvertToSolrWithParser(sp *SolrParser, src string) (string, error) {
 
 	if lel.valid == false {
 		err := errors.New(lel.Errors())
-		if sp.Verbose {
-			log.Printf("ERROR: LEXER: %s", err.Error())
-		}
+		sp.debug("ERROR: LEXER: %s", err.Error())
 		return "", err
 	}
 
 	if pel.valid == false {
 		err := errors.New(pel.Errors())
-		if sp.Verbose {
-			log.Printf("ERROR: PARSER: %s", err.Error())
-		}
+		sp.debug("ERROR: PARSER: %s", err.Error())
 		return "", err
 	}
 
 	if raw == nil {
 		err := errors.New("Empty query")
-		if sp.Verbose {
-			log.Printf("ERROR: %s", err.Error())
-		}
+		sp.debug("ERROR: %s", err.Error())
 		return "", err
 	}
 
-	out := strings.TrimSpace(raw.(string))
+	out := raw.(string)
 
-	if sp.Verbose {
-		log.Printf("SUCCESS: QUERY: %s", out)
-	}
+	sp.debug("SUCCESS: QUERY: %s", out)
 
 	return out, nil
 }
 
 // ConvertToSolr will convert a v4 query string into solr query string.
 func ConvertToSolr(src string) (string, error) {
-	sp := SolrParser{ Verbose: false }
+	sp := SolrParser{Debug: false}
 	return ConvertToSolrWithParser(&sp, src)
 }
