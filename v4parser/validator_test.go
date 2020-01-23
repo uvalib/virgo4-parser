@@ -134,3 +134,43 @@ func TestStarQueryNoQuotes(t *testing.T) {
 		t.Errorf("%s did not validate, but should have: %s", q, errors)
 	}
 }
+
+func TestSearchTip1(t *testing.T) {
+	q := `keyword: {"grapes of wrath"}`
+	valid, errors := v4parser.Validate(q)
+	if valid == false {
+		t.Errorf("%s did not validate, but should have: %s", q, errors)
+	}
+}
+
+func TestSearchTip2(t *testing.T) {
+	q := `keyword: {kyoto NOT protocol}`
+	valid, errors := v4parser.Validate(q)
+	if valid == false {
+		t.Errorf("%s did not validate, but should have: %s", q, errors)
+	}
+}
+
+func TestSearchTip3(t *testing.T) {
+	q := `keyword: {"frida kahlo" AND exhibitions}`
+	valid, errors := v4parser.Validate(q)
+	if valid == false {
+		t.Errorf("%s did not validate, but should have: %s", q, errors)
+	}
+}
+
+func TestSearchTip4a(t *testing.T) {
+	q := `keyword: {(calico OR "tortoise shell") AND cats}`
+	valid, errors := v4parser.Validate(q)
+	if valid == false {
+		t.Errorf("%s did not validate, but should have: %s", q, errors)
+	}
+}
+
+func TestSearchTip4b(t *testing.T) {
+	q := `(keyword: {calico OR "tortoise shell"})  AND keyword: {cats}`
+	valid, errors := v4parser.Validate(q)
+	if valid == false {
+		t.Errorf("%s did not validate, but should have: %s", q, errors)
+	}
+}
