@@ -1,6 +1,7 @@
 package v4parser_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/uvalib/virgo4-parser/v4parser"
@@ -140,7 +141,7 @@ func TestSolrEmptyKeyword(t *testing.T) {
 
 func TestSolrBobRandomQuery(t *testing.T) {
 	q := `keyword:{cincinnati, ohio (home of the :reds:)}`
-	e := `_query_:"{!edismax}(cincinnati, ohio [home of the :reds:])"`
+	e := `_query_:"{!edismax}(cincinnati, ohio home of the :reds:)"`
 
 	expectSolrConversionSuccess(t, q, e)
 }
@@ -168,9 +169,11 @@ func TestSolrSearchTip3(t *testing.T) {
 
 func TestSolrSearchTip4a(t *testing.T) {
 	q := `keyword: {(calico OR "tortoise shell") AND cats}`
-	e := `(_query_:"{!edismax}([[calico  OR  \"tortoise shell\"]])" AND _query_:"{!edismax}(cats)")`
+	e := `(((_query_:"{!edismax}(calico)" OR _query_:"{!edismax}(\"tortoise shell\")")) AND _query_:"{!edismax}(cats)")`
 
 	expectSolrConversionSuccess(t, q, e)
+
+	fmt.Printf("%s", v4parser.ParseTree(q))
 }
 
 func TestSolrSearchTip4b(t *testing.T) {
