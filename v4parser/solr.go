@@ -43,26 +43,38 @@ func (v *SolrParser) debug(format string, args ...interface{}) {
 	log.Printf(line, args...)
 }
 
-func (v *SolrParser) visit(tree antlr.Tree) interface{} {
-	v.level++
+func (v *SolrParser) enterFunction(funcName string) {
+	v.debug("%s {", funcName)
 
-	var out interface{}
+	v.level++
+}
+
+func (v *SolrParser) exitFunction(funcName string) {
+	v.level--
+
+	v.debug("} // %s", funcName)
+}
+
+func (v *SolrParser) visit(tree antlr.Tree) interface{} {
+	funcName := "visit()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
 
 	switch val := tree.(type) {
 	case antlr.RuleNode:
-		out = v.visitRuleNode(val)
+		return v.visitRuleNode(val)
 	case antlr.TerminalNode:
-		out = v.visitTerminal(val)
-	default:
-		out = nil
+		return v.visitTerminal(val)
 	}
 
-	v.level--
-
-	return out
+	return nil
 }
 
 func (v *SolrParser) visitRuleNode(rule antlr.RuleNode) interface{} {
+	funcName := "visitRuleNode()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
+
 	switch rule.(type) {
 	case *QueryContext:
 		return v.visitQuery(rule)
@@ -84,6 +96,10 @@ func (v *SolrParser) visitRuleNode(rule antlr.RuleNode) interface{} {
 }
 
 func (v *SolrParser) visitQuery(query antlr.RuleNode) interface{} {
+	funcName := "visitQuery()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
+
 	first := query.GetChild(0)
 	result := v.visit(first)
 
@@ -91,6 +107,10 @@ func (v *SolrParser) visitQuery(query antlr.RuleNode) interface{} {
 }
 
 func (v *SolrParser) visitQueryParts(ctx antlr.RuleNode) interface{} {
+	funcName := "visitQueryParts()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
+
 	//  query_parts : query_parts boolean_op query_parts
 	if ctx.GetChildCount() == 3 {
 		switch ctx.GetChild(1).(type) {
@@ -124,10 +144,16 @@ func (v *SolrParser) visitQueryParts(ctx antlr.RuleNode) interface{} {
 	// query_parts: field_query
 	out := v.visit(ctx.GetChild(0))
 
+	v.debug("query part: %v", out)
+
 	return out
 }
 
 func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
+	funcName := "visitFieldQuery()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
+
 	// field_query : field_type COLON LBRACE search_string RBRACE
 	//             | range_field_type COLON LBRACE range_search_string RBRACE
 	//   (_query_:"{!edismax qf=$title_qf pf=$title_pf}(certification of teachers )"
@@ -170,6 +196,10 @@ func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 // e.g. this field_query :   title : {"susan sontag" OR music title}
 // expands to this:           (_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
 func (v *SolrParser) expand(inStr string, fieldName string, fieldType string, query interface{}) string {
+	funcName := "expand()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
+
 	v.debug("==> Expand inStr %s for field %s, query: %v", inStr, fieldName, query)
 
 	rt := reflect.TypeOf(query)
@@ -179,13 +209,15 @@ func (v *SolrParser) expand(inStr string, fieldName string, fieldType string, qu
 
 	kind := rt.Kind()
 
+	v.debug("expanding query of type %s: %#v", kind, query)
+
 	if kind == reflect.Array || kind == reflect.Slice {
 		parts := reflect.ValueOf(query)
 
 		out := fmt.Sprintf("%s(", inStr)
-		out = v.expand(out, fieldName, fieldType, parts.Index(0))
+		out = v.expand(out, fieldName, fieldType, parts.Index(0).Interface())
 		out += fmt.Sprintf("%s", parts.Index(1))
-		out = v.expand(out, fieldName, fieldType, parts.Index(2))
+		out = v.expand(out, fieldName, fieldType, parts.Index(2).Interface())
 		out = fmt.Sprintf("%s)", out)
 
 		v.debug("expand type %s to %s", kind, out)
@@ -194,8 +226,6 @@ func (v *SolrParser) expand(inStr string, fieldName string, fieldType string, qu
 	}
 
 	val := fmt.Sprintf("%s", query)
-
-	v.debug("fieldName = [%s]  query = [%s]  kind = [%s]  val = [%s]", fieldName, query, kind, val)
 
 	switch fieldName {
 	case "title":
@@ -218,6 +248,10 @@ func (v *SolrParser) expand(inStr string, fieldName string, fieldType string, qu
 }
 
 func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
+	funcName := "visitFieldType()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
+
 	// field_type : TITLE | AUTHOR | SUBJECT | KEYWORD | IDENTIFIER
 	childTree := ctx.GetChild(0)
 	t := childTree.GetPayload().(*antlr.CommonToken)
@@ -242,6 +276,10 @@ func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
 }
 
 func (v *SolrParser) visitRangeFieldType(ctx antlr.RuleNode) interface{} {
+	funcName := "visitRangeFieldType()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
+
 	// range_field_type : DATE
 	childTree := ctx.GetChild(0)
 	t := childTree.GetPayload().(*antlr.CommonToken)
@@ -258,6 +296,10 @@ func (v *SolrParser) visitRangeFieldType(ctx antlr.RuleNode) interface{} {
 }
 
 func (v *SolrParser) visitRangeSearchString(ctx antlr.RuleNode) interface{} {
+	funcName := "visitRangeSearchString()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
+
 	//    range_search_string : date_string TO date_string
 	//                        | BEFORE date_string
 	//                        | AFTER date_string
@@ -376,6 +418,10 @@ query
 */
 
 func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
+	funcName := "visitSearchString()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
+
 	// search_string : search_string boolean_op search_string
 	// n.b.  this returns an array of three objects.
 	// the first or third of the objects could be either a string or an array of three objects
@@ -439,22 +485,11 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 	return out
 }
 
-/*
 func (v *SolrParser) visitChildren(node antlr.RuleNode) interface{} {
-	var out []interface{}
+	funcName := "visitChildren()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
 
-	for i := 0; i < node.GetChildCount(); i++ {
-		child := node.GetChild(i)
-		childResult := v.visit(child)
-
-		out = append(out, childResult)
-	}
-
-	return out
-}
-*/
-
-func (v *SolrParser) visitChildren(node antlr.RuleNode) interface{} {
 	out := ""
 
 	for i := 0; i < node.GetChildCount(); i++ {
@@ -474,6 +509,10 @@ func (v *SolrParser) visitChildren(node antlr.RuleNode) interface{} {
 }
 
 func (v *SolrParser) visitTerminal(terminal antlr.TerminalNode) interface{} {
+	funcName := "visitTerminal()"
+	v.enterFunction(funcName)
+	defer v.exitFunction(funcName)
+
 	if terminal.GetSymbol().GetTokenType() == VirgoQueryLexerQUOTE {
 		return `\"`
 	} else if terminal.GetSymbol().GetTokenType() == VirgoQueryLexerBOOLEAN {
