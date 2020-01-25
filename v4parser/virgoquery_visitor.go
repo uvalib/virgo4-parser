@@ -2,7 +2,6 @@
 
 package v4parser // VirgoQuery
 import "github.com/antlr/antlr4/runtime/Go/antlr"
-
 // A complete Visitor for a parse tree produced by VirgoQuery.
 type VirgoQueryVisitor interface {
 	antlr.ParseTreeVisitor
@@ -36,4 +35,5 @@ type VirgoQueryVisitor interface {
 
 	// Visit a parse tree produced by VirgoQuery#search_part.
 	VisitSearch_part(ctx *Search_partContext) interface{}
+
 }
