@@ -144,6 +144,10 @@ func (v *SolrParser) visitQueryParts(ctx antlr.RuleNode) interface{} {
 	// query_parts: field_query
 	out := v.visit(ctx.GetChild(0))
 
+	if out == nil {
+		out = ""
+	}
+
 	v.debug("query part: %v", out)
 
 	return out
