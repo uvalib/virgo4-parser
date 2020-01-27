@@ -22,6 +22,7 @@ func expectSolrConversionSuccess(t *testing.T, query string, expected string) v4
 	if err != nil {
 		t.Errorf("Conversion failed, but should have succeeded:")
 		t.Errorf("ERROR: %s", err.Error())
+		t.Errorf("WANT : %s", expected)
 
 		return sp
 	}
@@ -211,8 +212,12 @@ func TestSolrShouldSucceed(t *testing.T) {
 			solr: `_query_:"{!edismax qf=$subject_qf pf=$subject_pf}(\"TRANSMUTATION (Chemistry)\")"`,
 		},
 		{
-			query: `keyword:{"calvin AND hobbes" OR (susie derkins)"}`,
-			solr: `(_query_:"{!edismax}(\"calvin AND hobbes\") OR _query_:"{!edismax}((susie derkins)))"`,
+			query: `keyword:{"calvin AND hobbes" OR (susie derkins)}`,
+			solr: `(_query_:"{!edismax}(\"calvin AND hobbes\")" OR _query_:"{!edismax}(susie derkins)")`,
+		},
+		{
+			query: `keyword:{"calvin AND hobbes" OR "(susie derkins)"}`,
+			solr: `(_query_:"{!edismax}(\"calvin AND hobbes\")" OR _query_:"{!edismax}(\"(susie derkins)\")")`,
 		},
 	}
 
