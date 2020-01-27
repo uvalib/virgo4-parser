@@ -79,3 +79,9 @@ func (s *BaseVirgoQueryListener) EnterSearch_part(ctx *Search_partContext) {}
 
 // ExitSearch_part is called when production search_part is exited.
 func (s *BaseVirgoQueryListener) ExitSearch_part(ctx *Search_partContext) {}
+
+// EnterQuoted_search_part is called when production quoted_search_part is entered.
+func (s *BaseVirgoQueryListener) EnterQuoted_search_part(ctx *Quoted_search_partContext) {}
+
+// ExitQuoted_search_part is called when production quoted_search_part is exited.
+func (s *BaseVirgoQueryListener) ExitQuoted_search_part(ctx *Quoted_search_partContext) {}

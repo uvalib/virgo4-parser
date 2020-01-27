@@ -16,52 +16,63 @@ var _ = strconv.Itoa
 
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 26, 115, 
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 26, 136, 
 	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7, 
-	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 3, 2, 3, 2, 3, 2, 3, 
-	3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 32, 10, 3, 3, 3, 3, 3, 3, 3, 3, 
-	3, 7, 3, 38, 10, 3, 12, 3, 14, 3, 41, 11, 3, 3, 4, 3, 4, 3, 4, 3, 4, 3, 
-	4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 
-	4, 5, 4, 60, 10, 4, 3, 5, 3, 5, 3, 6, 3, 6, 3, 7, 3, 7, 3, 8, 3, 8, 3, 
-	8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 5, 8, 77, 10, 8, 3, 9, 3, 9, 3, 
-	10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 5, 10, 87, 10, 10, 3, 10, 3, 10, 
-	3, 10, 3, 10, 3, 10, 3, 10, 7, 10, 95, 10, 10, 12, 10, 14, 10, 98, 11, 
-	10, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 5, 11, 106, 10, 11, 3, 11, 
-	3, 11, 7, 11, 110, 10, 11, 12, 11, 14, 11, 113, 11, 11, 3, 11, 2, 5, 4, 
-	18, 20, 12, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 2, 3, 3, 2, 7, 11, 2, 116, 
-	2, 22, 3, 2, 2, 2, 4, 31, 3, 2, 2, 2, 6, 59, 3, 2, 2, 2, 8, 61, 3, 2, 2, 
-	2, 10, 63, 3, 2, 2, 2, 12, 65, 3, 2, 2, 2, 14, 76, 3, 2, 2, 2, 16, 78, 
-	3, 2, 2, 2, 18, 86, 3, 2, 2, 2, 20, 105, 3, 2, 2, 2, 22, 23, 5, 4, 3, 2, 
-	23, 24, 7, 2, 2, 3, 24, 3, 3, 2, 2, 2, 25, 26, 8, 3, 1, 2, 26, 27, 7, 3, 
-	2, 2, 27, 28, 5, 4, 3, 2, 28, 29, 7, 4, 2, 2, 29, 32, 3, 2, 2, 2, 30, 32, 
-	5, 6, 4, 2, 31, 25, 3, 2, 2, 2, 31, 30, 3, 2, 2, 2, 32, 39, 3, 2, 2, 2, 
-	33, 34, 12, 5, 2, 2, 34, 35, 5, 12, 7, 2, 35, 36, 5, 4, 3, 6, 36, 38, 3, 
-	2, 2, 2, 37, 33, 3, 2, 2, 2, 38, 41, 3, 2, 2, 2, 39, 37, 3, 2, 2, 2, 39, 
-	40, 3, 2, 2, 2, 40, 5, 3, 2, 2, 2, 41, 39, 3, 2, 2, 2, 42, 43, 5, 8, 5, 
-	2, 43, 44, 7, 6, 2, 2, 44, 45, 7, 13, 2, 2, 45, 46, 5, 18, 10, 2, 46, 47, 
-	7, 19, 2, 2, 47, 60, 3, 2, 2, 2, 48, 49, 5, 8, 5, 2, 49, 50, 7, 6, 2, 2, 
-	50, 51, 7, 13, 2, 2, 51, 52, 7, 19, 2, 2, 52, 60, 3, 2, 2, 2, 53, 54, 5, 
-	10, 6, 2, 54, 55, 7, 6, 2, 2, 55, 56, 7, 13, 2, 2, 56, 57, 5, 14, 8, 2, 
-	57, 58, 7, 19, 2, 2, 58, 60, 3, 2, 2, 2, 59, 42, 3, 2, 2, 2, 59, 48, 3, 
-	2, 2, 2, 59, 53, 3, 2, 2, 2, 60, 7, 3, 2, 2, 2, 61, 62, 9, 2, 2, 2, 62, 
-	9, 3, 2, 2, 2, 63, 64, 7, 12, 2, 2, 64, 11, 3, 2, 2, 2, 65, 66, 7, 5, 2, 
-	2, 66, 13, 3, 2, 2, 2, 67, 68, 5, 16, 9, 2, 68, 69, 7, 22, 2, 2, 69, 70, 
-	5, 16, 9, 2, 70, 77, 3, 2, 2, 2, 71, 72, 7, 24, 2, 2, 72, 77, 5, 16, 9, 
-	2, 73, 74, 7, 23, 2, 2, 74, 77, 5, 16, 9, 2, 75, 77, 5, 16, 9, 2, 76, 67, 
-	3, 2, 2, 2, 76, 71, 3, 2, 2, 2, 76, 73, 3, 2, 2, 2, 76, 75, 3, 2, 2, 2, 
-	77, 15, 3, 2, 2, 2, 78, 79, 7, 25, 2, 2, 79, 17, 3, 2, 2, 2, 80, 81, 8, 
-	10, 1, 2, 81, 82, 7, 3, 2, 2, 82, 83, 5, 18, 10, 2, 83, 84, 7, 4, 2, 2, 
-	84, 87, 3, 2, 2, 2, 85, 87, 5, 20, 11, 2, 86, 80, 3, 2, 2, 2, 86, 85, 3, 
-	2, 2, 2, 87, 96, 3, 2, 2, 2, 88, 89, 12, 5, 2, 2, 89, 90, 5, 12, 7, 2, 
-	90, 91, 5, 18, 10, 6, 91, 95, 3, 2, 2, 2, 92, 93, 12, 4, 2, 2, 93, 95, 
-	5, 18, 10, 5, 94, 88, 3, 2, 2, 2, 94, 92, 3, 2, 2, 2, 95, 98, 3, 2, 2, 
-	2, 96, 94, 3, 2, 2, 2, 96, 97, 3, 2, 2, 2, 97, 19, 3, 2, 2, 2, 98, 96, 
-	3, 2, 2, 2, 99, 100, 8, 11, 1, 2, 100, 101, 7, 16, 2, 2, 101, 102, 5, 20, 
-	11, 2, 102, 103, 7, 16, 2, 2, 103, 106, 3, 2, 2, 2, 104, 106, 7, 20, 2, 
-	2, 105, 99, 3, 2, 2, 2, 105, 104, 3, 2, 2, 2, 106, 111, 3, 2, 2, 2, 107, 
-	108, 12, 4, 2, 2, 108, 110, 7, 20, 2, 2, 109, 107, 3, 2, 2, 2, 110, 113, 
-	3, 2, 2, 2, 111, 109, 3, 2, 2, 2, 111, 112, 3, 2, 2, 2, 112, 21, 3, 2, 
-	2, 2, 113, 111, 3, 2, 2, 2, 11, 31, 39, 59, 76, 86, 94, 96, 105, 111,
+	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 3, 2, 
+	3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 34, 10, 3, 3, 3, 
+	3, 3, 3, 3, 3, 3, 7, 3, 40, 10, 3, 12, 3, 14, 3, 43, 11, 3, 3, 4, 3, 4, 
+	3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 
+	3, 4, 3, 4, 3, 4, 5, 4, 62, 10, 4, 3, 5, 3, 5, 3, 6, 3, 6, 3, 7, 3, 7, 
+	3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 5, 8, 79, 10, 8, 
+	3, 9, 3, 9, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 
+	10, 3, 10, 5, 10, 93, 10, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 
+	7, 10, 101, 10, 10, 12, 10, 14, 10, 104, 11, 10, 3, 11, 3, 11, 3, 11, 3, 
+	11, 3, 11, 7, 11, 111, 10, 11, 12, 11, 14, 11, 114, 11, 11, 3, 12, 3, 12, 
+	3, 12, 3, 12, 3, 12, 5, 12, 121, 10, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 
+	12, 3, 12, 3, 12, 3, 12, 7, 12, 131, 10, 12, 12, 12, 14, 12, 134, 11, 12, 
+	3, 12, 2, 6, 4, 18, 20, 22, 13, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 
+	2, 3, 3, 2, 7, 11, 2, 143, 2, 24, 3, 2, 2, 2, 4, 33, 3, 2, 2, 2, 6, 61, 
+	3, 2, 2, 2, 8, 63, 3, 2, 2, 2, 10, 65, 3, 2, 2, 2, 12, 67, 3, 2, 2, 2, 
+	14, 78, 3, 2, 2, 2, 16, 80, 3, 2, 2, 2, 18, 92, 3, 2, 2, 2, 20, 105, 3, 
+	2, 2, 2, 22, 120, 3, 2, 2, 2, 24, 25, 5, 4, 3, 2, 25, 26, 7, 2, 2, 3, 26, 
+	3, 3, 2, 2, 2, 27, 28, 8, 3, 1, 2, 28, 29, 7, 3, 2, 2, 29, 30, 5, 4, 3, 
+	2, 30, 31, 7, 4, 2, 2, 31, 34, 3, 2, 2, 2, 32, 34, 5, 6, 4, 2, 33, 27, 
+	3, 2, 2, 2, 33, 32, 3, 2, 2, 2, 34, 41, 3, 2, 2, 2, 35, 36, 12, 5, 2, 2, 
+	36, 37, 5, 12, 7, 2, 37, 38, 5, 4, 3, 6, 38, 40, 3, 2, 2, 2, 39, 35, 3, 
+	2, 2, 2, 40, 43, 3, 2, 2, 2, 41, 39, 3, 2, 2, 2, 41, 42, 3, 2, 2, 2, 42, 
+	5, 3, 2, 2, 2, 43, 41, 3, 2, 2, 2, 44, 45, 5, 8, 5, 2, 45, 46, 7, 6, 2, 
+	2, 46, 47, 7, 13, 2, 2, 47, 48, 5, 18, 10, 2, 48, 49, 7, 19, 2, 2, 49, 
+	62, 3, 2, 2, 2, 50, 51, 5, 8, 5, 2, 51, 52, 7, 6, 2, 2, 52, 53, 7, 13, 
+	2, 2, 53, 54, 7, 19, 2, 2, 54, 62, 3, 2, 2, 2, 55, 56, 5, 10, 6, 2, 56, 
+	57, 7, 6, 2, 2, 57, 58, 7, 13, 2, 2, 58, 59, 5, 14, 8, 2, 59, 60, 7, 19, 
+	2, 2, 60, 62, 3, 2, 2, 2, 61, 44, 3, 2, 2, 2, 61, 50, 3, 2, 2, 2, 61, 55, 
+	3, 2, 2, 2, 62, 7, 3, 2, 2, 2, 63, 64, 9, 2, 2, 2, 64, 9, 3, 2, 2, 2, 65, 
+	66, 7, 12, 2, 2, 66, 11, 3, 2, 2, 2, 67, 68, 7, 5, 2, 2, 68, 13, 3, 2, 
+	2, 2, 69, 70, 5, 16, 9, 2, 70, 71, 7, 22, 2, 2, 71, 72, 5, 16, 9, 2, 72, 
+	79, 3, 2, 2, 2, 73, 74, 7, 24, 2, 2, 74, 79, 5, 16, 9, 2, 75, 76, 7, 23, 
+	2, 2, 76, 79, 5, 16, 9, 2, 77, 79, 5, 16, 9, 2, 78, 69, 3, 2, 2, 2, 78, 
+	73, 3, 2, 2, 2, 78, 75, 3, 2, 2, 2, 78, 77, 3, 2, 2, 2, 79, 15, 3, 2, 2, 
+	2, 80, 81, 7, 25, 2, 2, 81, 17, 3, 2, 2, 2, 82, 83, 8, 10, 1, 2, 83, 84, 
+	7, 16, 2, 2, 84, 85, 5, 22, 12, 2, 85, 86, 7, 16, 2, 2, 86, 93, 3, 2, 2, 
+	2, 87, 88, 7, 3, 2, 2, 88, 89, 5, 18, 10, 2, 89, 90, 7, 4, 2, 2, 90, 93, 
+	3, 2, 2, 2, 91, 93, 5, 20, 11, 2, 92, 82, 3, 2, 2, 2, 92, 87, 3, 2, 2, 
+	2, 92, 91, 3, 2, 2, 2, 93, 102, 3, 2, 2, 2, 94, 95, 12, 5, 2, 2, 95, 96, 
+	5, 12, 7, 2, 96, 97, 5, 18, 10, 6, 97, 101, 3, 2, 2, 2, 98, 99, 12, 4, 
+	2, 2, 99, 101, 5, 18, 10, 5, 100, 94, 3, 2, 2, 2, 100, 98, 3, 2, 2, 2, 
+	101, 104, 3, 2, 2, 2, 102, 100, 3, 2, 2, 2, 102, 103, 3, 2, 2, 2, 103, 
+	19, 3, 2, 2, 2, 104, 102, 3, 2, 2, 2, 105, 106, 8, 11, 1, 2, 106, 107, 
+	7, 20, 2, 2, 107, 112, 3, 2, 2, 2, 108, 109, 12, 4, 2, 2, 109, 111, 7, 
+	20, 2, 2, 110, 108, 3, 2, 2, 2, 111, 114, 3, 2, 2, 2, 112, 110, 3, 2, 2, 
+	2, 112, 113, 3, 2, 2, 2, 113, 21, 3, 2, 2, 2, 114, 112, 3, 2, 2, 2, 115, 
+	116, 8, 12, 1, 2, 116, 121, 7, 20, 2, 2, 117, 121, 7, 3, 2, 2, 118, 121, 
+	7, 4, 2, 2, 119, 121, 5, 12, 7, 2, 120, 115, 3, 2, 2, 2, 120, 117, 3, 2, 
+	2, 2, 120, 118, 3, 2, 2, 2, 120, 119, 3, 2, 2, 2, 121, 132, 3, 2, 2, 2, 
+	122, 123, 12, 10, 2, 2, 123, 131, 7, 20, 2, 2, 124, 125, 12, 9, 2, 2, 125, 
+	131, 7, 3, 2, 2, 126, 127, 12, 8, 2, 2, 127, 131, 7, 4, 2, 2, 128, 129, 
+	12, 7, 2, 2, 129, 131, 5, 12, 7, 2, 130, 122, 3, 2, 2, 2, 130, 124, 3, 
+	2, 2, 2, 130, 126, 3, 2, 2, 2, 130, 128, 3, 2, 2, 2, 131, 134, 3, 2, 2, 
+	2, 132, 130, 3, 2, 2, 2, 132, 133, 3, 2, 2, 2, 133, 23, 3, 2, 2, 2, 134, 
+	132, 3, 2, 2, 2, 13, 33, 41, 61, 78, 92, 100, 102, 112, 120, 130, 132,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
@@ -79,7 +90,8 @@ var symbolicNames = []string{
 
 var ruleNames = []string{
 	"query", "query_parts", "field_query", "field_type", "range_field_type", 
-	"boolean_op", "range_search_string", "date_string", "search_string", "search_part",
+	"boolean_op", "range_search_string", "date_string", "search_string", "search_part", 
+	"quoted_search_part",
 }
 var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
 
@@ -148,6 +160,7 @@ const (
 	VirgoQueryRULE_date_string = 7
 	VirgoQueryRULE_search_string = 8
 	VirgoQueryRULE_search_part = 9
+	VirgoQueryRULE_quoted_search_part = 10
 )
 
 // IQueryContext is an interface to support dynamic dispatch.
@@ -258,11 +271,11 @@ func (p *VirgoQuery) Query() (localctx IQueryContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(20)
+		p.SetState(22)
 		p.query_parts(0)
 	}
 	{
-		p.SetState(21)
+		p.SetState(23)
 		p.Match(VirgoQueryEOF)
 	}
 
@@ -428,28 +441,28 @@ func (p *VirgoQuery) query_parts(_p int) (localctx IQuery_partsContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(29)
+	p.SetState(31)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case VirgoQueryLPAREN:
 		{
-			p.SetState(24)
+			p.SetState(26)
 			p.Match(VirgoQueryLPAREN)
 		}
 		{
-			p.SetState(25)
+			p.SetState(27)
 			p.query_parts(0)
 		}
 		{
-			p.SetState(26)
+			p.SetState(28)
 			p.Match(VirgoQueryRPAREN)
 		}
 
 
 	case VirgoQueryTITLE, VirgoQueryAUTHOR, VirgoQuerySUBJECT, VirgoQueryKEYWORD, VirgoQueryIDENTIFIER, VirgoQueryDATE:
 		{
-			p.SetState(28)
+			p.SetState(30)
 			p.Field_query()
 		}
 
@@ -459,7 +472,7 @@ func (p *VirgoQuery) query_parts(_p int) (localctx IQuery_partsContext) {
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(37)
+	p.SetState(39)
 	p.GetErrorHandler().Sync(p)
 	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 1, p.GetParserRuleContext())
 
@@ -471,23 +484,23 @@ func (p *VirgoQuery) query_parts(_p int) (localctx IQuery_partsContext) {
 			_prevctx = localctx
 			localctx = NewQuery_partsContext(p, _parentctx, _parentState)
 			p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_query_parts)
-			p.SetState(31)
+			p.SetState(33)
 
 			if !(p.Precpred(p.GetParserRuleContext(), 3)) {
 				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 3)", ""))
 			}
 			{
-				p.SetState(32)
+				p.SetState(34)
 				p.Boolean_op()
 			}
 			{
-				p.SetState(33)
+				p.SetState(35)
 				p.query_parts(4)
 			}
 
 
 		}
-		p.SetState(39)
+		p.SetState(41)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 1, p.GetParserRuleContext())
 	}
@@ -642,29 +655,29 @@ func (p *VirgoQuery) Field_query() (localctx IField_queryContext) {
 		}
 	}()
 
-	p.SetState(57)
+	p.SetState(59)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 2, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(40)
+			p.SetState(42)
 			p.Field_type()
 		}
 		{
-			p.SetState(41)
+			p.SetState(43)
 			p.Match(VirgoQueryCOLON)
 		}
 		{
-			p.SetState(42)
+			p.SetState(44)
 			p.Match(VirgoQueryLBRACE)
 		}
 		{
-			p.SetState(43)
+			p.SetState(45)
 			p.search_string(0)
 		}
 		{
-			p.SetState(44)
+			p.SetState(46)
 			p.Match(VirgoQueryRBRACE)
 		}
 
@@ -672,19 +685,19 @@ func (p *VirgoQuery) Field_query() (localctx IField_queryContext) {
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(46)
+			p.SetState(48)
 			p.Field_type()
 		}
 		{
-			p.SetState(47)
+			p.SetState(49)
 			p.Match(VirgoQueryCOLON)
 		}
 		{
-			p.SetState(48)
+			p.SetState(50)
 			p.Match(VirgoQueryLBRACE)
 		}
 		{
-			p.SetState(49)
+			p.SetState(51)
 			p.Match(VirgoQueryRBRACE)
 		}
 
@@ -692,23 +705,23 @@ func (p *VirgoQuery) Field_query() (localctx IField_queryContext) {
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(51)
+			p.SetState(53)
 			p.Range_field_type()
 		}
 		{
-			p.SetState(52)
+			p.SetState(54)
 			p.Match(VirgoQueryCOLON)
 		}
 		{
-			p.SetState(53)
+			p.SetState(55)
 			p.Match(VirgoQueryLBRACE)
 		}
 		{
-			p.SetState(54)
+			p.SetState(56)
 			p.Range_search_string()
 		}
 		{
-			p.SetState(55)
+			p.SetState(57)
 			p.Match(VirgoQueryRBRACE)
 		}
 
@@ -835,7 +848,7 @@ func (p *VirgoQuery) Field_type() (localctx IField_typeContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(59)
+		p.SetState(61)
 		_la = p.GetTokenStream().LA(1)
 
 		if !((((_la) & -(0x1f+1)) == 0 && ((1 << uint(_la)) & ((1 << VirgoQueryTITLE) | (1 << VirgoQueryAUTHOR) | (1 << VirgoQuerySUBJECT) | (1 << VirgoQueryKEYWORD) | (1 << VirgoQueryIDENTIFIER))) != 0)) {
@@ -950,7 +963,7 @@ func (p *VirgoQuery) Range_field_type() (localctx IRange_field_typeContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(61)
+		p.SetState(63)
 		p.Match(VirgoQueryDATE)
 	}
 
@@ -1058,7 +1071,7 @@ func (p *VirgoQuery) Boolean_op() (localctx IBoolean_opContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(63)
+		p.SetState(65)
 		p.Match(VirgoQueryBOOLEAN)
 	}
 
@@ -1195,21 +1208,21 @@ func (p *VirgoQuery) Range_search_string() (localctx IRange_search_stringContext
 		}
 	}()
 
-	p.SetState(74)
+	p.SetState(76)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(65)
+			p.SetState(67)
 			p.Date_string()
 		}
 		{
-			p.SetState(66)
+			p.SetState(68)
 			p.Match(VirgoQueryTO)
 		}
 		{
-			p.SetState(67)
+			p.SetState(69)
 			p.Date_string()
 		}
 
@@ -1217,20 +1230,8 @@ func (p *VirgoQuery) Range_search_string() (localctx IRange_search_stringContext
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(69)
-			p.Match(VirgoQueryBEFORE)
-		}
-		{
-			p.SetState(70)
-			p.Date_string()
-		}
-
-
-	case 3:
-		p.EnterOuterAlt(localctx, 3)
-		{
 			p.SetState(71)
-			p.Match(VirgoQueryAFTER)
+			p.Match(VirgoQueryBEFORE)
 		}
 		{
 			p.SetState(72)
@@ -1238,10 +1239,22 @@ func (p *VirgoQuery) Range_search_string() (localctx IRange_search_stringContext
 		}
 
 
+	case 3:
+		p.EnterOuterAlt(localctx, 3)
+		{
+			p.SetState(73)
+			p.Match(VirgoQueryAFTER)
+		}
+		{
+			p.SetState(74)
+			p.Date_string()
+		}
+
+
 	case 4:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(73)
+			p.SetState(75)
 			p.Date_string()
 		}
 
@@ -1350,7 +1363,7 @@ func (p *VirgoQuery) Date_string() (localctx IDate_stringContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(76)
+		p.SetState(78)
 		p.Match(VirgoQueryDATE_STRING)
 	}
 
@@ -1397,6 +1410,24 @@ func NewSearch_stringContext(parser antlr.Parser, parent antlr.ParserRuleContext
 }
 
 func (s *Search_stringContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Search_stringContext) AllQUOTE() []antlr.TerminalNode {
+	return s.GetTokens(VirgoQueryQUOTE)
+}
+
+func (s *Search_stringContext) QUOTE(i int) antlr.TerminalNode {
+	return s.GetToken(VirgoQueryQUOTE, i)
+}
+
+func (s *Search_stringContext) Quoted_search_part() IQuoted_search_partContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IQuoted_search_partContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IQuoted_search_partContext)
+}
 
 func (s *Search_stringContext) LPAREN() antlr.TerminalNode {
 	return s.GetToken(VirgoQueryLPAREN, 0)
@@ -1516,28 +1547,43 @@ func (p *VirgoQuery) search_string(_p int) (localctx ISearch_stringContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(84)
+	p.SetState(90)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
+	case VirgoQueryQUOTE:
+		{
+			p.SetState(81)
+			p.Match(VirgoQueryQUOTE)
+		}
+		{
+			p.SetState(82)
+			p.quoted_search_part(0)
+		}
+		{
+			p.SetState(83)
+			p.Match(VirgoQueryQUOTE)
+		}
+
+
 	case VirgoQueryLPAREN:
 		{
-			p.SetState(79)
+			p.SetState(85)
 			p.Match(VirgoQueryLPAREN)
 		}
 		{
-			p.SetState(80)
+			p.SetState(86)
 			p.search_string(0)
 		}
 		{
-			p.SetState(81)
+			p.SetState(87)
 			p.Match(VirgoQueryRPAREN)
 		}
 
 
-	case VirgoQueryQUOTE, VirgoQuerySEARCH_WORD:
+	case VirgoQuerySEARCH_WORD:
 		{
-			p.SetState(83)
+			p.SetState(89)
 			p.search_part(0)
 		}
 
@@ -1547,7 +1593,7 @@ func (p *VirgoQuery) search_string(_p int) (localctx ISearch_stringContext) {
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(94)
+	p.SetState(100)
 	p.GetErrorHandler().Sync(p)
 	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 6, p.GetParserRuleContext())
 
@@ -1557,23 +1603,23 @@ func (p *VirgoQuery) search_string(_p int) (localctx ISearch_stringContext) {
 				p.TriggerExitRuleEvent()
 			}
 			_prevctx = localctx
-			p.SetState(92)
+			p.SetState(98)
 			p.GetErrorHandler().Sync(p)
 			switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 5, p.GetParserRuleContext()) {
 			case 1:
 				localctx = NewSearch_stringContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_search_string)
-				p.SetState(86)
+				p.SetState(92)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 3)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 3)", ""))
 				}
 				{
-					p.SetState(87)
+					p.SetState(93)
 					p.Boolean_op()
 				}
 				{
-					p.SetState(88)
+					p.SetState(94)
 					p.search_string(4)
 				}
 
@@ -1581,20 +1627,20 @@ func (p *VirgoQuery) search_string(_p int) (localctx ISearch_stringContext) {
 			case 2:
 				localctx = NewSearch_stringContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_search_string)
-				p.SetState(90)
+				p.SetState(96)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 2)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 				}
 				{
-					p.SetState(91)
+					p.SetState(97)
 					p.search_string(3)
 				}
 
 			}
 
 		}
-		p.SetState(96)
+		p.SetState(102)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 6, p.GetParserRuleContext())
 	}
@@ -1643,12 +1689,8 @@ func NewSearch_partContext(parser antlr.Parser, parent antlr.ParserRuleContext, 
 
 func (s *Search_partContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *Search_partContext) AllQUOTE() []antlr.TerminalNode {
-	return s.GetTokens(VirgoQueryQUOTE)
-}
-
-func (s *Search_partContext) QUOTE(i int) antlr.TerminalNode {
-	return s.GetToken(VirgoQueryQUOTE, i)
+func (s *Search_partContext) SEARCH_WORD() antlr.TerminalNode {
+	return s.GetToken(VirgoQuerySEARCH_WORD, 0)
 }
 
 func (s *Search_partContext) Search_part() ISearch_partContext {
@@ -1659,10 +1701,6 @@ func (s *Search_partContext) Search_part() ISearch_partContext {
 	}
 
 	return t.(ISearch_partContext)
-}
-
-func (s *Search_partContext) SEARCH_WORD() antlr.TerminalNode {
-	return s.GetToken(VirgoQuerySEARCH_WORD, 0)
 }
 
 func (s *Search_partContext) GetRuleContext() antlr.RuleContext {
@@ -1732,40 +1770,15 @@ func (p *VirgoQuery) search_part(_p int) (localctx ISearch_partContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(103)
-	p.GetErrorHandler().Sync(p)
-
-	switch p.GetTokenStream().LA(1) {
-	case VirgoQueryQUOTE:
-		{
-			p.SetState(98)
-			p.Match(VirgoQueryQUOTE)
-		}
-		{
-			p.SetState(99)
-			p.search_part(0)
-		}
-		{
-			p.SetState(100)
-			p.Match(VirgoQueryQUOTE)
-		}
-
-
-	case VirgoQuerySEARCH_WORD:
-		{
-			p.SetState(102)
-			p.Match(VirgoQuerySEARCH_WORD)
-		}
-
-
-
-	default:
-		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+	{
+		p.SetState(104)
+		p.Match(VirgoQuerySEARCH_WORD)
 	}
+
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(109)
+	p.SetState(110)
 	p.GetErrorHandler().Sync(p)
-	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 8, p.GetParserRuleContext())
+	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 7, p.GetParserRuleContext())
 
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
@@ -1775,21 +1788,277 @@ func (p *VirgoQuery) search_part(_p int) (localctx ISearch_partContext) {
 			_prevctx = localctx
 			localctx = NewSearch_partContext(p, _parentctx, _parentState)
 			p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_search_part)
-			p.SetState(105)
+			p.SetState(106)
 
 			if !(p.Precpred(p.GetParserRuleContext(), 2)) {
 				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 			}
 			{
-				p.SetState(106)
+				p.SetState(107)
 				p.Match(VirgoQuerySEARCH_WORD)
 			}
 
 
 		}
-		p.SetState(111)
+		p.SetState(112)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 8, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 7, p.GetParserRuleContext())
+	}
+
+
+
+	return localctx
+}
+
+
+// IQuoted_search_partContext is an interface to support dynamic dispatch.
+type IQuoted_search_partContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsQuoted_search_partContext differentiates from other interfaces.
+	IsQuoted_search_partContext()
+}
+
+type Quoted_search_partContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyQuoted_search_partContext() *Quoted_search_partContext {
+	var p = new(Quoted_search_partContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = VirgoQueryRULE_quoted_search_part
+	return p
+}
+
+func (*Quoted_search_partContext) IsQuoted_search_partContext() {}
+
+func NewQuoted_search_partContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Quoted_search_partContext {
+	var p = new(Quoted_search_partContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = VirgoQueryRULE_quoted_search_part
+
+	return p
+}
+
+func (s *Quoted_search_partContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Quoted_search_partContext) SEARCH_WORD() antlr.TerminalNode {
+	return s.GetToken(VirgoQuerySEARCH_WORD, 0)
+}
+
+func (s *Quoted_search_partContext) LPAREN() antlr.TerminalNode {
+	return s.GetToken(VirgoQueryLPAREN, 0)
+}
+
+func (s *Quoted_search_partContext) RPAREN() antlr.TerminalNode {
+	return s.GetToken(VirgoQueryRPAREN, 0)
+}
+
+func (s *Quoted_search_partContext) Boolean_op() IBoolean_opContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IBoolean_opContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IBoolean_opContext)
+}
+
+func (s *Quoted_search_partContext) Quoted_search_part() IQuoted_search_partContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IQuoted_search_partContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IQuoted_search_partContext)
+}
+
+func (s *Quoted_search_partContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Quoted_search_partContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+
+func (s *Quoted_search_partContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.EnterQuoted_search_part(s)
+	}
+}
+
+func (s *Quoted_search_partContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(VirgoQueryListener); ok {
+		listenerT.ExitQuoted_search_part(s)
+	}
+}
+
+func (s *Quoted_search_partContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case VirgoQueryVisitor:
+		return t.VisitQuoted_search_part(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+
+
+
+
+func (p *VirgoQuery) Quoted_search_part() (localctx IQuoted_search_partContext) {
+	return p.quoted_search_part(0)
+}
+
+func (p *VirgoQuery) quoted_search_part(_p int) (localctx IQuoted_search_partContext) {
+	var _parentctx antlr.ParserRuleContext = p.GetParserRuleContext()
+	_parentState := p.GetState()
+	localctx = NewQuoted_search_partContext(p, p.GetParserRuleContext(), _parentState)
+	var _prevctx IQuoted_search_partContext = localctx
+	var _ antlr.ParserRuleContext = _prevctx // TODO: To prevent unused variable warning.
+	_startState := 20
+	p.EnterRecursionRule(localctx, 20, VirgoQueryRULE_quoted_search_part, _p)
+
+	defer func() {
+		p.UnrollRecursionContexts(_parentctx)
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	var _alt int
+
+	p.EnterOuterAlt(localctx, 1)
+	p.SetState(118)
+	p.GetErrorHandler().Sync(p)
+
+	switch p.GetTokenStream().LA(1) {
+	case VirgoQuerySEARCH_WORD:
+		{
+			p.SetState(114)
+			p.Match(VirgoQuerySEARCH_WORD)
+		}
+
+
+	case VirgoQueryLPAREN:
+		{
+			p.SetState(115)
+			p.Match(VirgoQueryLPAREN)
+		}
+
+
+	case VirgoQueryRPAREN:
+		{
+			p.SetState(116)
+			p.Match(VirgoQueryRPAREN)
+		}
+
+
+	case VirgoQueryBOOLEAN:
+		{
+			p.SetState(117)
+			p.Boolean_op()
+		}
+
+
+
+	default:
+		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+	}
+	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
+	p.SetState(130)
+	p.GetErrorHandler().Sync(p)
+	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 10, p.GetParserRuleContext())
+
+	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
+		if _alt == 1 {
+			if p.GetParseListeners() != nil {
+				p.TriggerExitRuleEvent()
+			}
+			_prevctx = localctx
+			p.SetState(128)
+			p.GetErrorHandler().Sync(p)
+			switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 9, p.GetParserRuleContext()) {
+			case 1:
+				localctx = NewQuoted_search_partContext(p, _parentctx, _parentState)
+				p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_quoted_search_part)
+				p.SetState(120)
+
+				if !(p.Precpred(p.GetParserRuleContext(), 8)) {
+					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 8)", ""))
+				}
+				{
+					p.SetState(121)
+					p.Match(VirgoQuerySEARCH_WORD)
+				}
+
+
+			case 2:
+				localctx = NewQuoted_search_partContext(p, _parentctx, _parentState)
+				p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_quoted_search_part)
+				p.SetState(122)
+
+				if !(p.Precpred(p.GetParserRuleContext(), 7)) {
+					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 7)", ""))
+				}
+				{
+					p.SetState(123)
+					p.Match(VirgoQueryLPAREN)
+				}
+
+
+			case 3:
+				localctx = NewQuoted_search_partContext(p, _parentctx, _parentState)
+				p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_quoted_search_part)
+				p.SetState(124)
+
+				if !(p.Precpred(p.GetParserRuleContext(), 6)) {
+					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 6)", ""))
+				}
+				{
+					p.SetState(125)
+					p.Match(VirgoQueryRPAREN)
+				}
+
+
+			case 4:
+				localctx = NewQuoted_search_partContext(p, _parentctx, _parentState)
+				p.PushNewRecursionContext(localctx, _startState, VirgoQueryRULE_quoted_search_part)
+				p.SetState(126)
+
+				if !(p.Precpred(p.GetParserRuleContext(), 5)) {
+					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 5)", ""))
+				}
+				{
+					p.SetState(127)
+					p.Boolean_op()
+				}
+
+			}
+
+		}
+		p.SetState(132)
+		p.GetErrorHandler().Sync(p)
+		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 10, p.GetParserRuleContext())
 	}
 
 
@@ -1814,6 +2083,11 @@ func (p *VirgoQuery) Sempred(localctx antlr.RuleContext, ruleIndex, predIndex in
 			var t *Search_partContext = nil
 			if localctx != nil { t = localctx.(*Search_partContext) }
 			return p.Search_part_Sempred(t, predIndex)
+
+	case 10:
+			var t *Quoted_search_partContext = nil
+			if localctx != nil { t = localctx.(*Quoted_search_partContext) }
+			return p.Quoted_search_part_Sempred(t, predIndex)
 
 
 	default:
@@ -1848,6 +2122,25 @@ func (p *VirgoQuery) Search_part_Sempred(localctx antlr.RuleContext, predIndex i
 	switch predIndex {
 	case 3:
 			return p.Precpred(p.GetParserRuleContext(), 2)
+
+	default:
+		panic("No predicate with index: " + fmt.Sprint(predIndex))
+	}
+}
+
+func (p *VirgoQuery) Quoted_search_part_Sempred(localctx antlr.RuleContext, predIndex int) bool {
+	switch predIndex {
+	case 4:
+			return p.Precpred(p.GetParserRuleContext(), 8)
+
+	case 5:
+			return p.Precpred(p.GetParserRuleContext(), 7)
+
+	case 6:
+			return p.Precpred(p.GetParserRuleContext(), 6)
+
+	case 7:
+			return p.Precpred(p.GetParserRuleContext(), 5)
 
 	default:
 		panic("No predicate with index: " + fmt.Sprint(predIndex))

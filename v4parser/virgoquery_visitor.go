@@ -36,4 +36,7 @@ type VirgoQueryVisitor interface {
 	// Visit a parse tree produced by VirgoQuery#search_part.
 	VisitSearch_part(ctx *Search_partContext) interface{}
 
+	// Visit a parse tree produced by VirgoQuery#quoted_search_part.
+	VisitQuoted_search_part(ctx *Quoted_search_partContext) interface{}
+
 }

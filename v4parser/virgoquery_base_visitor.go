@@ -46,3 +46,7 @@ func (v *BaseVirgoQueryVisitor) VisitSearch_string(ctx *Search_stringContext) in
 func (v *BaseVirgoQueryVisitor) VisitSearch_part(ctx *Search_partContext) interface{} {
 	return v.VisitChildren(ctx)
 }
+
+func (v *BaseVirgoQueryVisitor) VisitQuoted_search_part(ctx *Quoted_search_partContext) interface{} {
+	return v.VisitChildren(ctx)
+}

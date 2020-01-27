@@ -37,6 +37,9 @@ type VirgoQueryListener interface {
 	// EnterSearch_part is called when entering the search_part production.
 	EnterSearch_part(c *Search_partContext)
 
+	// EnterQuoted_search_part is called when entering the quoted_search_part production.
+	EnterQuoted_search_part(c *Quoted_search_partContext)
+
 	// ExitQuery is called when exiting the query production.
 	ExitQuery(c *QueryContext)
 
@@ -66,4 +69,7 @@ type VirgoQueryListener interface {
 
 	// ExitSearch_part is called when exiting the search_part production.
 	ExitSearch_part(c *Search_partContext)
+
+	// ExitQuoted_search_part is called when exiting the quoted_search_part production.
+	ExitQuoted_search_part(c *Quoted_search_partContext)
 }
