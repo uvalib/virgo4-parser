@@ -392,16 +392,35 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 	out := ""
 
 	for i := 0; i < ctx.GetChildCount(); i++ {
-		childResult := v.visit(ctx.GetChild(i)).(string)
+		childResult := v.visit(ctx.GetChild(i))
+
+		rt := reflect.TypeOf(childResult)
+		if rt == nil {
+			continue
+		}
+
+		kind := rt.Kind()
+
+		v.debug("search string component of type %s: %#v", kind, childResult)
+
+		str := ""
+
+		if kind == reflect.Array || kind == reflect.Slice {
+			parts := reflect.ValueOf(childResult)
+
+			str = fmt.Sprintf("%s %s %s", parts.Index(0), parts.Index(1), parts.Index(2))
+		} else {
+			str = childResult.(string)
+		}
 
 		if i > 0 {
 			out += " "
 		}
 
-		out += childResult
+		out += str
 	}
 
-	v.debug("search string: %v", out)
+	v.debug("search string: %s", out)
 
 	return out
 }

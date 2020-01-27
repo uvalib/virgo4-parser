@@ -22,6 +22,8 @@ func expectSolrConversionSuccess(t *testing.T, query string, expected string) v4
 	if err != nil {
 		t.Errorf("Conversion failed, but should have succeeded:")
 		t.Errorf("ERROR: %s", err.Error())
+
+		return sp
 	}
 
 	if solr != expected {
@@ -200,6 +202,14 @@ func TestSolrShouldSucceed(t *testing.T) {
 			query: `keyword:{ \" rotunda \" }`,
 			solr: `_query_:"{!edismax}(\ \"rotunda \\")"`,
 		},
+		{
+			query: `subject:{((((((((((turtles AND ((((((((((skateboarding))))))))))))))))))))}`,
+			solr: `(_query_:"{!edismax qf=$subject_qf pf=$subject_pf}(turtles)" AND _query_:"{!edismax qf=$subject_qf pf=$subject_pf}(skateboarding)")`,
+		},
+		{
+			query: `subject:{"TRANSMUTATION (Chemistry)"}`,
+			solr: `_query_:"{!edismax qf=$subject_qf pf=$subject_pf}(\"TRANSMUTATION (Chemistry)\")"`,
+		},
 	}
 
 	for _, test := range tests {
@@ -232,6 +242,8 @@ func TestSolrShouldFail(t *testing.T) {
 		`rubbish:{bananas}`,
 		`date:{1932 TO 1945} HELLOOOOO author:{Shelly}`,
 		`date:{BadDate}`,
+		`subject:{"((((((((((turtles AND ((((((((((skateboarding))))))))))))))))))))}"`,
+		`subject:{"((((((((((turtles AND ((((((((((skateboarding))))))))))))))))))))"}`,
 	}
 
 	for _, query := range tests {
