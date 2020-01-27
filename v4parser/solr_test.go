@@ -210,6 +210,10 @@ func TestSolrShouldSucceed(t *testing.T) {
 			query: `subject:{"TRANSMUTATION (Chemistry)"}`,
 			solr: `_query_:"{!edismax qf=$subject_qf pf=$subject_pf}(\"TRANSMUTATION (Chemistry)\")"`,
 		},
+		{
+			query: `keyword:{"calvin AND hobbes" OR (susie derkins)"}`,
+			solr: `(_query_:"{!edismax}(\"calvin AND hobbes\") OR _query_:"{!edismax}((susie derkins)))"`,
+		},
 	}
 
 	for _, test := range tests {

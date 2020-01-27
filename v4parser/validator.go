@@ -28,11 +28,11 @@ func (eh *virgoErrorListener) LogWarning(msg string) {
 }
 
 func (eh *virgoErrorListener) Errors() string {
-	return strings.Join(eh.errors, ", ")
+	return strings.Join(eh.errors, "; ")
 }
 
 func (eh *virgoErrorListener) Warnings() string {
-	return strings.Join(eh.warnings, ", ")
+	return strings.Join(eh.warnings, "; ")
 }
 
 func (eh *virgoErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{},
