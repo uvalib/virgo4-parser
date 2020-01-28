@@ -204,16 +204,18 @@ func (v *SolrParser) expand(inStr string, fieldName string, fieldType string, qu
 	v.enterFunction(funcName)
 	defer v.exitFunction(funcName)
 
-	v.debug("==> Expand inStr %s for field %s, query: %v", inStr, fieldName, query)
-
 	rt := reflect.TypeOf(query)
 	if rt == nil {
+		v.debug("nil query")
 		return ""
 	}
 
 	kind := rt.Kind()
 
-	v.debug("expanding query of type %s: %#v", kind, query)
+	v.debug("[expand] cur string : %s", inStr)
+	v.debug("[expand] new field  : %s", fieldName)
+	v.debug("[expand] new query  : %#v", query)
+	v.debug("[expand] query type : %s", kind)
 
 	if kind == reflect.Array || kind == reflect.Slice {
 		parts := reflect.ValueOf(query)
@@ -224,7 +226,7 @@ func (v *SolrParser) expand(inStr string, fieldName string, fieldType string, qu
 		out = v.expand(out, fieldName, fieldType, parts.Index(2).Interface())
 		out = fmt.Sprintf("%s)", out)
 
-		v.debug("expand type %s to %s", kind, out)
+		v.debug("[expand] new string : %s", out)
 
 		return out
 	}
@@ -246,7 +248,7 @@ func (v *SolrParser) expand(inStr string, fieldName string, fieldType string, qu
 
 	out := fmt.Sprintf(`%s_query_:"{%s}(%s)"`, inStr, fieldType, query)
 
-	v.debug("expanded: %v", out)
+	v.debug("[expand] new string : %s", out)
 
 	return out
 }
@@ -553,7 +555,7 @@ func printSyntaxTree(parser antlr.Parser, root antlr.Tree) string {
 	return recursive(parser, root, 0)
 }
 
-func recursive (parser antlr.Parser, branch antlr.Tree, offset int) string {
+func recursive(parser antlr.Parser, branch antlr.Tree, offset int) string {
 	line := ""
 
 	for i := 0; i < offset; i++ {
