@@ -567,7 +567,7 @@ func recursive(parser antlr.Parser, branch antlr.Tree, offset int) string {
 	switch branch.(type) {
 	case antlr.ParserRuleContext:
 		for _, child := range branch.GetChildren() {
-			line += recursive(parser, child, offset + 1)
+			line += recursive(parser, child, offset+1)
 		}
 	}
 
