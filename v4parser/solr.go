@@ -236,9 +236,6 @@ func (v *SolrParser) expand(inStr string, fieldName string, fieldType string, qu
 
 	val := fmt.Sprintf("%s", query)
 
-	if v.FieldValues[fieldName] == nil {
-		v.FieldValues[fieldName] = []string{}
-	}
 	v.FieldValues[fieldName] = append(v.FieldValues[fieldName], val)
 
 	out := fmt.Sprintf(`%s_query_:"{%s}(%s)"`, inStr, fieldType, query)
