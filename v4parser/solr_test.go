@@ -1,13 +1,15 @@
 package v4parser_test
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/uvalib/virgo4-parser/v4parser"
 )
 
 func convert(t *testing.T, query string) (v4parser.SolrParser, string, error) {
-	sp := v4parser.SolrParser{Debug: true}
+	sp := v4parser.SolrParser{Debug: true, DebugCallTree: false}
 
 	t.Logf("QUERY: %s", query)
 
@@ -33,6 +35,14 @@ func expectSolrConversionSuccess(t *testing.T, query string, expected string) v4
 		t.Errorf("WANT : %s", expected)
 	}
 
+	counts := []string{}
+
+	for field, values := range sp.FieldValues {
+		counts = append(counts, fmt.Sprintf("%s: %d", field, len(values)))
+	}
+
+	t.Logf("FieldValue counts: %s", strings.Join(counts, "; "))
+
 	return sp
 }
 
@@ -45,23 +55,34 @@ func expectSolrConversionFailure(t *testing.T, query string) {
 	}
 }
 
-func expectCounts(t *testing.T, label string, values []string, want int) {
+func expectCounts(t *testing.T, field string, fieldValues map[string][]string, want int) {
+	values := fieldValues[field]
+
+	if values == nil {
+		if want != 0 {
+			t.Errorf("%s count fail. Expected %d, Actual: none", field, want)
+		}
+		return
+	}
+
 	got := len(values)
 
-	if len(values) != want {
-		t.Errorf("%s count fail. Expected %d, Actual: %d, List: %v", label, want, got, values)
+	if got != want {
+		t.Errorf("%s count fail. Expected %d, Actual: %d, List: %v", field, want, got, values)
 	}
 }
 
 func TestSolrShouldSucceed(t *testing.T) {
 	type expectedResults struct {
-		query    string // v4 query
-		solr     string // expected solr conversion
-		counts   bool   // check counts?
-		titles   int    // expected title count
-		authors  int    // expected author count
-		subjects int    // expected subject count
-		keywords int    // expected keyword count
+		query       string // v4 query
+		solr        string // expected solr conversion
+		counts      bool   // check counts?
+		titles      int    // expected title count
+		authors     int    // expected author count
+		subjects    int    // expected subject count
+		keywords    int    // expected keyword count
+		identifiers int    // expected identifier count
+		dates       int    // expected date count
 	}
 
 	tests := []expectedResults{
@@ -240,10 +261,12 @@ func TestSolrShouldSucceed(t *testing.T) {
 		sp := expectSolrConversionSuccess(t, test.query, test.solr)
 
 		if test.counts == true {
-			expectCounts(t, "title", sp.Titles, test.titles)
-			expectCounts(t, "author", sp.Authors, test.authors)
-			expectCounts(t, "subject", sp.Subjects, test.subjects)
-			expectCounts(t, "keyword", sp.Keywords, test.keywords)
+			expectCounts(t, "title", sp.FieldValues, test.titles)
+			expectCounts(t, "author", sp.FieldValues, test.authors)
+			expectCounts(t, "subject", sp.FieldValues, test.subjects)
+			expectCounts(t, "keyword", sp.FieldValues, test.keywords)
+			expectCounts(t, "identifiers", sp.FieldValues, test.identifiers)
+			expectCounts(t, "date", sp.FieldValues, test.dates)
 		}
 	}
 }
@@ -266,8 +289,8 @@ func TestSolrShouldFail(t *testing.T) {
 		`rubbish:{bananas}`,
 		`date:{1932 TO 1945} HELLOOOOO author:{Shelly}`,
 		`date:{BadDate}`,
-		`subject:{"((((((((((turtles AND ((((((((((skateboarding))))))))))))))))))))}"`,
-		`subject:{"((((((((((turtles AND ((((((((((skateboarding))))))))))))))))))))}`,
+		`subject:{"(((turtles AND (((skateboarding))))))}"`,
+		`subject:{"(((turtles AND (((skateboarding))))))}`,
 	}
 
 	for _, query := range tests {

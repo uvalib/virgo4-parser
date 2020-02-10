@@ -14,14 +14,11 @@ import (
 // SolrParser will parse the query string into a format compatable with a solr search
 type SolrParser struct {
 	// options
-	Debug bool
+	Debug         bool
+	DebugCallTree bool // Debug must also be enabled
 
-	// basic info about the parsed query, can be useful to the caller
-	Titles      []string
-	Authors     []string
-	Subjects    []string
-	Keywords    []string
-	Identifiers []string
+	// map of collected field values as parsed from the query, can be useful to the caller
+	FieldValues map[string][]string
 
 	// internal values
 	level int
@@ -34,8 +31,10 @@ func (v *SolrParser) debug(format string, args ...interface{}) {
 
 	line := ""
 
-	for i := 0; i < v.level; i++ {
-		line += "  "
+	if v.DebugCallTree == true {
+		for i := 0; i < v.level; i++ {
+			line += "  "
+		}
 	}
 
 	line += format
@@ -44,7 +43,9 @@ func (v *SolrParser) debug(format string, args ...interface{}) {
 }
 
 func (v *SolrParser) enterFunction(funcName string) {
-	v.debug("%s {", funcName)
+	if v.DebugCallTree == true {
+		v.debug("%s {", funcName)
+	}
 
 	v.level++
 }
@@ -52,7 +53,9 @@ func (v *SolrParser) enterFunction(funcName string) {
 func (v *SolrParser) exitFunction(funcName string) {
 	v.level--
 
-	v.debug("} // %s", funcName)
+	if v.DebugCallTree == true {
+		v.debug("} // %s", funcName)
+	}
 }
 
 func (v *SolrParser) visit(tree antlr.Tree) interface{} {
@@ -233,18 +236,10 @@ func (v *SolrParser) expand(inStr string, fieldName string, fieldType string, qu
 
 	val := fmt.Sprintf("%s", query)
 
-	switch fieldName {
-	case "title":
-		v.Titles = append(v.Titles, val)
-	case "author":
-		v.Authors = append(v.Authors, val)
-	case "subject":
-		v.Subjects = append(v.Subjects, val)
-	case "keyword":
-		v.Keywords = append(v.Keywords, val)
-	case "identifier":
-		v.Identifiers = append(v.Identifiers, val)
+	if v.FieldValues[fieldName] == nil {
+		v.FieldValues[fieldName] = []string{}
 	}
+	v.FieldValues[fieldName] = append(v.FieldValues[fieldName], val)
 
 	out := fmt.Sprintf(`%s_query_:"{%s}(%s)"`, inStr, fieldType, query)
 
@@ -475,6 +470,8 @@ func ConvertToSolrWithParser(sp *SolrParser, src string) (string, error) {
 
 	sp.debug("Convert to Solr: %s", src)
 
+	sp.FieldValues = make(map[string][]string)
+
 	is := antlr.NewInputStream(src)
 
 	lexer := NewVirgoQueryLexer(is)
@@ -522,7 +519,7 @@ func ConvertToSolrWithParser(sp *SolrParser, src string) (string, error) {
 
 // ConvertToSolr will convert a v4 query string into solr query string.
 func ConvertToSolr(src string) (string, error) {
-	sp := SolrParser{Debug: false}
+	sp := SolrParser{}
 	return ConvertToSolrWithParser(&sp, src)
 }
 
