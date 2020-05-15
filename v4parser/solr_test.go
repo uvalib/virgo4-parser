@@ -112,7 +112,7 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `author:{ ʼJam-dbyangs-nyi-ma }`,
-			solr:  `_query_:"{!edismax qf=$author_qf pf=$author_pf}(ʼJam-dbyangs-nyi-ma)"`,
+			solr:  `_query_:"{!edismax qf=$author_qf pf=$author_pf}(ʼJam\-dbyangs\-nyi\-ma)"`,
 		},
 		{
 			query: `title:{Tragicheskai͡a istorii͡a kavkazskikh }`,
@@ -120,23 +120,23 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `author:{Немирович-Данченко, Василий Иванович}`,
-			solr:  `_query_:"{!edismax qf=$author_qf pf=$author_pf}(Немирович-Данченко, Василий Иванович)"`,
+			solr:  `_query_:"{!edismax qf=$author_qf pf=$author_pf}(Немирович\-Данченко, Василий Иванович)"`,
 		},
 		{
 			query: `title : {"susan sontag" OR (music title)}   AND keyword:{ Maunsell }`,
-			solr:  `((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)") AND _query_:"{!edismax}(Maunsell)")`,
+			solr:  `((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\"susan sontag\")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)") AND _query_:"{!edismax}(Maunsell)")`,
 		},
 		{
 			query: `( title : {"susan sontag" OR music title}   AND keyword:{ Maunsell } ) OR author:{ liberty }`,
-			solr:  `((((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)") AND _query_:"{!edismax}(Maunsell)")) OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")`,
+			solr:  `((((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\"susan sontag\")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)") AND _query_:"{!edismax}(Maunsell)")) OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")`,
 		},
 		{
 			query: `( title : {"susan sontag" OR (music title)}   AND keyword:{ Maunsell } ) OR author:{ liberty }`,
-			solr:  `((((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)") AND _query_:"{!edismax}(Maunsell)")) OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")`,
+			solr:  `((((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\"susan sontag\")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)") AND _query_:"{!edismax}(Maunsell)")) OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")`,
 		},
 		{
 			query: `title : {"susan sontag" OR (music title)}   AND ( keyword:{ Maunsell } OR author:{ liberty })`,
-			solr:  `((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)") AND ((_query_:"{!edismax}(Maunsell)" OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")))`,
+			solr:  `((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\"susan sontag\")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)") AND ((_query_:"{!edismax}(Maunsell)" OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")))`,
 		},
 		{
 			query: ` author: {lovecraft} AND title: {madness NOT dunwich}`,
@@ -144,7 +144,7 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `identifier:{35007007606860  OR 9780754645733 OR 38083649 OR 2001020407  OR u5670758 OR "KJE5602.C73 2012"}`,
-			solr:  `(((((_query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(35007007606860)" OR _query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(9780754645733)") OR _query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(38083649)") OR _query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(2001020407)") OR _query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(u5670758)") OR _query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(\" KJE5602.C73 2012 \")")`,
+			solr:  `(((((_query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(35007007606860)" OR _query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(9780754645733)") OR _query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(38083649)") OR _query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(2001020407)") OR _query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(u5670758)") OR _query_:"{!edismax qf=$identifier_qf pf=$identifier_pf}(\"KJE5602.C73 2012\")")`,
 		},
 		{
 			query: `keyword:{triceratops OR flameproof}`,
@@ -185,11 +185,11 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `keyword:{cincinnati, ohio (home of the :reds:)}`,
-			solr:  `_query_:"{!edismax}(cincinnati, ohio home of the :reds:)"`,
+			solr:  `_query_:"{!edismax}(cincinnati, ohio home of the \:reds\:)"`,
 		},
 		{
 			query: `keyword: {"grapes of wrath"}`,
-			solr:  `_query_:"{!edismax}(\" grapes of wrath \")"`,
+			solr:  `_query_:"{!edismax}(\"grapes of wrath\")"`,
 		},
 		{
 			query: `keyword: {kyoto NOT protocol}`,
@@ -197,11 +197,11 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `keyword: {"frida kahlo" AND exhibitions}`,
-			solr:  `(_query_:"{!edismax}(\" frida kahlo \")" AND _query_:"{!edismax}(exhibitions)")`,
+			solr:  `(_query_:"{!edismax}(\"frida kahlo\")" AND _query_:"{!edismax}(exhibitions)")`,
 		},
 		{
 			query: `keyword: {(calico OR "tortoise shell") AND cats}`,
-			solr:  `((_query_:"{!edismax}(calico)" OR _query_:"{!edismax}(\" tortoise shell \")") AND _query_:"{!edismax}(cats)")`,
+			solr:  `((_query_:"{!edismax}(calico)" OR _query_:"{!edismax}(\"tortoise shell\")") AND _query_:"{!edismax}(cats)")`,
 		},
 		{
 			query: ` keyword : { (calico OR tortoise shell) AND cats } `,
@@ -209,19 +209,19 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `(keyword: {calico OR "tortoise shell"})  AND keyword: {cats}`,
-			solr:  `(((_query_:"{!edismax}(calico)" OR _query_:"{!edismax}(\" tortoise shell \")")) AND _query_:"{!edismax}(cats)")`,
+			solr:  `(((_query_:"{!edismax}(calico)" OR _query_:"{!edismax}(\"tortoise shell\")")) AND _query_:"{!edismax}(cats)")`,
 		},
 		{
 			query: ` keyword : { ("tortoise shell" OR calico) AND cats } `,
-			solr:  `((_query_:"{!edismax}(\" tortoise shell \")" OR _query_:"{!edismax}(calico)") AND _query_:"{!edismax}(cats)")`,
+			solr:  `((_query_:"{!edismax}(\"tortoise shell\")" OR _query_:"{!edismax}(calico)") AND _query_:"{!edismax}(cats)")`,
 		},
 		{
 			query: `keyword: {(calico OR "tortoise shell") AND (cats OR dogs)}`,
-			solr:  `((_query_:"{!edismax}(calico)" OR _query_:"{!edismax}(\" tortoise shell \")") AND (_query_:"{!edismax}(cats)" OR _query_:"{!edismax}(dogs)"))`,
+			solr:  `((_query_:"{!edismax}(calico)" OR _query_:"{!edismax}(\"tortoise shell\")") AND (_query_:"{!edismax}(cats)" OR _query_:"{!edismax}(dogs)"))`,
 		},
 		{
 			query: `keyword:{ \" rotunda \" }`,
-			solr:  `_query_:"{!edismax}(\ \" rotunda \ \")"`,
+			solr:  `_query_:"{!edismax}(\\ \"rotunda \\\")"`,
 		},
 		{
 			query: `subject:{((((((((((turtles AND ((((((((((skateboarding))))))))))))))))))))}`,
@@ -229,31 +229,87 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `subject:{"((((((((((turtles AND ((((((((((skateboarding))))))))))))))))))))"}`,
-			solr:  `_query_:"{!edismax qf=$subject_qf pf=$subject_pf}(\" ( ( ( ( ( ( ( ( ( ( turtles  AND  ( ( ( ( ( ( ( ( ( ( skateboarding ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) \")"`,
+			solr:  `_query_:"{!edismax qf=$subject_qf pf=$subject_pf}(\"((((((((((turtles AND ((((((((((skateboarding))))))))))))))))))))\")"`,
 		},
 		{
 			query: `keyword:{"calvin AND hobbes" OR (susie derkins)}`,
-			solr:  `(_query_:"{!edismax}(\" calvin  AND  hobbes \")" OR _query_:"{!edismax}(susie derkins)")`,
+			solr:  `(_query_:"{!edismax}(\"calvin AND hobbes\")" OR _query_:"{!edismax}(susie derkins)")`,
 		},
 		{
 			query: `keyword:{"calvin AND hobbes" OR "(susie derkins)"}`,
-			solr:  `(_query_:"{!edismax}(\" calvin  AND  hobbes \")" OR _query_:"{!edismax}(\" ( susie derkins ) \")")`,
+			solr:  `(_query_:"{!edismax}(\"calvin AND hobbes\")" OR _query_:"{!edismax}(\"(susie derkins)\")")`,
 		},
 		{
 			query: `keyword:{"calvin and hobbes" or "(susie derkins)"}`,
-			solr:  `_query_:"{!edismax}(\" calvin and hobbes \" or \" ( susie derkins ) \")"`,
+			solr:  `_query_:"{!edismax}(\"calvin and hobbes\" or \"(susie derkins)\")"`,
 		},
 		{
 			query: `subject:{"TRANSMUTATION (Chemistry)"}`,
-			solr:  `_query_:"{!edismax qf=$subject_qf pf=$subject_pf}(\" TRANSMUTATION ( Chemistry ) \")"`,
+			solr:  `_query_:"{!edismax qf=$subject_qf pf=$subject_pf}(\"TRANSMUTATION (Chemistry)\")"`,
 		},
 		{
 			query: `keyword: {"transmutation AND (chemistry)"}`,
-			solr:  `_query_:"{!edismax}(\" transmutation  AND  ( chemistry ) \")"`,
+			solr:  `_query_:"{!edismax}(\"transmutation AND (chemistry)\")"`,
 		},
 		{
 			query: `keyword: {("Death AND taxes" OR "war AND Peace") AND (cats OR dogs)}`,
-			solr:  `((_query_:"{!edismax}(\" Death  AND  taxes \")" OR _query_:"{!edismax}(\" war  AND  Peace \")") AND (_query_:"{!edismax}(cats)" OR _query_:"{!edismax}(dogs)"))`,
+			solr:  `((_query_:"{!edismax}(\"Death AND taxes\")" OR _query_:"{!edismax}(\"war AND Peace\")") AND (_query_:"{!edismax}(cats)" OR _query_:"{!edismax}(dogs)"))`,
+		},
+		{
+			query: `keyword: {a \ b}`,
+			solr:  `_query_:"{!edismax}(a \\ b)"`,
+		},
+		{
+			query: `keyword: {a + b}`,
+			solr:  `_query_:"{!edismax}(a \+ b)"`,
+		},
+		{
+			query: `keyword: {a - b}`,
+			solr:  `_query_:"{!edismax}(a \- b)"`,
+		},
+		{
+			query: `keyword: {a && b}`,
+			solr:  `_query_:"{!edismax}(a \&& b)"`,
+		},
+		{
+			query: `keyword: {a || b}`,
+			solr:  `_query_:"{!edismax}(a \|| b)"`,
+		},
+		{
+			query: `keyword: {a ! b}`,
+			solr:  `_query_:"{!edismax}(a \! b)"`,
+		},
+		{
+			query: `keyword: {a ( b ) c}`,
+			solr:  `_query_:"{!edismax}(a b c)"`,
+		},
+		{
+			query: `keyword: {a * b}`,
+			solr:  `_query_:"{!edismax}(a * b)"`,
+		},
+		{
+			query: `keyword: {a ^ b}`,
+			solr:  `_query_:"{!edismax}(a \^ b)"`,
+		},
+		{
+			query: `keyword: {a " b " c}`,
+			solr:  `_query_:"{!edismax}(a \"b\" c)"`,
+		},
+		{
+			query: `keyword: {a ~ b}`,
+			solr:  `_query_:"{!edismax}(a \~ b)"`,
+		},
+		{
+			query: `keyword: {a ? b}`,
+			solr:  `_query_:"{!edismax}(a \? b)"`,
+		},
+		{
+			query: `keyword: {a : b}`,
+			solr:  `_query_:"{!edismax}(a \: b)"`,
+		},
+		{
+			query: `keyword: {a / b}`,
+			solr:  `_query_:"{!edismax}(a \/ b)"`,
 		},
 	}
 
@@ -291,6 +347,7 @@ func TestSolrShouldFail(t *testing.T) {
 		`date:{BadDate}`,
 		`subject:{"(((turtles AND (((skateboarding))))))}"`,
 		`subject:{"(((turtles AND (((skateboarding))))))}`,
+		`keyword: {a [ b ] c}`,
 	}
 
 	for _, query := range tests {
