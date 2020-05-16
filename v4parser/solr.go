@@ -259,13 +259,11 @@ func (v *SolrParser) escapeSolrSpecialCharacters(fieldName, s string) string {
 	// * do not escape `*` as it is allowed as a wildcard
 	// * do not escape `(` or `)` as they are allowed for ordering
 
-	// NOTE: this string is the escaped form for solr, so the escape char `\` needs to be double-escaped as `\\`.
-
 	specialChars := []string{`+`, `-`, `&&`, `||`, `!`, `{`, `}`, `[`, `]`, `^`, `"`, `~`, `?`, `:`, `/`}
 
 	escaped := strings.ReplaceAll(s, `\`, `\\`)
 	for _, c := range specialChars {
-		escaped = strings.ReplaceAll(escaped, c, `\\`+c)
+		escaped = strings.ReplaceAll(escaped, c, `\`+c)
 	}
 
 	v.debug("[escape] from: [%s]", s)
