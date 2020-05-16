@@ -112,7 +112,7 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `author:{ ʼJam-dbyangs-nyi-ma }`,
-			solr:  `_query_:"{!edismax qf=$author_qf pf=$author_pf}(ʼJam\-dbyangs\-nyi\-ma)"`,
+			solr:  `_query_:"{!edismax qf=$author_qf pf=$author_pf}(ʼJam\\-dbyangs\\-nyi\\-ma)"`,
 		},
 		{
 			query: `title:{Tragicheskai͡a istorii͡a kavkazskikh }`,
@@ -120,7 +120,7 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `author:{Немирович-Данченко, Василий Иванович}`,
-			solr:  `_query_:"{!edismax qf=$author_qf pf=$author_pf}(Немирович\-Данченко, Василий Иванович)"`,
+			solr:  `_query_:"{!edismax qf=$author_qf pf=$author_pf}(Немирович\\-Данченко, Василий Иванович)"`,
 		},
 		{
 			query: `title : {"susan sontag" OR (music title)}   AND keyword:{ Maunsell }`,
@@ -185,7 +185,7 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `keyword:{cincinnati, ohio (home of the :reds:)}`,
-			solr:  `_query_:"{!edismax}(cincinnati, ohio home of the \:reds\:)"`,
+			solr:  `_query_:"{!edismax}(cincinnati, ohio home of the \\:reds\\:)"`,
 		},
 		{
 			query: `keyword: {"grapes of wrath"}`,
@@ -261,23 +261,23 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `keyword: {a + b}`,
-			solr:  `_query_:"{!edismax}(a \+ b)"`,
+			solr:  `_query_:"{!edismax}(a \\+ b)"`,
 		},
 		{
 			query: `keyword: {a - b}`,
-			solr:  `_query_:"{!edismax}(a \- b)"`,
+			solr:  `_query_:"{!edismax}(a \\- b)"`,
 		},
 		{
 			query: `keyword: {a && b}`,
-			solr:  `_query_:"{!edismax}(a \&& b)"`,
+			solr:  `_query_:"{!edismax}(a \\&& b)"`,
 		},
 		{
 			query: `keyword: {a || b}`,
-			solr:  `_query_:"{!edismax}(a \|| b)"`,
+			solr:  `_query_:"{!edismax}(a \\|| b)"`,
 		},
 		{
 			query: `keyword: {a ! b}`,
-			solr:  `_query_:"{!edismax}(a \! b)"`,
+			solr:  `_query_:"{!edismax}(a \\! b)"`,
 		},
 		{
 			query: `keyword: {a ( b ) c}`,
@@ -289,7 +289,7 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `keyword: {a ^ b}`,
-			solr:  `_query_:"{!edismax}(a \^ b)"`,
+			solr:  `_query_:"{!edismax}(a \\^ b)"`,
 		},
 		{
 			query: `keyword: {a " b " c}`,
@@ -297,19 +297,19 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `keyword: {a ~ b}`,
-			solr:  `_query_:"{!edismax}(a \~ b)"`,
+			solr:  `_query_:"{!edismax}(a \\~ b)"`,
 		},
 		{
 			query: `keyword: {a ? b}`,
-			solr:  `_query_:"{!edismax}(a \? b)"`,
+			solr:  `_query_:"{!edismax}(a \\? b)"`,
 		},
 		{
 			query: `keyword: {a : b}`,
-			solr:  `_query_:"{!edismax}(a \: b)"`,
+			solr:  `_query_:"{!edismax}(a \\: b)"`,
 		},
 		{
 			query: `keyword: {a / b}`,
-			solr:  `_query_:"{!edismax}(a \/ b)"`,
+			solr:  `_query_:"{!edismax}(a \\/ b)"`,
 		},
 	}
 

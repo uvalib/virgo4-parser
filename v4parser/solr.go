@@ -11,6 +11,7 @@ import (
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
+const EscapeQuote = `\"`
 const Quote = `"`
 const LParen = `(`
 const RParen = `)`
@@ -234,23 +235,14 @@ func (v *SolrParser) expand(inStr string, fieldName string, fieldType string, qu
 
 	v.FieldValues[fieldName] = append(v.FieldValues[fieldName], val)
 
-	// escape solr special characters.  don't worry about pathological input
-	escaped := v.escapeSolrSpecialCharacters(fieldName, val)
-
-	out := fmt.Sprintf(`%s_query_:"{%s}(%s)"`, inStr, fieldType, escaped)
+	out := fmt.Sprintf(`%s_query_:"{%s}(%s)"`, inStr, fieldType, val)
 
 	v.debug("[expand] new string : [%s]", out)
 
 	return out
 }
 
-func (v *SolrParser) escapeSolrSpecialCharacters(fieldName, s string) string {
-	// certain fields should not be escaped
-
-	if fieldName == "date" {
-		return s
-	}
-
+func (v *SolrParser) escapeSolrSpecialCharacters(s string) string {
 	// https://lucene.apache.org/solr/guide/7_7/the-standard-query-parser.html#TheStandardQueryParser-EscapingSpecialCharacters
 	//
 	// escape characters in the list above, with the following modifications:
@@ -263,7 +255,7 @@ func (v *SolrParser) escapeSolrSpecialCharacters(fieldName, s string) string {
 
 	escaped := strings.ReplaceAll(s, `\`, `\\`)
 	for _, c := range specialChars {
-		escaped = strings.ReplaceAll(escaped, c, `\`+c)
+		escaped = strings.ReplaceAll(escaped, c, `\\`+c)
 	}
 
 	v.debug("[escape] from: [%s]", s)
@@ -506,14 +498,14 @@ func (v *SolrParser) visitTerminal(terminal antlr.TerminalNode) interface{} {
 	defer v.exitFunction(funcName)
 
 	if terminal.GetSymbol().GetTokenType() == VirgoQueryLexerQUOTE {
-		return Quote
+		return EscapeQuote
 	} else if terminal.GetSymbol().GetTokenType() == VirgoQueryLexerBOOLEAN {
 		return terminal.GetText()
 	} else if terminal.GetSymbol().GetTokenType() == VirgoQueryLexerDATE_STRING {
 		return fmt.Sprintf("%s", strings.ReplaceAll(terminal.GetText(), "/", "-"))
 	}
 
-	return terminal.GetText()
+	return v.escapeSolrSpecialCharacters(terminal.GetText())
 }
 
 // ConvertToSolrWithParser will convert a v4 query string into solr query string. The passed SolrPaser struct will be
