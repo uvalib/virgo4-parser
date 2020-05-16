@@ -459,9 +459,15 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 func (v *SolrParser) conditionalPad(i int, left string, right string) string {
 	out := left
 
-	if i > 0 &&
-		left != Quote && strings.HasSuffix(left, LParen) == false &&
-		right != Quote && strings.HasPrefix(right, RParen) == false {
+	/*
+		if i > 0 &&
+			// these checks break solr; spaces seem necessary between quotes/parens
+			left != Quote && strings.HasSuffix(left, LParen) == false &&
+			right != Quote && strings.HasPrefix(right, RParen) == false {
+			out += " "
+		}
+	*/
+	if i > 0 {
 		out += " "
 	}
 
