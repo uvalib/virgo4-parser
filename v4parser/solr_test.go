@@ -221,7 +221,7 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `keyword:{ \" rotunda \" }`,
-			solr:  `_query_:"{!edismax}(\\ \" rotunda \\ \")"`,
+			solr:  `_query_:"{!edismax}(\\\\ \" rotunda \\\\ \")"`,
 		},
 		{
 			query: `subject:{((((((((((turtles AND ((((((((((skateboarding))))))))))))))))))))}`,
@@ -257,7 +257,7 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `keyword: {a \ b}`,
-			solr:  `_query_:"{!edismax}(a \\ b)"`,
+			solr:  `_query_:"{!edismax}(a \\\\ b)"`,
 		},
 		{
 			query: `keyword: {a + b}`,
