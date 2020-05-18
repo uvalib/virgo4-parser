@@ -478,9 +478,8 @@ func (v *SolrParser) visitTerminal(terminal antlr.TerminalNode) interface{} {
 		out = EscapeQuote
 
 	case VirgoQueryLexerBOOLEAN:
-		// escaping not strictly necessary, but do it anyway in case the
-		// special char versions `&&` / `||` / `!` are ever allowed
-		out = v.escapeSolrSpecialCharacters(terminal.GetText())
+		// do not escape this; it is an explicit boolean operator
+		out = terminal.GetText()
 
 	case VirgoQueryLexerDATE_STRING:
 		// do not escape this; it contains some solr special chars/keywords
