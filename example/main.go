@@ -56,4 +56,22 @@ func main() {
 	} else {
 		log.Printf("FAIL: Parsed invalid string to %s", solrOut)
 	}
+	
+	pub := `published: {New York City}`
+	solrOut, err = v4parser.ConvertToSolr(pub)
+	if err != nil {
+		log.Printf("FAIL: %s", err.Error())
+	} else {
+		log.Printf("Result: %s", solrOut)
+	}
+
+	filter := `keyword: {"Organic chemistry"}  AND filter:{data_source_f:libraetd  OR  data_source_f:libraoc}`
+	solrOut, err = v4parser.ConvertToSolr(filter)
+	if err != nil {
+		log.Printf("FAIL: %s", err.Error())
+	} else {
+		log.Printf("Result: %s", solrOut)
+	}
+
+
 }

@@ -231,7 +231,7 @@ func (v *SolrParser) expand(inStr string, fieldName string, fieldType string, qu
 
 	v.FieldValues[fieldName] = append(v.FieldValues[fieldName], val)
 
-	out := fmt.Sprintf(`%s_query_:"{%s}(%s)"`, inStr, fieldType, val)
+	out := fmt.Sprintf(`%s_query_:"%s(%s)"`, inStr, fieldType, val)
 
 	v.debug("[EXPAND] new string : [%s]", out)
 
@@ -267,23 +267,28 @@ func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
 	v.enterFunction("visitFieldType()")
 	defer v.exitFunction()
 
-	// field_type : TITLE | AUTHOR | SUBJECT | KEYWORD | IDENTIFIER
+	// field_type : TITLE | AUTHOR | SUBJECT | KEYWORD | PUBLISHED | FILTER | IDENTIFIER
 	childTree := ctx.GetChild(0)
 	t := childTree.GetPayload().(*antlr.CommonToken)
 	fieldType := t.GetText()
 
 	out := "!edismax"
 
+	// filter field type needs special handling
+	if fieldType == "filter" {
+		return ""
+	}
+
 	// keyword field type doesn't need qf/pf parameter
 	if fieldType == "keyword" {
-		return out
+		return "{" + out  + "}"
 	}
 
 	// all other field types need qf/pf parameters based on their names
 	qf := "qf=$" + fieldType + "_qf"
 	pf := "pf=$" + fieldType + "_pf"
 
-	out = out + " " + qf + " " + pf
+	out = "{" + out + " " + qf + " " + pf + "}"
 
 	v.debug("[GRAMMAR] field_type: [%s]", out)
 
