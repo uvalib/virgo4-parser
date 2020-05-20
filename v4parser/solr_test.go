@@ -83,6 +83,8 @@ func TestSolrShouldSucceed(t *testing.T) {
 		keywords    int    // expected keyword count
 		identifiers int    // expected identifier count
 		dates       int    // expected date count
+		publisheds  int    // expected published count
+		filters     int    // expected filter count
 	}
 
 	tests := []expectedResults{
@@ -313,11 +315,11 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `published: {New York City}`,
-			solr:  `_query_:"{!edismax qf=$published_qf pf=$published_pf}(New York City)`,
+			solr:  `_query_:"{!edismax qf=$published_qf pf=$published_pf}(New York City)"`,
 		},
 		{
 			query: `keyword: {"Organic chemistry"}  AND filter:{data_source_f:libraetd  OR  data_source_f:libraoc}`,
-			solr:  `(_query_:"{!edismax }(\"Organic chemistry\")" AND (_query_:"(data_source_f:libraetd)" OR _query_:"(data_source_f:libraoc)"))`,
+			solr:  `(_query_:"{!edismax}(\" Organic chemistry \")" AND (_query_:"(data_source_f:libraetd)" OR _query_:"(data_source_f:libraoc)"))`,
 		},
 	}
 

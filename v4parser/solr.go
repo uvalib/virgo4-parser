@@ -19,6 +19,7 @@ type SolrParser struct {
 	DebugCallTree bool                // if Debug enabled, also print call tree
 	FieldValues   map[string][]string // map of values seen per field type
 	callStack     []string            // internal call stack (len == level)
+	escapeText    bool                // internal escaping flag
 }
 
 // internal parser info
@@ -178,8 +179,18 @@ func (v *SolrParser) visitFieldQuery(ctx antlr.RuleNode) interface{} {
 		// no query supplied; default to '*' query
 		out = v.expand("", fieldName, fieldType, "*")
 	default:
+		// set escaping flag.  don't want to escape filters
+		esc := v.escapeText
+		v.escapeText = true
+		if fieldName == "filter" {
+			v.escapeText = false
+		}
+
 		query := v.visit(ctx.GetChild(3))
 		out = v.expand("", fieldName, fieldType, query)
+
+		// restore escape flag
+		v.escapeText = esc
 	}
 
 	v.debug("[GRAMMAR] field_query: [%s]", out)
@@ -281,7 +292,7 @@ func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
 
 	// keyword field type doesn't need qf/pf parameter
 	if fieldType == "keyword" {
-		return "{" + out  + "}"
+		return "{" + out + "}"
 	}
 
 	// all other field types need qf/pf parameters based on their names
@@ -313,7 +324,7 @@ func (v *SolrParser) visitRangeFieldType(ctx antlr.RuleNode) interface{} {
 
 	v.debug("[GRAMMAR] range_field_type: [%s]", out)
 
-	return out
+	return "{" + out + "}"
 }
 
 func (v *SolrParser) visitRangeSearchString(ctx antlr.RuleNode) interface{} {
@@ -491,8 +502,11 @@ func (v *SolrParser) visitTerminal(terminal antlr.TerminalNode) interface{} {
 		out = strings.ReplaceAll(terminal.GetText(), "/", "-")
 
 	default:
-		// escape this, as it is free-form user input
-		out = v.escapeSolrSpecialCharacters(terminal.GetText())
+		out = terminal.GetText()
+
+		if v.escapeText == true {
+			out = v.escapeSolrSpecialCharacters(out)
+		}
 	}
 
 	v.debug("[GRAMMAR] terminal: [%s]", out)
