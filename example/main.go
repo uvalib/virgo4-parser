@@ -65,7 +65,7 @@ func main() {
 		log.Printf("Result: %s", solrOut)
 	}
 
-	filter := `keyword: {"Organic chemistry"}  AND filter:{data_source_f:libraetd  OR  data_source_f:libraoc}`
+	filter := `keyword: {"Organic chemistry"}  AND filter:{source_f:"Hathi Trust Digital Library"}`
 	solrOut, err = v4parser.ConvertToSolr(filter)
 	if err != nil {
 		log.Printf("FAIL: %s", err.Error())

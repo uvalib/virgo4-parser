@@ -445,7 +445,9 @@ func (v *SolrParser) visitSearchString(ctx antlr.RuleNode) interface{} {
 			v.debug("str str = [%s]", str)
 		}
 
-		if i > 0 {
+		// log.Printf("I %d, STR [%s]", i, str)
+		if i > 0 && str != "\\\"" && out != "\\\"" {
+			// log.Printf("ADD SPACE TO %s", out)
 			out += " "
 		}
 
