@@ -23,7 +23,7 @@ func (eh *virgoErrorListener) LogError(msg string) {
 }
 
 func (eh *virgoErrorListener) LogWarning(msg string) {
-	log.Printf("WARNING: %s", msg)
+	//log.Printf("WARNING: %s", msg)
 	eh.warnings = append(eh.warnings, msg)
 }
 
