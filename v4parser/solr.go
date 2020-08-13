@@ -524,7 +524,7 @@ func initializeParser(query string) parseContext {
 	lexer := NewVirgoQueryLexer(inputStream)
 	lexer.RemoveErrorListeners()
 
-	parseCtx.lexerErrorListener = virgoErrorListener{valid: true}
+	parseCtx.lexerErrorListener = virgoErrorListener{valid: true, quiet: true}
 	lexer.AddErrorListener(&parseCtx.lexerErrorListener)
 
 	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
@@ -532,7 +532,7 @@ func initializeParser(query string) parseContext {
 	parseCtx.parser = NewVirgoQuery(tokenStream)
 	parseCtx.parser.RemoveErrorListeners()
 
-	parseCtx.parserErrorListener = virgoErrorListener{valid: true}
+	parseCtx.parserErrorListener = virgoErrorListener{valid: true, quiet: true}
 	parseCtx.parser.AddErrorListener(&parseCtx.parserErrorListener)
 
 	parseCtx.tree = parseCtx.parser.Query()

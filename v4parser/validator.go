@@ -11,19 +11,26 @@ import (
 //virgoErrorListener implements the antlr.ErrorListener interface
 //and is used by both the lexer and the parser
 type virgoErrorListener struct {
+	quiet    bool
 	valid    bool
 	errors   []string
 	warnings []string
 }
 
 func (eh *virgoErrorListener) LogError(msg string) {
-	log.Printf("ERROR: %s", msg)
+	if eh.quiet == false {
+		log.Printf("ERROR: %s", msg)
+	}
+
 	eh.errors = append(eh.errors, msg)
 	eh.valid = false
 }
 
 func (eh *virgoErrorListener) LogWarning(msg string) {
-	//log.Printf("WARNING: %s", msg)
+	if eh.quiet == false {
+		log.Printf("WARNING: %s", msg)
+	}
+
 	eh.warnings = append(eh.warnings, msg)
 }
 
