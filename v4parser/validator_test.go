@@ -166,3 +166,7 @@ func TestSearchTip4b(t *testing.T) {
 
 	expectValidationSuccess(t, q)
 }
+
+func BenchmarkSlowValidation(b *testing.B) {
+	v4parser.Validate(`keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`)
+}
