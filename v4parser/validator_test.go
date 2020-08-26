@@ -6,165 +6,189 @@ import (
 	"github.com/uvalib/virgo4-parser/v4parser"
 )
 
-func validate(query string) (bool, string) {
-	return v4parser.Validate(query)
+type v4query struct {
+	query   string
+	timeout int
 }
 
-func expectValidationSuccess(t *testing.T, query string) {
-	valid, errors := validate(query)
+func (v *v4query) validate() (bool, string) {
+	if v.timeout > 0 {
+		return v4parser.ValidateWithTimeout(v.query, v.timeout)
+	}
+
+	return v4parser.Validate(v.query)
+}
+
+func (v *v4query) expectValidationSuccess(t *testing.T) {
+	valid, errors := v.validate()
 
 	if valid == false {
-		t.Errorf("%s did not validate, but should have: %s", query, errors)
+		t.Errorf("%s did not validate, but should have: %s", v.query, errors)
 	}
 
 	if errors != "" {
-		t.Errorf("%s had errors, but should not have: %s", query, errors)
+		t.Errorf("%s had errors, but should not have: %s", v.query, errors)
 	}
 }
 
-func expectValidationFailure(t *testing.T, query string) {
-	valid, errors := validate(query)
+func (v *v4query) expectValidationFailure(t *testing.T) {
+	valid, errors := v.validate()
 
 	if valid == true {
-		t.Errorf("%s validated, but should not have: %s", query, errors)
+		t.Errorf("%s validated, but should not have: %s", v.query, errors)
 	}
 
 	if errors == "" {
-		t.Errorf("%s did not have errors, but should have", query)
+		t.Errorf("%s did not have errors, but should have", v.query)
 	}
 }
 
 func TestSimpleValid(t *testing.T) {
-	q := "title: {bannanas}"
+	v := v4query{query: "title: {bannanas}"}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestSpecialCharsValid(t *testing.T) {
-	q := "title:{A = B}"
+	v := v4query{query: "title:{A = B}"}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestIdentifierValid(t *testing.T) {
-	q := `identifier:{35007007606860  OR 9780754645733 OR 38083649 OR 2001020407  OR u5670758 OR "KJE5602.C73 2012"}`
+	v := v4query{query: `identifier:{35007007606860  OR 9780754645733 OR 38083649 OR 2001020407  OR u5670758 OR "KJE5602.C73 2012"}`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestIdentifierInvalid(t *testing.T) {
-	q := `identifier:{35007007606860  OR 9780754645733 OR 38083649 OR 2001020407  OR u5670758 OR KJE5602.C73 2012"}`
+	v := v4query{query: `identifier:{35007007606860  OR 9780754645733 OR 38083649 OR 2001020407  OR u5670758 OR KJE5602.C73 2012"}`}
 
-	expectValidationFailure(t, q)
+	v.expectValidationFailure(t)
 }
 
 func TestSimpleInvalidCrash(t *testing.T) {
-	q := "title: bannanas"
+	v := v4query{query: "title: bannanas"}
 
-	expectValidationFailure(t, q)
+	v.expectValidationFailure(t)
 }
 
 func TestComplexValid(t *testing.T) {
-	q := `( title : {"susan sontag" OR music title} AND keyword:{ Maunsell } ) OR author:{ liberty } AND subject:{ poe } AND keyword:{ horror }`
+	v := v4query{query: `( title : {"susan sontag" OR music title} AND keyword:{ Maunsell } ) OR author:{ liberty } AND subject:{ poe } AND keyword:{ horror }`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestComplexInvalid(t *testing.T) {
-	q := `( title : {"susan sontag" OR music title} AND keyword:{ Maunsell }  OR author:{ liberty } NOT author:{ poe }`
+	v := v4query{query: `( title : {"susan sontag" OR music title} AND keyword:{ Maunsell }  OR author:{ liberty } NOT author:{ poe }`}
 
-	expectValidationFailure(t, q)
+	v.expectValidationFailure(t)
 }
 
 func TestNotOpValid(t *testing.T) {
-	q := `author:{ edgar } NOT author:{ poe }`
+	v := v4query{query: `author:{ edgar } NOT author:{ poe }`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestNotOpInvalid(t *testing.T) {
 	// Unary NOT operator is not supported
-	q := `author:{ edgar } author:{ NOT poe }`
+	v := v4query{query: `author:{ edgar } author:{ NOT poe }`}
 
-	expectValidationFailure(t, q)
+	v.expectValidationFailure(t)
 }
 
 func TestEmptyKeyword(t *testing.T) {
-	q := `keyword:{}`
+	v := v4query{query: `keyword:{}`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestEmptyQuotedKeyword(t *testing.T) {
-	q := `keyword:{""}`
+	v := v4query{query: `keyword:{""}`}
 
-	expectValidationFailure(t, q)
+	v.expectValidationFailure(t)
 }
 
 func TestMismatchedBracket(t *testing.T) {
-	q := `keyword:{`
+	v := v4query{query: `keyword:{`}
 
-	expectValidationFailure(t, q)
+	v.expectValidationFailure(t)
 }
 
 func TestExtraBracket(t *testing.T) {
-	q := `keyword:{{}`
+	v := v4query{query: `keyword:{{}`}
 
-	expectValidationFailure(t, q)
+	v.expectValidationFailure(t)
 }
 
 func TestUnsupportedType(t *testing.T) {
-	q := `color:{blue}`
+	v := v4query{query: `color:{blue}`}
 
-	expectValidationFailure(t, q)
+	v.expectValidationFailure(t)
 }
 
 func TestStarQuery(t *testing.T) {
-	q := `keyword:{"*"}`
+	v := v4query{query: `keyword:{"*"}`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestStarQueryNoQuotes(t *testing.T) {
-	q := `keyword:{*}`
+	v := v4query{query: `keyword:{*}`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestBobRandomQuery(t *testing.T) {
-	q := `keyword:{cincinnati, ohio (home of the :reds:)}`
+	v := v4query{query: `keyword:{cincinnati, ohio (home of the :reds:)}`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestSearchTip1(t *testing.T) {
-	q := `keyword: {"grapes of wrath"}`
+	v := v4query{query: `keyword: {"grapes of wrath"}`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestSearchTip2(t *testing.T) {
-	q := `keyword: {kyoto NOT protocol}`
+	v := v4query{query: `keyword: {kyoto NOT protocol}`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestSearchTip3(t *testing.T) {
-	q := `keyword: {"frida kahlo" AND exhibitions}`
+	v := v4query{query: `keyword: {"frida kahlo" AND exhibitions}`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestSearchTip4a(t *testing.T) {
-	q := `keyword: {(calico OR "tortoise shell") AND cats}`
+	v := v4query{query: `keyword: {(calico OR "tortoise shell") AND cats}`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
 }
 
 func TestSearchTip4b(t *testing.T) {
-	q := `(keyword: {calico OR "tortoise shell"})  AND keyword: {cats}`
+	v := v4query{query: `(keyword: {calico OR "tortoise shell"})  AND keyword: {cats}`}
 
-	expectValidationSuccess(t, q)
+	v.expectValidationSuccess(t)
+}
+
+func TestSlowValidation(t *testing.T) {
+	v := v4query{query: `keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`}
+
+	v.expectValidationSuccess(t)
+}
+
+func TestSlowValidationWithTimeout(t *testing.T) {
+	v := v4query{
+		query:   `keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`,
+		timeout: 5,
+	}
+
+	v.expectValidationFailure(t)
 }
 
 func BenchmarkSlowValidation(b *testing.B) {
