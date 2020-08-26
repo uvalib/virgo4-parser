@@ -7,6 +7,7 @@ import (
 	"log"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
@@ -37,7 +38,7 @@ func (v *SolrParser) debug(format string, args ...interface{}) {
 
 	line := strings.Repeat(" ", len(v.callStack)) + format
 
-	log.Printf(line, args...)
+	log.Printf("[V4QUERY] "+line, args...)
 }
 
 func (v *SolrParser) enterFunction(funcName string) {
@@ -516,79 +517,115 @@ func (v *SolrParser) visitTerminal(terminal antlr.TerminalNode) interface{} {
 	return out
 }
 
-func initializeParser(query string) parseContext {
-	parseCtx := parseContext{}
+func (v *SolrParser) initializeParser(query string, timeout int) (parseCtx parseContext, err error) {
+	parseCtx = parseContext{
+		lexerErrorListener:  virgoErrorListener{name: "lexer", valid: true, quiet: true},
+		parserErrorListener: virgoErrorListener{name: "parser", valid: true, quiet: true},
+	}
+
+	if timeout > 0 {
+		parseCtx.lexerErrorListener.timer = time.NewTimer(time.Duration(timeout) * time.Second)
+		parseCtx.parserErrorListener.timer = time.NewTimer(time.Duration(timeout) * time.Second)
+	}
+
+	defer func() {
+		if x := recover(); x != nil {
+			err = errors.New(fmt.Sprintf("%v", x))
+			log.Printf("[V4QUERY] ERROR (recovered): %s", err.Error())
+		} else {
+			if parseCtx.lexerErrorListener.valid == false {
+				err = errors.New(parseCtx.lexerErrorListener.Errors())
+				v.debug("ERROR: LEXER: %s", err.Error())
+				return
+			}
+
+			if parseCtx.parserErrorListener.valid == false {
+				err = errors.New(parseCtx.parserErrorListener.Errors())
+				v.debug("ERROR: PARSER: %s", err.Error())
+				return
+			}
+		}
+	}()
 
 	inputStream := antlr.NewInputStream(query)
 
 	lexer := NewVirgoQueryLexer(inputStream)
 	lexer.RemoveErrorListeners()
-
-	parseCtx.lexerErrorListener = virgoErrorListener{valid: true, quiet: true}
 	lexer.AddErrorListener(&parseCtx.lexerErrorListener)
 
 	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
 	parseCtx.parser = NewVirgoQuery(tokenStream)
 	parseCtx.parser.RemoveErrorListeners()
-
-	parseCtx.parserErrorListener = virgoErrorListener{valid: true, quiet: true}
 	parseCtx.parser.AddErrorListener(&parseCtx.parserErrorListener)
 
 	parseCtx.tree = parseCtx.parser.Query()
 
-	return parseCtx
+	return
 }
 
-// ConvertToSolrWithParser will convert a v4 query string into solr query string. The passed SolrPaser struct will be
-// poulated with details about the items parsed into the resulting string
-func ConvertToSolrWithParser(v *SolrParser, query string) (string, error) {
-	// EXAMPLE: `( title : {"susan sontag" OR music title}   AND keyword:{ Maunsell } ) OR author:{ liberty }`
-	// SOLR: ( ( ((_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
-	//              AND _query_:"{!edismax}(Maunsell)") )  OR _query_:"{!edismax qf=$author_qf pf=$author_pf}(liberty)")
-
-	v.debug("Convert to Solr: %s", query)
+func convert(v *SolrParser, query string, timeout int) (out string, err error) {
+	start := time.Now()
 
 	v.FieldValues = make(map[string][]string)
 
-	parseCtx := initializeParser(query)
+	parseCtx, parseErr := v.initializeParser(query, timeout)
+
+	if parseErr != nil {
+		err = parseErr
+		return
+	}
+
+	v.debug("Convert to Solr: %s", query)
 
 	raw := v.visit(parseCtx.tree)
 
-	if parseCtx.lexerErrorListener.valid == false {
-		err := errors.New(parseCtx.lexerErrorListener.Errors())
-		v.debug("ERROR: LEXER: %s", err.Error())
-		return "", err
-	}
-
-	if parseCtx.parserErrorListener.valid == false {
-		err := errors.New(parseCtx.parserErrorListener.Errors())
-		v.debug("ERROR: PARSER: %s", err.Error())
-		return "", err
-	}
-
 	if raw == nil {
-		err := errors.New("Empty query")
+		err = errors.New("Empty query")
 		v.debug("ERROR: %s", err.Error())
-		return "", err
+		return
 	}
 
-	out := raw.(string)
+	out = raw.(string)
 
 	v.debug("SUCCESS: QUERY: %s", out)
 
-	return out, nil
+	elapsedMS := int64(time.Since(start) / time.Millisecond)
+
+	log.Printf("[V4QUERY] Conversion elapsed ms: %d", elapsedMS)
+
+	return
 }
 
 // ConvertToSolr will convert a v4 query string into solr query string.
 func ConvertToSolr(query string) (string, error) {
 	v := SolrParser{}
-	return ConvertToSolrWithParser(&v, query)
+	return convert(&v, query, 0)
+}
+
+// ConvertToSolrWithParser will convert a v4 query string into solr query string.
+// The passed SolrPaser struct will be poulated with details about the items parsed.
+func ConvertToSolrWithParser(v *SolrParser, query string) (string, error) {
+	return convert(v, query, 0)
+}
+
+// ConvertToSolrWithTimeout will convert a v4 query string into solr query string with a timeout.
+func ConvertToSolrWithTimeout(query string, timeout int) (string, error) {
+	v := SolrParser{}
+	return convert(&v, query, timeout)
+}
+
+// ConvertToSolrWithParserAndTimeout will convert a v4 query string into solr query string with a timeout.
+// The passed SolrPaser  struct will be poulated with details about the items parsed.
+func ConvertToSolrWithParserAndTimeout(v *SolrParser, query string, timeout int) (string, error) {
+	return convert(v, query, timeout)
 }
 
 // ParseTree will generate a pretty parse tree
 func ParseTree(query string) string {
-	parseCtx := initializeParser(query)
+	v := SolrParser{}
+
+	parseCtx, _ := v.initializeParser(query, 0)
 
 	return printSyntaxTree(parseCtx.parser, parseCtx.tree)
 }

@@ -8,31 +8,44 @@ import (
 	"github.com/uvalib/virgo4-parser/v4parser"
 )
 
-func convert(t *testing.T, query string) (v4parser.SolrParser, string, error) {
+type v4SolrQuery struct {
+	query   string
+	solr    string
+	timeout int
+}
+
+func (v *v4SolrQuery) convert(t *testing.T) (v4parser.SolrParser, string, error) {
 	sp := v4parser.SolrParser{Debug: true, DebugCallTree: false}
 
-	t.Logf("QUERY: %s", query)
+	t.Logf("QUERY: %s", v.query)
 
-	solr, err := v4parser.ConvertToSolrWithParser(&sp, query)
+	var solr string
+	var err error
+
+	if v.timeout > 0 {
+		solr, err = v4parser.ConvertToSolrWithParserAndTimeout(&sp, v.query, v.timeout)
+	} else {
+		solr, err = v4parser.ConvertToSolrWithParser(&sp, v.query)
+	}
 
 	return sp, solr, err
 }
 
-func expectSolrConversionSuccess(t *testing.T, query string, expected string) v4parser.SolrParser {
-	sp, solr, err := convert(t, query)
+func (v *v4SolrQuery) expectSolrConversionSuccess(t *testing.T) v4parser.SolrParser {
+	sp, solr, err := v.convert(t)
 
 	if err != nil {
 		t.Errorf("Conversion failed, but should have succeeded:")
 		t.Errorf("ERROR: %s", err.Error())
-		t.Errorf("WANT : %s", expected)
+		t.Errorf("WANT : %s", v.solr)
 
 		return sp
 	}
 
-	if solr != expected {
+	if solr != v.solr {
 		t.Errorf("Conversion succeeded, but result was not as expected:")
 		t.Errorf("GOT  : %s", solr)
-		t.Errorf("WANT : %s", expected)
+		t.Errorf("WANT : %s", v.solr)
 	}
 
 	counts := []string{}
@@ -46,8 +59,8 @@ func expectSolrConversionSuccess(t *testing.T, query string, expected string) v4
 	return sp
 }
 
-func expectSolrConversionFailure(t *testing.T, query string) {
-	_, solr, err := convert(t, query)
+func (v *v4SolrQuery) expectSolrConversionFailure(t *testing.T) {
+	_, solr, err := v.convert(t)
 
 	if err == nil {
 		t.Errorf("Conversion succeeded, but should have failed:")
@@ -324,7 +337,9 @@ func TestSolrShouldSucceed(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		sp := expectSolrConversionSuccess(t, test.query, test.solr)
+		v := v4SolrQuery{query: test.query, solr: test.solr}
+
+		sp := v.expectSolrConversionSuccess(t)
 
 		if test.counts == true {
 			expectCounts(t, "title", sp.FieldValues, test.titles)
@@ -361,8 +376,28 @@ func TestSolrShouldFail(t *testing.T) {
 	}
 
 	for _, query := range tests {
-		expectSolrConversionFailure(t, query)
+		v := v4SolrQuery{query: query}
+
+		v.expectSolrConversionFailure(t)
 	}
+}
+
+func TestSlowConversion(t *testing.T) {
+	v := v4SolrQuery{
+		query: `keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`,
+		solr:  `_query_:"{!edismax}(I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well\\-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time.)"`,
+	}
+
+	v.expectSolrConversionSuccess(t)
+}
+
+func TestSlowConversionWithTimeout(t *testing.T) {
+	v := v4SolrQuery{
+		query:   `keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`,
+		timeout: 5,
+	}
+
+	v.expectSolrConversionFailure(t)
 }
 
 func BenchmarkSlowConversion(b *testing.B) {
