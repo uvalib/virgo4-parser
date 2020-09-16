@@ -38,7 +38,7 @@ func (v *SolrParser) debug(format string, args ...interface{}) {
 
 	line := strings.Repeat(" ", len(v.callStack)) + format
 
-	log.Printf("[V4QUERY] "+line, args...)
+	log.Printf("INFO: [V4QUERY] "+line, args...)
 }
 
 func (v *SolrParser) enterFunction(funcName string) {
@@ -531,11 +531,11 @@ func (v *SolrParser) initializeParser(query string, timeout int) (parseCtx parse
 	defer func() {
 		if x := recover(); x != nil {
 			err = errors.New(fmt.Sprintf("%v", x))
-			log.Printf("[V4QUERY] ERROR (recovered): %s", err.Error())
+			log.Printf("ERROR: [V4QUERY] (recovered): %s", err.Error())
 		} else {
 			if parseCtx.lexerErrorListener.valid == false {
 				err = errors.New(parseCtx.lexerErrorListener.Errors())
-				v.debug("ERROR: LEXER: %s", err.Error())
+				v.debug("ERROR: [V4QUERY] LEXER: %s", err.Error())
 				return
 			}
 
@@ -592,7 +592,7 @@ func convert(v *SolrParser, query string, timeout int) (out string, err error) {
 
 	elapsedMS := int64(time.Since(start) / time.Millisecond)
 
-	log.Printf("[V4QUERY] Conversion elapsed ms: %d", elapsedMS)
+	log.Printf("INFO: [V4QUERY] Conversion elapsed ms: %d", elapsedMS)
 
 	return
 }

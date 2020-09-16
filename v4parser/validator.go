@@ -34,7 +34,7 @@ func (eh *virgoErrorListener) checkForTimeout() {
 
 func (eh *virgoErrorListener) LogError(msg string) {
 	if eh.quiet == false {
-		log.Printf("[V4QUERY] ERROR (%s): %s", eh.name, msg)
+		log.Printf("ERROR: [V4QUERY] (%s): %s", eh.name, msg)
 	}
 
 	eh.errors = append(eh.errors, msg)
@@ -45,7 +45,7 @@ func (eh *virgoErrorListener) LogError(msg string) {
 
 func (eh *virgoErrorListener) LogWarning(msg string) {
 	if eh.quiet == false {
-		log.Printf("[V4QUERY] WARNING (%s): %s", eh.name, msg)
+		log.Printf("WARNING: [V4QUERY] (%s): %s", eh.name, msg)
 	}
 
 	eh.warnings = append(eh.warnings, msg)
@@ -119,7 +119,7 @@ func validate(src string, timeout int) (valid bool, errors string) {
 		if x := recover(); x != nil {
 			valid = false
 			errors = fmt.Sprintf("%v", x)
-			log.Printf("[V4QUERY] ERROR (recovered): %s", errors)
+			log.Printf("ERROR: [V4QUERY] (recovered): %s", errors)
 		} else {
 			valid = v.valid && l.valid && p.valid
 
@@ -128,10 +128,10 @@ func validate(src string, timeout int) (valid bool, errors string) {
 			}
 		}
 
-		log.Printf("[V4QUERY] Validation elapsed ms: %d", elapsedMS)
+		log.Printf("INFO: [V4QUERY] Validation elapsed ms: %d", elapsedMS)
 	}()
 
-	log.Printf("[V4QUERY] Validate: %s", src)
+	log.Printf("INFO: [V4QUERY] Validate: %s", src)
 
 	is := antlr.NewInputStream(src)
 
