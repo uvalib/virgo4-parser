@@ -8,6 +8,12 @@ import (
 	"github.com/uvalib/virgo4-parser/v4parser"
 )
 
+// currently takes ~7 seconds
+const slow1 = `keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`
+
+// currently takes ~33 seconds
+const slow2 = `keyword: { If a nation expects to be ignorant and free, in a state of civilization, it expects what never was and never will be. The functionaries of every government have propensities to command at will the liberty and property of their constituents. There is no safe deposit for these but with the people themselves; nor can they be safe with them without information. Where the press is free, and every man able to read, all is safe. }`
+
 type v4SolrQuery struct {
 	query   string
 	solr    string
@@ -382,10 +388,19 @@ func TestSolrShouldFail(t *testing.T) {
 	}
 }
 
-func TestSlowConversion(t *testing.T) {
+func TestSlowConversion1(t *testing.T) {
 	v := v4SolrQuery{
-		query: `keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`,
+		query: slow1,
 		solr:  `_query_:"{!edismax}(I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well\\-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time.)"`,
+	}
+
+	v.expectSolrConversionSuccess(t)
+}
+
+func TestSlowConversion2(t *testing.T) {
+	v := v4SolrQuery{
+		query: slow2,
+		solr:  `_query_:"{!edismax}(If a nation expects to be ignorant and free, in a state of civilization, it expects what never was and never will be. The functionaries of every government have propensities to command at will the liberty and property of their constituents. There is no safe deposit for these but with the people themselves; nor can they be safe with them without information. Where the press is free, and every man able to read, all is safe.)"`,
 	}
 
 	v.expectSolrConversionSuccess(t)
@@ -393,13 +408,17 @@ func TestSlowConversion(t *testing.T) {
 
 func TestSlowConversionWithTimeout(t *testing.T) {
 	v := v4SolrQuery{
-		query:   `keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`,
+		query:   slow2,
 		timeout: 5,
 	}
 
 	v.expectSolrConversionFailure(t)
 }
 
-func BenchmarkSlowConversion(b *testing.B) {
-	v4parser.ConvertToSolr(`keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`)
+func BenchmarkSlowConversion1(b *testing.B) {
+	v4parser.ConvertToSolr(slow1)
+}
+
+func BenchmarkSlowConversion2(b *testing.B) {
+	v4parser.ConvertToSolr(slow2)
 }

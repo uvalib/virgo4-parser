@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"unicode"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/uvalib/antlr4/runtime/Go/antlr"
 )
 
 // Suppress unused import error
