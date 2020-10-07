@@ -340,6 +340,10 @@ func TestSolrShouldSucceed(t *testing.T) {
 			query: `keyword: {"Organic chemistry"}  AND filter:{data_source_f:libraetd  OR  data_source_f:libraoc}`,
 			solr:  `(_query_:"{!edismax}(\"Organic chemistry\")" AND (_query_:"(data_source_f:libraetd)" OR _query_:"(data_source_f:libraoc)"))`,
 		},
+		{
+			query: `keyword: {chicago AND ("white sox" NOT “cubs”)}`,
+			solr:  `(_query_:"{!edismax}(chicago)" AND (_query_:"{!edismax}(\"white sox\")" NOT _query_:"{!edismax}(\"cubs\")"))`,
+		},
 	}
 
 	for _, test := range tests {
