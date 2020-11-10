@@ -344,6 +344,10 @@ func TestSolrShouldSucceed(t *testing.T) {
 			query: `keyword: {chicago AND ("white sox" NOT “cubs”)}`,
 			solr:  `(_query_:"{!edismax}(chicago)" AND (_query_:"{!edismax}(\"white sox\")" NOT _query_:"{!edismax}(\"cubs\")"))`,
 		},
+		{
+			query: `journal_title:{nature} AND title:{orangutan}`,
+			solr:  `(_query_:"{!edismax qf=$journal_title_qf pf=$journal_title_pf}(nature)" AND _query_:"{!edismax qf=$title_qf pf=$title_pf}(orangutan)")`,
+		},
 	}
 
 	for _, test := range tests {

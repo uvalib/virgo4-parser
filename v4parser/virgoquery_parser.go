@@ -15,7 +15,7 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 29, 135,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 30, 135,
 	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
 	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 3, 2,
 	3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 34, 10, 3, 3, 3,
@@ -30,7 +30,7 @@ var parserATN = []uint16{
 	3, 12, 3, 12, 5, 12, 120, 10, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3,
 	12, 3, 12, 3, 12, 7, 12, 130, 10, 12, 12, 12, 14, 12, 133, 11, 12, 3, 12,
 	2, 6, 4, 18, 20, 22, 13, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 2, 3,
-	3, 2, 7, 13, 2, 142, 2, 24, 3, 2, 2, 2, 4, 33, 3, 2, 2, 2, 6, 61, 3, 2,
+	3, 2, 7, 14, 2, 142, 2, 24, 3, 2, 2, 2, 4, 33, 3, 2, 2, 2, 6, 61, 3, 2,
 	2, 2, 8, 63, 3, 2, 2, 2, 10, 65, 3, 2, 2, 2, 12, 67, 3, 2, 2, 2, 14, 78,
 	3, 2, 2, 2, 16, 80, 3, 2, 2, 2, 18, 91, 3, 2, 2, 2, 20, 104, 3, 2, 2, 2,
 	22, 119, 3, 2, 2, 2, 24, 25, 5, 4, 3, 2, 25, 26, 7, 2, 2, 3, 26, 3, 3,
@@ -40,33 +40,33 @@ var parserATN = []uint16{
 	5, 12, 7, 2, 37, 38, 5, 4, 3, 6, 38, 40, 3, 2, 2, 2, 39, 35, 3, 2, 2, 2,
 	40, 43, 3, 2, 2, 2, 41, 39, 3, 2, 2, 2, 41, 42, 3, 2, 2, 2, 42, 5, 3, 2,
 	2, 2, 43, 41, 3, 2, 2, 2, 44, 45, 5, 8, 5, 2, 45, 46, 7, 6, 2, 2, 46, 47,
-	7, 15, 2, 2, 47, 48, 5, 18, 10, 2, 48, 49, 7, 21, 2, 2, 49, 62, 3, 2, 2,
-	2, 50, 51, 5, 8, 5, 2, 51, 52, 7, 6, 2, 2, 52, 53, 7, 15, 2, 2, 53, 54,
-	7, 21, 2, 2, 54, 62, 3, 2, 2, 2, 55, 56, 5, 10, 6, 2, 56, 57, 7, 6, 2,
-	2, 57, 58, 7, 15, 2, 2, 58, 59, 5, 14, 8, 2, 59, 60, 7, 21, 2, 2, 60, 62,
+	7, 16, 2, 2, 47, 48, 5, 18, 10, 2, 48, 49, 7, 22, 2, 2, 49, 62, 3, 2, 2,
+	2, 50, 51, 5, 8, 5, 2, 51, 52, 7, 6, 2, 2, 52, 53, 7, 16, 2, 2, 53, 54,
+	7, 22, 2, 2, 54, 62, 3, 2, 2, 2, 55, 56, 5, 10, 6, 2, 56, 57, 7, 6, 2,
+	2, 57, 58, 7, 16, 2, 2, 58, 59, 5, 14, 8, 2, 59, 60, 7, 22, 2, 2, 60, 62,
 	3, 2, 2, 2, 61, 44, 3, 2, 2, 2, 61, 50, 3, 2, 2, 2, 61, 55, 3, 2, 2, 2,
-	62, 7, 3, 2, 2, 2, 63, 64, 9, 2, 2, 2, 64, 9, 3, 2, 2, 2, 65, 66, 7, 14,
+	62, 7, 3, 2, 2, 2, 63, 64, 9, 2, 2, 2, 64, 9, 3, 2, 2, 2, 65, 66, 7, 15,
 	2, 2, 66, 11, 3, 2, 2, 2, 67, 68, 7, 5, 2, 2, 68, 13, 3, 2, 2, 2, 69, 70,
-	5, 16, 9, 2, 70, 71, 7, 24, 2, 2, 71, 72, 5, 16, 9, 2, 72, 79, 3, 2, 2,
-	2, 73, 74, 7, 26, 2, 2, 74, 79, 5, 16, 9, 2, 75, 76, 7, 25, 2, 2, 76, 79,
+	5, 16, 9, 2, 70, 71, 7, 25, 2, 2, 71, 72, 5, 16, 9, 2, 72, 79, 3, 2, 2,
+	2, 73, 74, 7, 27, 2, 2, 74, 79, 5, 16, 9, 2, 75, 76, 7, 26, 2, 2, 76, 79,
 	5, 16, 9, 2, 77, 79, 5, 16, 9, 2, 78, 69, 3, 2, 2, 2, 78, 73, 3, 2, 2,
 	2, 78, 75, 3, 2, 2, 2, 78, 77, 3, 2, 2, 2, 79, 15, 3, 2, 2, 2, 80, 81,
-	7, 27, 2, 2, 81, 17, 3, 2, 2, 2, 82, 83, 8, 10, 1, 2, 83, 84, 7, 18, 2,
-	2, 84, 85, 7, 29, 2, 2, 85, 92, 7, 18, 2, 2, 86, 87, 7, 3, 2, 2, 87, 88,
+	7, 28, 2, 2, 81, 17, 3, 2, 2, 2, 82, 83, 8, 10, 1, 2, 83, 84, 7, 19, 2,
+	2, 84, 85, 7, 30, 2, 2, 85, 92, 7, 19, 2, 2, 86, 87, 7, 3, 2, 2, 87, 88,
 	5, 18, 10, 2, 88, 89, 7, 4, 2, 2, 89, 92, 3, 2, 2, 2, 90, 92, 5, 20, 11,
 	2, 91, 82, 3, 2, 2, 2, 91, 86, 3, 2, 2, 2, 91, 90, 3, 2, 2, 2, 92, 101,
 	3, 2, 2, 2, 93, 94, 12, 5, 2, 2, 94, 95, 5, 12, 7, 2, 95, 96, 5, 18, 10,
 	6, 96, 100, 3, 2, 2, 2, 97, 98, 12, 4, 2, 2, 98, 100, 5, 18, 10, 5, 99,
 	93, 3, 2, 2, 2, 99, 97, 3, 2, 2, 2, 100, 103, 3, 2, 2, 2, 101, 99, 3, 2,
 	2, 2, 101, 102, 3, 2, 2, 2, 102, 19, 3, 2, 2, 2, 103, 101, 3, 2, 2, 2,
-	104, 105, 8, 11, 1, 2, 105, 106, 7, 22, 2, 2, 106, 111, 3, 2, 2, 2, 107,
-	108, 12, 4, 2, 2, 108, 110, 7, 22, 2, 2, 109, 107, 3, 2, 2, 2, 110, 113,
+	104, 105, 8, 11, 1, 2, 105, 106, 7, 23, 2, 2, 106, 111, 3, 2, 2, 2, 107,
+	108, 12, 4, 2, 2, 108, 110, 7, 23, 2, 2, 109, 107, 3, 2, 2, 2, 110, 113,
 	3, 2, 2, 2, 111, 109, 3, 2, 2, 2, 111, 112, 3, 2, 2, 2, 112, 21, 3, 2,
-	2, 2, 113, 111, 3, 2, 2, 2, 114, 115, 8, 12, 1, 2, 115, 120, 7, 22, 2,
+	2, 2, 113, 111, 3, 2, 2, 2, 114, 115, 8, 12, 1, 2, 115, 120, 7, 23, 2,
 	2, 116, 120, 7, 3, 2, 2, 117, 120, 7, 4, 2, 2, 118, 120, 5, 12, 7, 2, 119,
 	114, 3, 2, 2, 2, 119, 116, 3, 2, 2, 2, 119, 117, 3, 2, 2, 2, 119, 118,
 	3, 2, 2, 2, 120, 131, 3, 2, 2, 2, 121, 122, 12, 10, 2, 2, 122, 130, 7,
-	22, 2, 2, 123, 124, 12, 9, 2, 2, 124, 130, 7, 3, 2, 2, 125, 126, 12, 8,
+	23, 2, 2, 123, 124, 12, 9, 2, 2, 124, 130, 7, 3, 2, 2, 125, 126, 12, 8,
 	2, 2, 126, 130, 7, 4, 2, 2, 127, 128, 12, 7, 2, 2, 128, 130, 5, 12, 7,
 	2, 129, 121, 3, 2, 2, 2, 129, 123, 3, 2, 2, 2, 129, 125, 3, 2, 2, 2, 129,
 	127, 3, 2, 2, 2, 130, 133, 3, 2, 2, 2, 131, 129, 3, 2, 2, 2, 131, 132,
@@ -77,13 +77,14 @@ var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
 
 var literalNames = []string{
-	"", "", "", "", "", "'title'", "'author'", "'subject'", "'keyword'", "'published'",
-	"'identifier'", "'filter'", "'date'", "", "", "", "", "'['", "']'",
+	"", "", "", "", "", "'title'", "'journal_title'", "'author'", "'subject'",
+	"'keyword'", "'published'", "'identifier'", "'filter'", "'date'", "", "",
+	"", "", "'['", "']'",
 }
 var symbolicNames = []string{
-	"", "LPAREN", "RPAREN", "BOOLEAN", "COLON", "TITLE", "AUTHOR", "SUBJECT",
-	"KEYWORD", "PUBLISHED", "IDENTIFIER", "FILTER", "DATE", "LBRACE", "WS1",
-	"ERROR_CHARACTER", "QUOTE", "LBRACKET", "RBRACKET", "RBRACE", "SEARCH_WORD",
+	"", "LPAREN", "RPAREN", "BOOLEAN", "COLON", "TITLE", "JOURNAL_TITLE", "AUTHOR",
+	"SUBJECT", "KEYWORD", "PUBLISHED", "IDENTIFIER", "FILTER", "DATE", "LBRACE",
+	"WS1", "ERROR_CHARACTER", "QUOTE", "LBRACKET", "RBRACKET", "RBRACE", "SEARCH_WORD",
 	"WS2", "TO", "AFTER", "BEFORE", "DATE_STRING", "WS3", "QUOTE_STR",
 }
 
@@ -126,28 +127,29 @@ const (
 	VirgoQueryBOOLEAN         = 3
 	VirgoQueryCOLON           = 4
 	VirgoQueryTITLE           = 5
-	VirgoQueryAUTHOR          = 6
-	VirgoQuerySUBJECT         = 7
-	VirgoQueryKEYWORD         = 8
-	VirgoQueryPUBLISHED       = 9
-	VirgoQueryIDENTIFIER      = 10
-	VirgoQueryFILTER          = 11
-	VirgoQueryDATE            = 12
-	VirgoQueryLBRACE          = 13
-	VirgoQueryWS1             = 14
-	VirgoQueryERROR_CHARACTER = 15
-	VirgoQueryQUOTE           = 16
-	VirgoQueryLBRACKET        = 17
-	VirgoQueryRBRACKET        = 18
-	VirgoQueryRBRACE          = 19
-	VirgoQuerySEARCH_WORD     = 20
-	VirgoQueryWS2             = 21
-	VirgoQueryTO              = 22
-	VirgoQueryAFTER           = 23
-	VirgoQueryBEFORE          = 24
-	VirgoQueryDATE_STRING     = 25
-	VirgoQueryWS3             = 26
-	VirgoQueryQUOTE_STR       = 27
+	VirgoQueryJOURNAL_TITLE   = 6
+	VirgoQueryAUTHOR          = 7
+	VirgoQuerySUBJECT         = 8
+	VirgoQueryKEYWORD         = 9
+	VirgoQueryPUBLISHED       = 10
+	VirgoQueryIDENTIFIER      = 11
+	VirgoQueryFILTER          = 12
+	VirgoQueryDATE            = 13
+	VirgoQueryLBRACE          = 14
+	VirgoQueryWS1             = 15
+	VirgoQueryERROR_CHARACTER = 16
+	VirgoQueryQUOTE           = 17
+	VirgoQueryLBRACKET        = 18
+	VirgoQueryRBRACKET        = 19
+	VirgoQueryRBRACE          = 20
+	VirgoQuerySEARCH_WORD     = 21
+	VirgoQueryWS2             = 22
+	VirgoQueryTO              = 23
+	VirgoQueryAFTER           = 24
+	VirgoQueryBEFORE          = 25
+	VirgoQueryDATE_STRING     = 26
+	VirgoQueryWS3             = 27
+	VirgoQueryQUOTE_STR       = 28
 )
 
 // VirgoQuery rules.
@@ -449,7 +451,7 @@ func (p *VirgoQuery) query_parts(_p int) (localctx IQuery_partsContext) {
 			p.Match(VirgoQueryRPAREN)
 		}
 
-	case VirgoQueryTITLE, VirgoQueryAUTHOR, VirgoQuerySUBJECT, VirgoQueryKEYWORD, VirgoQueryPUBLISHED, VirgoQueryIDENTIFIER, VirgoQueryFILTER, VirgoQueryDATE:
+	case VirgoQueryTITLE, VirgoQueryJOURNAL_TITLE, VirgoQueryAUTHOR, VirgoQuerySUBJECT, VirgoQueryKEYWORD, VirgoQueryPUBLISHED, VirgoQueryIDENTIFIER, VirgoQueryFILTER, VirgoQueryDATE:
 		{
 			p.SetState(30)
 			p.Field_query()
@@ -749,6 +751,10 @@ func (s *Field_typeContext) TITLE() antlr.TerminalNode {
 	return s.GetToken(VirgoQueryTITLE, 0)
 }
 
+func (s *Field_typeContext) JOURNAL_TITLE() antlr.TerminalNode {
+	return s.GetToken(VirgoQueryJOURNAL_TITLE, 0)
+}
+
 func (s *Field_typeContext) AUTHOR() antlr.TerminalNode {
 	return s.GetToken(VirgoQueryAUTHOR, 0)
 }
@@ -829,7 +835,7 @@ func (p *VirgoQuery) Field_type() (localctx IField_typeContext) {
 		p.SetState(61)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<VirgoQueryTITLE)|(1<<VirgoQueryAUTHOR)|(1<<VirgoQuerySUBJECT)|(1<<VirgoQueryKEYWORD)|(1<<VirgoQueryPUBLISHED)|(1<<VirgoQueryIDENTIFIER)|(1<<VirgoQueryFILTER))) != 0) {
+		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<VirgoQueryTITLE)|(1<<VirgoQueryJOURNAL_TITLE)|(1<<VirgoQueryAUTHOR)|(1<<VirgoQuerySUBJECT)|(1<<VirgoQueryKEYWORD)|(1<<VirgoQueryPUBLISHED)|(1<<VirgoQueryIDENTIFIER)|(1<<VirgoQueryFILTER))) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
