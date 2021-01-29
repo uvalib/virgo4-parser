@@ -328,6 +328,34 @@ func (v *SolrParser) visitRangeFieldType(ctx antlr.RuleNode) interface{} {
 	return "{" + out + "}"
 }
 
+func (v *SolrParser) getRangeBeforeAfterValues(date string) (string, string) {
+	// calculate the appropriate values for dates in BEFORE/AFTER clauses
+
+	// handle YYYY case
+	if t, err := time.Parse("2006", date); err == nil {
+		b := t.AddDate(-1, 0, 0)
+		a := t.AddDate(1, 0, 0)
+		return b.Format("2006"), a.Format("2006")
+	}
+
+	// handle YYYY-MM case
+	if t, err := time.Parse("2006-1", date); err == nil {
+		b := t.AddDate(0, -1, 0)
+		a := t.AddDate(0, 1, 0)
+		return b.Format("2006-01"), a.Format("2006-01")
+	}
+
+	// handle YYYY-MM-DD case
+	if t, err := time.Parse("2006-1-2", date); err == nil {
+		b := t.AddDate(0, 0, -1)
+		a := t.AddDate(0, 0, 1)
+		return b.Format("2006-01-02"), a.Format("2006-01-02")
+	}
+
+	// unhandled date format; just use the date that was passed
+	return date, date
+}
+
 func (v *SolrParser) visitRangeSearchString(ctx antlr.RuleNode) interface{} {
 	v.enterFunction("visitRangeSearchString()")
 	defer v.exitFunction()
@@ -352,11 +380,13 @@ func (v *SolrParser) visitRangeSearchString(ctx antlr.RuleNode) interface{} {
 
 		switch ctx.GetChild(0).(type) {
 		case antlr.TerminalNode:
+			before, after := v.getRangeBeforeAfterValues(value)
+
 			terminal := ctx.GetChild(0).(antlr.TerminalNode)
 			if terminal.GetSymbol().GetTokenType() == VirgoQueryLexerBEFORE {
-				rangeEnd = value
+				rangeEnd = before
 			} else {
-				rangeStart = value
+				rangeStart = after
 			}
 		}
 	}

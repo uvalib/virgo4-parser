@@ -194,15 +194,15 @@ func TestSolrShouldSucceed(t *testing.T) {
 		},
 		{
 			query: `date:{BEFORE 1945-12-06}`,
-			solr:  `_query_:"{!lucene df=published_daterange}([* TO 1945-12-06])"`,
+			solr:  `_query_:"{!lucene df=published_daterange}([* TO 1945-12-05])"`,
 		},
 		{
 			query: `date:{AFTER 1945}`,
-			solr:  `_query_:"{!lucene df=published_daterange}([1945 TO *])"`,
+			solr:  `_query_:"{!lucene df=published_daterange}([1946 TO *])"`,
 		},
 		{
 			query: `date:{<1945} AND date:{>1932} AND author:{Shelly}`,
-			solr:  `((_query_:"{!lucene df=published_daterange}([* TO 1945])" AND _query_:"{!lucene df=published_daterange}([1932 TO *])") AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)")`,
+			solr:  `((_query_:"{!lucene df=published_daterange}([* TO 1944])" AND _query_:"{!lucene df=published_daterange}([1933 TO *])") AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)")`,
 		},
 		{
 			query: `keyword:{cincinnati, ohio (home of the :reds:)}`,
