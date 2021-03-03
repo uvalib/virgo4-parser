@@ -560,7 +560,7 @@ func (v *SolrParser) initializeParser(query string, timeout int) (parseCtx parse
 
 	defer func() {
 		if x := recover(); x != nil {
-			err = fmt.Errorf("%v", x))
+			err = fmt.Errorf("%v", x)
 			log.Printf("ERROR: [V4QUERY] (recovered): %s", err.Error())
 		} else {
 			if parseCtx.lexerErrorListener.valid == false {
