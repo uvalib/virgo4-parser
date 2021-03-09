@@ -1,6 +1,7 @@
 package v4parser
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"strings"
@@ -13,23 +14,10 @@ import (
 //and is used by both the lexer and the parser
 type virgoErrorListener struct {
 	name     string
-	timer    *time.Timer
 	quiet    bool
 	valid    bool
 	errors   []string
 	warnings []string
-}
-
-func (eh *virgoErrorListener) checkForTimeout() {
-	if eh.timer == nil {
-		return
-	}
-
-	select {
-	case <-eh.timer.C:
-		panic("timeout exceeded")
-	default:
-	}
 }
 
 func (eh *virgoErrorListener) LogError(msg string) {
@@ -39,8 +27,6 @@ func (eh *virgoErrorListener) LogError(msg string) {
 
 	eh.errors = append(eh.errors, msg)
 	eh.valid = false
-
-	eh.checkForTimeout()
 }
 
 func (eh *virgoErrorListener) LogWarning(msg string) {
@@ -49,8 +35,6 @@ func (eh *virgoErrorListener) LogWarning(msg string) {
 	}
 
 	eh.warnings = append(eh.warnings, msg)
-
-	eh.checkForTimeout()
 }
 
 func (eh *virgoErrorListener) Errors() string {
@@ -64,29 +48,21 @@ func (eh *virgoErrorListener) Warnings() string {
 func (eh *virgoErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{},
 	line, column int, msg string, e antlr.RecognitionException) {
 	eh.LogError(fmt.Sprintf("Line %d, Column %d: %s", line, column, msg))
-
-	eh.checkForTimeout()
 }
 
 func (eh *virgoErrorListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex,
 	stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
 	eh.LogWarning("Ambiguous query")
-
-	eh.checkForTimeout()
 }
 
 func (eh *virgoErrorListener) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA,
 	startIndex, stopIndex int, conflictingAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
 	eh.LogWarning("Lexer full context")
-
-	eh.checkForTimeout()
 }
 
 func (eh *virgoErrorListener) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA,
 	startIndex, stopIndex, prediction int, configs antlr.ATNConfigSet) {
 	eh.LogWarning("Lexer context sensitivity")
-
-	eh.checkForTimeout()
 }
 
 // validator is an implementation of the v4Parser that just checks for errors.
@@ -100,31 +76,31 @@ func (v *validator) VisitErrorNode(node antlr.ErrorNode) {
 	v.valid = false
 }
 
-// validate will validate an input string and return true or false, with an optional timeout
-func validate(src string, timeout int) (valid bool, errors string) {
+type validateResponse struct {
+	valid  bool
+	errors string
+}
+
+// validate will validate an input string and return true or false
+func validate(src string) (res validateResponse) {
 	start := time.Now()
 
 	v := validator{valid: true}
 	l := virgoErrorListener{name: "lexer", valid: true}
 	p := virgoErrorListener{name: "parser", valid: true}
 
-	if timeout > 0 {
-		l.timer = time.NewTimer(time.Duration(timeout) * time.Second)
-		p.timer = time.NewTimer(time.Duration(timeout) * time.Second)
-	}
-
 	defer func() {
 		elapsedMS := int64(time.Since(start) / time.Millisecond)
 
 		if x := recover(); x != nil {
-			valid = false
-			errors = fmt.Sprintf("%v", x)
-			log.Printf("ERROR: [V4QUERY] (recovered): %s", errors)
+			res.valid = false
+			res.errors = fmt.Sprintf("%v", x)
+			log.Printf("ERROR: [V4QUERY] (recovered): %s", res.errors)
 		} else {
-			valid = v.valid && l.valid && p.valid
+			res.valid = v.valid && l.valid && p.valid
 
-			if valid == false {
-				errors = strings.Join([]string{"lexer: [" + l.Errors() + "]", "parser: [" + p.Errors() + "]"}, "; ")
+			if res.valid == false {
+				res.errors = strings.Join([]string{"lexer: [" + l.Errors() + "]", "parser: [" + p.Errors() + "]"}, "; ")
 			}
 		}
 
@@ -154,10 +130,31 @@ func validate(src string, timeout int) (valid bool, errors string) {
 
 // Validate will run validation with no timeout
 func Validate(src string) (bool, string) {
-	return validate(src, 0)
+	res := validate(src)
+	return res.valid, res.errors
 }
 
 // ValidateWithTimeout will run validation with a timeout
 func ValidateWithTimeout(src string, timeout int) (bool, string) {
-	return validate(src, timeout)
+	ch := make(chan validateResponse, 1)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
+
+	defer cancel()
+
+	go func() {
+		select {
+		case <-ctx.Done():
+			return
+		default:
+			ch <- validate(src)
+		}
+	}()
+
+	select {
+	case res := <-ch:
+		return res.valid, res.errors
+	case <-ctx.Done():
+		return false, ctx.Err().Error()
+	}
 }

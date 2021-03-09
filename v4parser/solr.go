@@ -1,6 +1,7 @@
 package v4parser
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -12,7 +13,7 @@ import (
 	"github.com/uvalib/antlr4/runtime/Go/antlr"
 )
 
-const EscapeQuote = `\"`
+const escapeQuote = `\"`
 
 // SolrParser will parse the query string into a format compatable with a solr search
 type SolrParser struct {
@@ -524,7 +525,7 @@ func (v *SolrParser) visitTerminal(terminal antlr.TerminalNode) interface{} {
 	case VirgoQueryLexerQUOTE:
 		// singly-escaped quote character that begins/ends a quoted string
 		// within a query fragment, which itself is quoted.
-		out = EscapeQuote
+		out = escapeQuote
 
 	case VirgoQueryLexerBOOLEAN:
 		// do not escape this; it is an explicit boolean operator
@@ -547,15 +548,10 @@ func (v *SolrParser) visitTerminal(terminal antlr.TerminalNode) interface{} {
 	return out
 }
 
-func (v *SolrParser) initializeParser(query string, timeout int) (parseCtx parseContext, err error) {
+func (v *SolrParser) initializeParser(query string) (parseCtx parseContext, err error) {
 	parseCtx = parseContext{
 		lexerErrorListener:  virgoErrorListener{name: "lexer", valid: true, quiet: true},
 		parserErrorListener: virgoErrorListener{name: "parser", valid: true, quiet: true},
-	}
-
-	if timeout > 0 {
-		parseCtx.lexerErrorListener.timer = time.NewTimer(time.Duration(timeout) * time.Second)
-		parseCtx.parserErrorListener.timer = time.NewTimer(time.Duration(timeout) * time.Second)
 	}
 
 	defer func() {
@@ -594,15 +590,20 @@ func (v *SolrParser) initializeParser(query string, timeout int) (parseCtx parse
 	return
 }
 
-func convert(v *SolrParser, query string, timeout int) (out string, err error) {
+type convertResponse struct {
+	out string
+	err error
+}
+
+func convert(v *SolrParser, query string) (res convertResponse) {
 	start := time.Now()
 
 	v.FieldValues = make(map[string][]string)
 
-	parseCtx, parseErr := v.initializeParser(query, timeout)
+	parseCtx, parseErr := v.initializeParser(query)
 
 	if parseErr != nil {
-		err = parseErr
+		res.err = parseErr
 		return
 	}
 
@@ -611,14 +612,14 @@ func convert(v *SolrParser, query string, timeout int) (out string, err error) {
 	raw := v.visit(parseCtx.tree)
 
 	if raw == nil {
-		err = errors.New("Empty query")
-		v.debug("ERROR: %s", err.Error())
+		res.err = errors.New("Empty query")
+		v.debug("ERROR: %s", res.err.Error())
 		return
 	}
 
-	out = raw.(string)
+	res.out = raw.(string)
 
-	v.debug("SUCCESS: QUERY: %s", out)
+	v.debug("SUCCESS: QUERY: %s", res.out)
 
 	elapsedMS := int64(time.Since(start) / time.Millisecond)
 
@@ -627,35 +628,61 @@ func convert(v *SolrParser, query string, timeout int) (out string, err error) {
 	return
 }
 
+func convertWithTimeout(v *SolrParser, query string, timeout int) (string, error) {
+	ch := make(chan convertResponse, 1)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
+
+	defer cancel()
+
+	go func() {
+		select {
+		case <-ctx.Done():
+			return
+		default:
+			ch <- convert(v, query)
+		}
+	}()
+
+	select {
+	case res := <-ch:
+		return res.out, res.err
+	case <-ctx.Done():
+		return "", ctx.Err()
+	}
+}
+
 // ConvertToSolr will convert a v4 query string into solr query string.
 func ConvertToSolr(query string) (string, error) {
 	v := SolrParser{}
-	return convert(&v, query, 0)
+	res := convert(&v, query)
+	return res.out, res.err
 }
 
 // ConvertToSolrWithParser will convert a v4 query string into solr query string.
 // The passed SolrPaser struct will be poulated with details about the items parsed.
 func ConvertToSolrWithParser(v *SolrParser, query string) (string, error) {
-	return convert(v, query, 0)
+	res := convert(v, query)
+	return res.out, res.err
 }
 
 // ConvertToSolrWithTimeout will convert a v4 query string into solr query string with a timeout.
 func ConvertToSolrWithTimeout(query string, timeout int) (string, error) {
 	v := SolrParser{}
-	return convert(&v, query, timeout)
+	return convertWithTimeout(&v, query, timeout)
 }
 
 // ConvertToSolrWithParserAndTimeout will convert a v4 query string into solr query string with a timeout.
 // The passed SolrPaser  struct will be poulated with details about the items parsed.
 func ConvertToSolrWithParserAndTimeout(v *SolrParser, query string, timeout int) (string, error) {
-	return convert(v, query, timeout)
+	return convertWithTimeout(v, query, timeout)
 }
 
 // ParseTree will generate a pretty parse tree
 func ParseTree(query string) string {
 	v := SolrParser{}
 
-	parseCtx, _ := v.initializeParser(query, 0)
+	parseCtx, _ := v.initializeParser(query)
 
 	return printSyntaxTree(parseCtx.parser, parseCtx.tree)
 }
