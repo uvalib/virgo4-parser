@@ -1,2 +1,2 @@
-github.com/uvalib/antlr4 v0.0.0-20200923134101-dff98b67fb18 h1:kq7Z42mUNIhvkL2nEVW3IBKMDde30Wb7QVixn7QaZNA=
-github.com/uvalib/antlr4 v0.0.0-20200923134101-dff98b67fb18/go.mod h1:cppH23VknRINksatSXBh5/05/3k5odnMJthcfkzpcZA=
+github.com/antlr/antlr4 v0.0.0-20210304020514-0f8bddcbc14b h1:8MsgPS/CrG3huIsmrNUDtc+33SWjTfYcRUw3CljEayU=
+github.com/antlr/antlr4 v0.0.0-20210304020514-0f8bddcbc14b/go.mod h1:T7PbCXFs94rrTttyxjbyT5+/1V8T2TYDejxUfHJjw1Y=

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/uvalib/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
 //virgoErrorListener implements the antlr.ErrorListener interface

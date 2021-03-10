@@ -1,4 +1,4 @@
-// Code generated from VirgoQuery.g4 by ANTLR 4.7.2. DO NOT EDIT.
+// Code generated from VirgoQuery.g4 by ANTLR 4.9.1. DO NOT EDIT.
 
 package v4parser // VirgoQuery
 import (
@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/uvalib/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
 // Suppress unused import errors
@@ -73,9 +73,6 @@ var parserATN = []uint16{
 	3, 2, 2, 2, 132, 23, 3, 2, 2, 2, 133, 131, 3, 2, 2, 2, 13, 33, 41, 61,
 	78, 91, 99, 101, 111, 119, 129, 131,
 }
-var deserializer = antlr.NewATNDeserializer(nil)
-var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
-
 var literalNames = []string{
 	"", "", "", "", "", "'title'", "'journal_title'", "'author'", "'subject'",
 	"'keyword'", "'published'", "'identifier'", "'filter'", "'date'", "", "",
@@ -93,21 +90,25 @@ var ruleNames = []string{
 	"boolean_op", "range_search_string", "date_string", "search_string", "search_part",
 	"quoted_search_part",
 }
-var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
-
-func init() {
-	for index, ds := range deserializedATN.DecisionToState {
-		decisionToDFA[index] = antlr.NewDFA(ds, index)
-	}
-}
 
 type VirgoQuery struct {
 	*antlr.BaseParser
 }
 
+// NewVirgoQuery produces a new parser instance for the optional input antlr.TokenStream.
+//
+// The *VirgoQuery instance produced may be reused by calling the SetInputStream method.
+// The initial parser configuration is expensive to construct, and the object is not thread-safe;
+// however, if used within a Golang sync.Pool, the construction cost amortizes well and the
+// objects can be used in a thread-safe manner.
 func NewVirgoQuery(input antlr.TokenStream) *VirgoQuery {
 	this := new(VirgoQuery)
-
+	deserializer := antlr.NewATNDeserializer(nil)
+	deserializedATN := deserializer.DeserializeFromUInt16(parserATN)
+	decisionToDFA := make([]*antlr.DFA, len(deserializedATN.DecisionToState))
+	for index, ds := range deserializedATN.DecisionToState {
+		decisionToDFA[index] = antlr.NewDFA(ds, index)
+	}
 	this.BaseParser = antlr.NewBaseParser(input)
 
 	this.Interpreter = antlr.NewParserATNSimulator(this, deserializedATN, decisionToDFA, antlr.NewPredictionContextCache())

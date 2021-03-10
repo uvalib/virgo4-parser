@@ -1,4 +1,4 @@
-// Code generated from VirgoQueryLexer.g4 by ANTLR 4.7.2. DO NOT EDIT.
+// Code generated from VirgoQueryLexer.g4 by ANTLR 4.9.1. DO NOT EDIT.
 
 package v4parser
 
@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"unicode"
 
-	"github.com/uvalib/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
 // Suppress unused import error
@@ -151,9 +151,6 @@ var serializedLexerAtn = []uint16{
 	18, 2, 9, 6, 2, 9, 22, 2, 9, 19, 2,
 }
 
-var lexerDeserializer = antlr.NewATNDeserializer(nil)
-var lexerAtn = lexerDeserializer.DeserializeFromUInt16(serializedLexerAtn)
-
 var lexerChannelNames = []string{
 	"DEFAULT_TOKEN_CHANNEL", "HIDDEN",
 }
@@ -191,18 +188,20 @@ type VirgoQueryLexer struct {
 	// TODO: EOF string
 }
 
-var lexerDecisionToDFA = make([]*antlr.DFA, len(lexerAtn.DecisionToState))
-
-func init() {
+// NewVirgoQueryLexer produces a new lexer instance for the optional input antlr.CharStream.
+//
+// The *VirgoQueryLexer instance produced may be reused by calling the SetInputStream method.
+// The initial lexer configuration is expensive to construct, and the object is not thread-safe;
+// however, if used within a Golang sync.Pool, the construction cost amortizes well and the
+// objects can be used in a thread-safe manner.
+func NewVirgoQueryLexer(input antlr.CharStream) *VirgoQueryLexer {
+	l := new(VirgoQueryLexer)
+	lexerDeserializer := antlr.NewATNDeserializer(nil)
+	lexerAtn := lexerDeserializer.DeserializeFromUInt16(serializedLexerAtn)
+	lexerDecisionToDFA := make([]*antlr.DFA, len(lexerAtn.DecisionToState))
 	for index, ds := range lexerAtn.DecisionToState {
 		lexerDecisionToDFA[index] = antlr.NewDFA(ds, index)
 	}
-}
-
-func NewVirgoQueryLexer(input antlr.CharStream) *VirgoQueryLexer {
-
-	l := new(VirgoQueryLexer)
-
 	l.BaseLexer = antlr.NewBaseLexer(input)
 	l.Interpreter = antlr.NewLexerATNSimulator(l, lexerAtn, lexerDecisionToDFA, antlr.NewPredictionContextCache())
 
