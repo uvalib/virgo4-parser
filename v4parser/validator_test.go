@@ -176,12 +176,17 @@ func TestSearchTip4b(t *testing.T) {
 	v.expectValidationSuccess(t)
 }
 
+// with SLL prediction mode, these remaining tests/benchmarks are now fast.  see:
+// * https://github.com/antlr/antlr4/blob/master/doc/faq/general.md  (section "Why is my expression parser slow?")
+// * https://github.com/antlr/antlr4/issues/374
+
 func TestSlowValidation(t *testing.T) {
 	v := v4ValidationQuery{query: `keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`}
 
 	v.expectValidationSuccess(t)
 }
 
+/*
 func TestSlowValidationWithTimeout(t *testing.T) {
 	v := v4ValidationQuery{
 		query:   `keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`,
@@ -190,6 +195,7 @@ func TestSlowValidationWithTimeout(t *testing.T) {
 
 	v.expectValidationFailure(t)
 }
+*/
 
 func BenchmarkSlowValidation(b *testing.B) {
 	v4parser.Validate(`keyword: { I have often thought that nothing would do more extensive good at small expense than the establishment of a small circulating library in every county, to consist of a few well-chosen books, to be lent to the people of the country under regulations as would secure their safe return in due time. }`)

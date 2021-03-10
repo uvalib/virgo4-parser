@@ -113,15 +113,15 @@ func validate(src string) (res validateResponse) {
 
 	lexer := NewVirgoQueryLexer(is)
 	lexer.RemoveErrorListeners()
-
 	lexer.AddErrorListener(&l)
 
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
 	parser := NewVirgoQuery(stream)
 	parser.RemoveErrorListeners()
-
 	parser.AddErrorListener(&p)
+
+	parser.GetInterpreter().SetPredictionMode(antlr.PredictionModeSLL)
 
 	antlr.ParseTreeWalkerDefault.Walk(&v, parser.Query())
 

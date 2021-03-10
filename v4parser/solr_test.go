@@ -396,6 +396,10 @@ func TestSolrShouldFail(t *testing.T) {
 	}
 }
 
+// with SLL prediction mode, these remaining tests/benchmarks are now fast.  see:
+// * https://github.com/antlr/antlr4/blob/master/doc/faq/general.md  (section "Why is my expression parser slow?")
+// * https://github.com/antlr/antlr4/issues/374
+
 func TestSlowConversion1(t *testing.T) {
 	v := v4SolrQuery{
 		query: slow1,
@@ -414,6 +418,7 @@ func TestSlowConversion2(t *testing.T) {
 	v.expectSolrConversionSuccess(t)
 }
 
+/*
 func TestSlowConversionWithTimeout(t *testing.T) {
 	v := v4SolrQuery{
 		query:   slow2,
@@ -422,6 +427,7 @@ func TestSlowConversionWithTimeout(t *testing.T) {
 
 	v.expectSolrConversionFailure(t)
 }
+*/
 
 func BenchmarkSlowConversion1(b *testing.B) {
 	v4parser.ConvertToSolr(slow1)

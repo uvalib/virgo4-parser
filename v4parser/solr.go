@@ -585,6 +585,8 @@ func (v *SolrParser) initializeParser(query string) (parseCtx parseContext, err 
 	parseCtx.parser.RemoveErrorListeners()
 	parseCtx.parser.AddErrorListener(&parseCtx.parserErrorListener)
 
+	parseCtx.parser.GetInterpreter().SetPredictionMode(antlr.PredictionModeSLL)
+
 	parseCtx.tree = parseCtx.parser.Query()
 
 	return
