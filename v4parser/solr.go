@@ -280,7 +280,7 @@ func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
 	v.enterFunction("visitFieldType()")
 	defer v.exitFunction()
 
-	// field_type : TITLE | AUTHOR | SUBJECT | KEYWORD | PUBLISHED | FILTER | IDENTIFIER
+	// field_type : TITLE | AUTHOR | SUBJECT | KEYWORD | PUBLISHED | FULLTEXT | FILTER | IDENTIFIER
 	childTree := ctx.GetChild(0)
 	t := childTree.GetPayload().(*antlr.CommonToken)
 	fieldType := t.GetText()

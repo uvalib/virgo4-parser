@@ -1,4 +1,4 @@
-// Code generated from VirgoQuery.g4 by ANTLR 4.9.1. DO NOT EDIT.
+// Code generated from VirgoQuery.g4 by ANTLR 4.9.3. DO NOT EDIT.
 
 package v4parser // VirgoQuery
 import "github.com/antlr/antlr4/runtime/Go/antlr"

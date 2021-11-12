@@ -348,6 +348,10 @@ func TestSolrShouldSucceed(t *testing.T) {
 			query: `journal_title:{nature} AND title:{orangutan}`,
 			solr:  `(_query_:"{!edismax qf=$journal_title_qf pf=$journal_title_pf}(nature)" AND _query_:"{!edismax qf=$title_qf pf=$title_pf}(orangutan)")`,
 		},
+		{
+			query: `fulltext:{Frank C.  MCCUE}`,
+			solr:  `_query_:"{!edismax qf=$fulltext_qf pf=$fulltext_pf}(Frank C. MCCUE)"`,
+		},
 	}
 
 	for _, test := range tests {
