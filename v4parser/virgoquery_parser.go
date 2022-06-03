@@ -1,121 +1,140 @@
-// Code generated from VirgoQuery.g4 by ANTLR 4.9.3. DO NOT EDIT.
+// Code generated from VirgoQuery.g4 by ANTLR 4.10.1. DO NOT EDIT.
 
 package v4parser // VirgoQuery
 import (
 	"fmt"
-	"reflect"
 	"strconv"
+	"sync"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/uvalib/antlr4/runtime/Go/antlr"
 )
 
 // Suppress unused import errors
 var _ = fmt.Printf
-var _ = reflect.Copy
 var _ = strconv.Itoa
-
-var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 31, 135,
-	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
-	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 3, 2,
-	3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 34, 10, 3, 3, 3,
-	3, 3, 3, 3, 3, 3, 7, 3, 40, 10, 3, 12, 3, 14, 3, 43, 11, 3, 3, 4, 3, 4,
-	3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4,
-	3, 4, 3, 4, 3, 4, 5, 4, 62, 10, 4, 3, 5, 3, 5, 3, 6, 3, 6, 3, 7, 3, 7,
-	3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 5, 8, 79, 10, 8,
-	3, 9, 3, 9, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3,
-	10, 5, 10, 92, 10, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 7, 10,
-	100, 10, 10, 12, 10, 14, 10, 103, 11, 10, 3, 11, 3, 11, 3, 11, 3, 11, 3,
-	11, 7, 11, 110, 10, 11, 12, 11, 14, 11, 113, 11, 11, 3, 12, 3, 12, 3, 12,
-	3, 12, 3, 12, 5, 12, 120, 10, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3,
-	12, 3, 12, 3, 12, 7, 12, 130, 10, 12, 12, 12, 14, 12, 133, 11, 12, 3, 12,
-	2, 6, 4, 18, 20, 22, 13, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 2, 3,
-	3, 2, 7, 15, 2, 142, 2, 24, 3, 2, 2, 2, 4, 33, 3, 2, 2, 2, 6, 61, 3, 2,
-	2, 2, 8, 63, 3, 2, 2, 2, 10, 65, 3, 2, 2, 2, 12, 67, 3, 2, 2, 2, 14, 78,
-	3, 2, 2, 2, 16, 80, 3, 2, 2, 2, 18, 91, 3, 2, 2, 2, 20, 104, 3, 2, 2, 2,
-	22, 119, 3, 2, 2, 2, 24, 25, 5, 4, 3, 2, 25, 26, 7, 2, 2, 3, 26, 3, 3,
-	2, 2, 2, 27, 28, 8, 3, 1, 2, 28, 29, 7, 3, 2, 2, 29, 30, 5, 4, 3, 2, 30,
-	31, 7, 4, 2, 2, 31, 34, 3, 2, 2, 2, 32, 34, 5, 6, 4, 2, 33, 27, 3, 2, 2,
-	2, 33, 32, 3, 2, 2, 2, 34, 41, 3, 2, 2, 2, 35, 36, 12, 5, 2, 2, 36, 37,
-	5, 12, 7, 2, 37, 38, 5, 4, 3, 6, 38, 40, 3, 2, 2, 2, 39, 35, 3, 2, 2, 2,
-	40, 43, 3, 2, 2, 2, 41, 39, 3, 2, 2, 2, 41, 42, 3, 2, 2, 2, 42, 5, 3, 2,
-	2, 2, 43, 41, 3, 2, 2, 2, 44, 45, 5, 8, 5, 2, 45, 46, 7, 6, 2, 2, 46, 47,
-	7, 17, 2, 2, 47, 48, 5, 18, 10, 2, 48, 49, 7, 23, 2, 2, 49, 62, 3, 2, 2,
-	2, 50, 51, 5, 8, 5, 2, 51, 52, 7, 6, 2, 2, 52, 53, 7, 17, 2, 2, 53, 54,
-	7, 23, 2, 2, 54, 62, 3, 2, 2, 2, 55, 56, 5, 10, 6, 2, 56, 57, 7, 6, 2,
-	2, 57, 58, 7, 17, 2, 2, 58, 59, 5, 14, 8, 2, 59, 60, 7, 23, 2, 2, 60, 62,
-	3, 2, 2, 2, 61, 44, 3, 2, 2, 2, 61, 50, 3, 2, 2, 2, 61, 55, 3, 2, 2, 2,
-	62, 7, 3, 2, 2, 2, 63, 64, 9, 2, 2, 2, 64, 9, 3, 2, 2, 2, 65, 66, 7, 16,
-	2, 2, 66, 11, 3, 2, 2, 2, 67, 68, 7, 5, 2, 2, 68, 13, 3, 2, 2, 2, 69, 70,
-	5, 16, 9, 2, 70, 71, 7, 26, 2, 2, 71, 72, 5, 16, 9, 2, 72, 79, 3, 2, 2,
-	2, 73, 74, 7, 28, 2, 2, 74, 79, 5, 16, 9, 2, 75, 76, 7, 27, 2, 2, 76, 79,
-	5, 16, 9, 2, 77, 79, 5, 16, 9, 2, 78, 69, 3, 2, 2, 2, 78, 73, 3, 2, 2,
-	2, 78, 75, 3, 2, 2, 2, 78, 77, 3, 2, 2, 2, 79, 15, 3, 2, 2, 2, 80, 81,
-	7, 29, 2, 2, 81, 17, 3, 2, 2, 2, 82, 83, 8, 10, 1, 2, 83, 84, 7, 20, 2,
-	2, 84, 85, 7, 31, 2, 2, 85, 92, 7, 20, 2, 2, 86, 87, 7, 3, 2, 2, 87, 88,
-	5, 18, 10, 2, 88, 89, 7, 4, 2, 2, 89, 92, 3, 2, 2, 2, 90, 92, 5, 20, 11,
-	2, 91, 82, 3, 2, 2, 2, 91, 86, 3, 2, 2, 2, 91, 90, 3, 2, 2, 2, 92, 101,
-	3, 2, 2, 2, 93, 94, 12, 5, 2, 2, 94, 95, 5, 12, 7, 2, 95, 96, 5, 18, 10,
-	6, 96, 100, 3, 2, 2, 2, 97, 98, 12, 4, 2, 2, 98, 100, 5, 18, 10, 5, 99,
-	93, 3, 2, 2, 2, 99, 97, 3, 2, 2, 2, 100, 103, 3, 2, 2, 2, 101, 99, 3, 2,
-	2, 2, 101, 102, 3, 2, 2, 2, 102, 19, 3, 2, 2, 2, 103, 101, 3, 2, 2, 2,
-	104, 105, 8, 11, 1, 2, 105, 106, 7, 24, 2, 2, 106, 111, 3, 2, 2, 2, 107,
-	108, 12, 4, 2, 2, 108, 110, 7, 24, 2, 2, 109, 107, 3, 2, 2, 2, 110, 113,
-	3, 2, 2, 2, 111, 109, 3, 2, 2, 2, 111, 112, 3, 2, 2, 2, 112, 21, 3, 2,
-	2, 2, 113, 111, 3, 2, 2, 2, 114, 115, 8, 12, 1, 2, 115, 120, 7, 24, 2,
-	2, 116, 120, 7, 3, 2, 2, 117, 120, 7, 4, 2, 2, 118, 120, 5, 12, 7, 2, 119,
-	114, 3, 2, 2, 2, 119, 116, 3, 2, 2, 2, 119, 117, 3, 2, 2, 2, 119, 118,
-	3, 2, 2, 2, 120, 131, 3, 2, 2, 2, 121, 122, 12, 10, 2, 2, 122, 130, 7,
-	24, 2, 2, 123, 124, 12, 9, 2, 2, 124, 130, 7, 3, 2, 2, 125, 126, 12, 8,
-	2, 2, 126, 130, 7, 4, 2, 2, 127, 128, 12, 7, 2, 2, 128, 130, 5, 12, 7,
-	2, 129, 121, 3, 2, 2, 2, 129, 123, 3, 2, 2, 2, 129, 125, 3, 2, 2, 2, 129,
-	127, 3, 2, 2, 2, 130, 133, 3, 2, 2, 2, 131, 129, 3, 2, 2, 2, 131, 132,
-	3, 2, 2, 2, 132, 23, 3, 2, 2, 2, 133, 131, 3, 2, 2, 2, 13, 33, 41, 61,
-	78, 91, 99, 101, 111, 119, 129, 131,
-}
-var literalNames = []string{
-	"", "", "", "", "", "'title'", "'journal_title'", "'author'", "'subject'",
-	"'keyword'", "'fulltext'", "'published'", "'identifier'", "'filter'", "'date'",
-	"", "", "", "", "'['", "']'",
-}
-var symbolicNames = []string{
-	"", "LPAREN", "RPAREN", "BOOLEAN", "COLON", "TITLE", "JOURNAL_TITLE", "AUTHOR",
-	"SUBJECT", "KEYWORD", "FULLTEXT", "PUBLISHED", "IDENTIFIER", "FILTER",
-	"DATE", "LBRACE", "WS1", "ERROR_CHARACTER", "QUOTE", "LBRACKET", "RBRACKET",
-	"RBRACE", "SEARCH_WORD", "WS2", "TO", "AFTER", "BEFORE", "DATE_STRING",
-	"WS3", "QUOTE_STR",
-}
-
-var ruleNames = []string{
-	"query", "query_parts", "field_query", "field_type", "range_field_type",
-	"boolean_op", "range_search_string", "date_string", "search_string", "search_part",
-	"quoted_search_part",
-}
+var _ = sync.Once{}
 
 type VirgoQuery struct {
 	*antlr.BaseParser
 }
 
-// NewVirgoQuery produces a new parser instance for the optional input antlr.TokenStream.
-//
-// The *VirgoQuery instance produced may be reused by calling the SetInputStream method.
-// The initial parser configuration is expensive to construct, and the object is not thread-safe;
-// however, if used within a Golang sync.Pool, the construction cost amortizes well and the
-// objects can be used in a thread-safe manner.
-func NewVirgoQuery(input antlr.TokenStream) *VirgoQuery {
-	this := new(VirgoQuery)
-	deserializer := antlr.NewATNDeserializer(nil)
-	deserializedATN := deserializer.DeserializeFromUInt16(parserATN)
-	decisionToDFA := make([]*antlr.DFA, len(deserializedATN.DecisionToState))
-	for index, ds := range deserializedATN.DecisionToState {
-		decisionToDFA[index] = antlr.NewDFA(ds, index)
-	}
-	this.BaseParser = antlr.NewBaseParser(input)
+var virgoqueryParserStaticData struct {
+	once                   sync.Once
+	serializedATN          []int32
+	literalNames           []string
+	symbolicNames          []string
+	ruleNames              []string
+	predictionContextCache *antlr.PredictionContextCache
+	atn                    *antlr.ATN
+	decisionToDFA          []*antlr.DFA
+}
 
-	this.Interpreter = antlr.NewParserATNSimulator(this, deserializedATN, decisionToDFA, antlr.NewPredictionContextCache())
-	this.RuleNames = ruleNames
-	this.LiteralNames = literalNames
-	this.SymbolicNames = symbolicNames
+func virgoqueryParserInit() {
+	staticData := &virgoqueryParserStaticData
+	staticData.literalNames = []string{
+		"", "", "", "", "", "'title'", "'journal_title'", "'author'", "'subject'",
+		"'keyword'", "'fulltext'", "'published'", "'identifier'", "'filter'",
+		"'date'", "", "", "", "", "'['", "']'",
+	}
+	staticData.symbolicNames = []string{
+		"", "LPAREN", "RPAREN", "BOOLEAN", "COLON", "TITLE", "JOURNAL_TITLE",
+		"AUTHOR", "SUBJECT", "KEYWORD", "FULLTEXT", "PUBLISHED", "IDENTIFIER",
+		"FILTER", "DATE", "LBRACE", "WS1", "ERROR_CHARACTER", "QUOTE", "LBRACKET",
+		"RBRACKET", "RBRACE", "SEARCH_WORD", "WS2", "TO", "AFTER", "BEFORE",
+		"DATE_STRING", "WS3", "QUOTE_STR",
+	}
+	staticData.ruleNames = []string{
+		"query", "query_parts", "field_query", "field_type", "range_field_type",
+		"boolean_op", "range_search_string", "date_string", "search_string",
+		"search_part", "quoted_search_part",
+	}
+	staticData.predictionContextCache = antlr.NewPredictionContextCache()
+	staticData.serializedATN = []int32{
+		4, 1, 29, 133, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
+		10, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 32, 8,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 38, 8, 1, 10, 1, 12, 1, 41, 9, 1, 1, 2,
+		1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,
+		1, 2, 1, 2, 1, 2, 1, 2, 3, 2, 60, 8, 2, 1, 3, 1, 3, 1, 4, 1, 4, 1, 5, 1,
+		5, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 3, 6, 77, 8, 6,
+		1, 7, 1, 7, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 3, 8,
+		90, 8, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 5, 8, 98, 8, 8, 10, 8, 12,
+		8, 101, 9, 8, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 5, 9, 108, 8, 9, 10, 9, 12,
+		9, 111, 9, 9, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 3, 10, 118, 8, 10, 1,
+		10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 5, 10, 128, 8, 10,
+		10, 10, 12, 10, 131, 9, 10, 1, 10, 0, 4, 2, 16, 18, 20, 11, 0, 2, 4, 6,
+		8, 10, 12, 14, 16, 18, 20, 0, 1, 1, 0, 5, 13, 140, 0, 22, 1, 0, 0, 0, 2,
+		31, 1, 0, 0, 0, 4, 59, 1, 0, 0, 0, 6, 61, 1, 0, 0, 0, 8, 63, 1, 0, 0, 0,
+		10, 65, 1, 0, 0, 0, 12, 76, 1, 0, 0, 0, 14, 78, 1, 0, 0, 0, 16, 89, 1,
+		0, 0, 0, 18, 102, 1, 0, 0, 0, 20, 117, 1, 0, 0, 0, 22, 23, 3, 2, 1, 0,
+		23, 24, 5, 0, 0, 1, 24, 1, 1, 0, 0, 0, 25, 26, 6, 1, -1, 0, 26, 27, 5,
+		1, 0, 0, 27, 28, 3, 2, 1, 0, 28, 29, 5, 2, 0, 0, 29, 32, 1, 0, 0, 0, 30,
+		32, 3, 4, 2, 0, 31, 25, 1, 0, 0, 0, 31, 30, 1, 0, 0, 0, 32, 39, 1, 0, 0,
+		0, 33, 34, 10, 3, 0, 0, 34, 35, 3, 10, 5, 0, 35, 36, 3, 2, 1, 4, 36, 38,
+		1, 0, 0, 0, 37, 33, 1, 0, 0, 0, 38, 41, 1, 0, 0, 0, 39, 37, 1, 0, 0, 0,
+		39, 40, 1, 0, 0, 0, 40, 3, 1, 0, 0, 0, 41, 39, 1, 0, 0, 0, 42, 43, 3, 6,
+		3, 0, 43, 44, 5, 4, 0, 0, 44, 45, 5, 15, 0, 0, 45, 46, 3, 16, 8, 0, 46,
+		47, 5, 21, 0, 0, 47, 60, 1, 0, 0, 0, 48, 49, 3, 6, 3, 0, 49, 50, 5, 4,
+		0, 0, 50, 51, 5, 15, 0, 0, 51, 52, 5, 21, 0, 0, 52, 60, 1, 0, 0, 0, 53,
+		54, 3, 8, 4, 0, 54, 55, 5, 4, 0, 0, 55, 56, 5, 15, 0, 0, 56, 57, 3, 12,
+		6, 0, 57, 58, 5, 21, 0, 0, 58, 60, 1, 0, 0, 0, 59, 42, 1, 0, 0, 0, 59,
+		48, 1, 0, 0, 0, 59, 53, 1, 0, 0, 0, 60, 5, 1, 0, 0, 0, 61, 62, 7, 0, 0,
+		0, 62, 7, 1, 0, 0, 0, 63, 64, 5, 14, 0, 0, 64, 9, 1, 0, 0, 0, 65, 66, 5,
+		3, 0, 0, 66, 11, 1, 0, 0, 0, 67, 68, 3, 14, 7, 0, 68, 69, 5, 24, 0, 0,
+		69, 70, 3, 14, 7, 0, 70, 77, 1, 0, 0, 0, 71, 72, 5, 26, 0, 0, 72, 77, 3,
+		14, 7, 0, 73, 74, 5, 25, 0, 0, 74, 77, 3, 14, 7, 0, 75, 77, 3, 14, 7, 0,
+		76, 67, 1, 0, 0, 0, 76, 71, 1, 0, 0, 0, 76, 73, 1, 0, 0, 0, 76, 75, 1,
+		0, 0, 0, 77, 13, 1, 0, 0, 0, 78, 79, 5, 27, 0, 0, 79, 15, 1, 0, 0, 0, 80,
+		81, 6, 8, -1, 0, 81, 82, 5, 18, 0, 0, 82, 83, 5, 29, 0, 0, 83, 90, 5, 18,
+		0, 0, 84, 85, 5, 1, 0, 0, 85, 86, 3, 16, 8, 0, 86, 87, 5, 2, 0, 0, 87,
+		90, 1, 0, 0, 0, 88, 90, 3, 18, 9, 0, 89, 80, 1, 0, 0, 0, 89, 84, 1, 0,
+		0, 0, 89, 88, 1, 0, 0, 0, 90, 99, 1, 0, 0, 0, 91, 92, 10, 3, 0, 0, 92,
+		93, 3, 10, 5, 0, 93, 94, 3, 16, 8, 4, 94, 98, 1, 0, 0, 0, 95, 96, 10, 2,
+		0, 0, 96, 98, 3, 16, 8, 3, 97, 91, 1, 0, 0, 0, 97, 95, 1, 0, 0, 0, 98,
+		101, 1, 0, 0, 0, 99, 97, 1, 0, 0, 0, 99, 100, 1, 0, 0, 0, 100, 17, 1, 0,
+		0, 0, 101, 99, 1, 0, 0, 0, 102, 103, 6, 9, -1, 0, 103, 104, 5, 22, 0, 0,
+		104, 109, 1, 0, 0, 0, 105, 106, 10, 2, 0, 0, 106, 108, 5, 22, 0, 0, 107,
+		105, 1, 0, 0, 0, 108, 111, 1, 0, 0, 0, 109, 107, 1, 0, 0, 0, 109, 110,
+		1, 0, 0, 0, 110, 19, 1, 0, 0, 0, 111, 109, 1, 0, 0, 0, 112, 113, 6, 10,
+		-1, 0, 113, 118, 5, 22, 0, 0, 114, 118, 5, 1, 0, 0, 115, 118, 5, 2, 0,
+		0, 116, 118, 3, 10, 5, 0, 117, 112, 1, 0, 0, 0, 117, 114, 1, 0, 0, 0, 117,
+		115, 1, 0, 0, 0, 117, 116, 1, 0, 0, 0, 118, 129, 1, 0, 0, 0, 119, 120,
+		10, 8, 0, 0, 120, 128, 5, 22, 0, 0, 121, 122, 10, 7, 0, 0, 122, 128, 5,
+		1, 0, 0, 123, 124, 10, 6, 0, 0, 124, 128, 5, 2, 0, 0, 125, 126, 10, 5,
+		0, 0, 126, 128, 3, 10, 5, 0, 127, 119, 1, 0, 0, 0, 127, 121, 1, 0, 0, 0,
+		127, 123, 1, 0, 0, 0, 127, 125, 1, 0, 0, 0, 128, 131, 1, 0, 0, 0, 129,
+		127, 1, 0, 0, 0, 129, 130, 1, 0, 0, 0, 130, 21, 1, 0, 0, 0, 131, 129, 1,
+		0, 0, 0, 11, 31, 39, 59, 76, 89, 97, 99, 109, 117, 127, 129,
+	}
+	deserializer := antlr.NewATNDeserializer(nil)
+	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
+	atn := staticData.atn
+	staticData.decisionToDFA = make([]*antlr.DFA, len(atn.DecisionToState))
+	decisionToDFA := staticData.decisionToDFA
+	for index, state := range atn.DecisionToState {
+		decisionToDFA[index] = antlr.NewDFA(state, index)
+	}
+}
+
+// VirgoQueryInit initializes any static state used to implement VirgoQuery. By default the
+// static state used to implement the parser is lazily initialized during the first call to
+// NewVirgoQuery(). You can call this function if you wish to initialize the static state ahead
+// of time.
+func VirgoQueryInit() {
+	staticData := &virgoqueryParserStaticData
+	staticData.once.Do(virgoqueryParserInit)
+}
+
+// NewVirgoQuery produces a new parser instance for the optional input antlr.TokenStream.
+func NewVirgoQuery(input antlr.TokenStream) *VirgoQuery {
+	VirgoQueryInit()
+	this := new(VirgoQuery)
+	this.BaseParser = antlr.NewBaseParser(input)
+	staticData := &virgoqueryParserStaticData
+	this.Interpreter = antlr.NewParserATNSimulator(this, staticData.atn, staticData.decisionToDFA, staticData.predictionContextCache)
+	this.RuleNames = staticData.ruleNames
+	this.LiteralNames = staticData.literalNames
+	this.SymbolicNames = staticData.symbolicNames
 	this.GrammarFileName = "VirgoQuery.g4"
 
 	return this
@@ -209,7 +228,13 @@ func NewQueryContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 func (s *QueryContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *QueryContext) Query_parts() IQuery_partsContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IQuery_partsContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IQuery_partsContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -331,12 +356,20 @@ func (s *Query_partsContext) LPAREN() antlr.TerminalNode {
 }
 
 func (s *Query_partsContext) AllQuery_parts() []IQuery_partsContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*IQuery_partsContext)(nil)).Elem())
-	var tst = make([]IQuery_partsContext, len(ts))
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(IQuery_partsContext); ok {
+			len++
+		}
+	}
 
-	for i, t := range ts {
-		if t != nil {
+	tst := make([]IQuery_partsContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(IQuery_partsContext); ok {
 			tst[i] = t.(IQuery_partsContext)
+			i++
 		}
 	}
 
@@ -344,7 +377,17 @@ func (s *Query_partsContext) AllQuery_parts() []IQuery_partsContext {
 }
 
 func (s *Query_partsContext) Query_parts(i int) IQuery_partsContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IQuery_partsContext)(nil)).Elem(), i)
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IQuery_partsContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -358,7 +401,13 @@ func (s *Query_partsContext) RPAREN() antlr.TerminalNode {
 }
 
 func (s *Query_partsContext) Field_query() IField_queryContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IField_queryContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IField_queryContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -368,7 +417,13 @@ func (s *Query_partsContext) Field_query() IField_queryContext {
 }
 
 func (s *Query_partsContext) Boolean_op() IBoolean_opContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IBoolean_opContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IBoolean_opContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -544,7 +599,13 @@ func NewField_queryContext(parser antlr.Parser, parent antlr.ParserRuleContext, 
 func (s *Field_queryContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *Field_queryContext) Field_type() IField_typeContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IField_typeContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IField_typeContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -562,7 +623,13 @@ func (s *Field_queryContext) LBRACE() antlr.TerminalNode {
 }
 
 func (s *Field_queryContext) Search_string() ISearch_stringContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISearch_stringContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ISearch_stringContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -576,7 +643,13 @@ func (s *Field_queryContext) RBRACE() antlr.TerminalNode {
 }
 
 func (s *Field_queryContext) Range_field_type() IRange_field_typeContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IRange_field_typeContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IRange_field_typeContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -586,7 +659,13 @@ func (s *Field_queryContext) Range_field_type() IRange_field_typeContext {
 }
 
 func (s *Field_queryContext) Range_search_string() IRange_search_stringContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IRange_search_stringContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IRange_search_stringContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -1112,12 +1191,20 @@ func NewRange_search_stringContext(parser antlr.Parser, parent antlr.ParserRuleC
 func (s *Range_search_stringContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *Range_search_stringContext) AllDate_string() []IDate_stringContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*IDate_stringContext)(nil)).Elem())
-	var tst = make([]IDate_stringContext, len(ts))
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(IDate_stringContext); ok {
+			len++
+		}
+	}
 
-	for i, t := range ts {
-		if t != nil {
+	tst := make([]IDate_stringContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(IDate_stringContext); ok {
 			tst[i] = t.(IDate_stringContext)
+			i++
 		}
 	}
 
@@ -1125,7 +1212,17 @@ func (s *Range_search_stringContext) AllDate_string() []IDate_stringContext {
 }
 
 func (s *Range_search_stringContext) Date_string(i int) IDate_stringContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IDate_stringContext)(nil)).Elem(), i)
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IDate_stringContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -1410,12 +1507,20 @@ func (s *Search_stringContext) LPAREN() antlr.TerminalNode {
 }
 
 func (s *Search_stringContext) AllSearch_string() []ISearch_stringContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISearch_stringContext)(nil)).Elem())
-	var tst = make([]ISearch_stringContext, len(ts))
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(ISearch_stringContext); ok {
+			len++
+		}
+	}
 
-	for i, t := range ts {
-		if t != nil {
+	tst := make([]ISearch_stringContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(ISearch_stringContext); ok {
 			tst[i] = t.(ISearch_stringContext)
+			i++
 		}
 	}
 
@@ -1423,7 +1528,17 @@ func (s *Search_stringContext) AllSearch_string() []ISearch_stringContext {
 }
 
 func (s *Search_stringContext) Search_string(i int) ISearch_stringContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISearch_stringContext)(nil)).Elem(), i)
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ISearch_stringContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -1437,7 +1552,13 @@ func (s *Search_stringContext) RPAREN() antlr.TerminalNode {
 }
 
 func (s *Search_stringContext) Search_part() ISearch_partContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISearch_partContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ISearch_partContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -1447,7 +1568,13 @@ func (s *Search_stringContext) Search_part() ISearch_partContext {
 }
 
 func (s *Search_stringContext) Boolean_op() IBoolean_opContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IBoolean_opContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IBoolean_opContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -1660,7 +1787,13 @@ func (s *Search_partContext) SEARCH_WORD() antlr.TerminalNode {
 }
 
 func (s *Search_partContext) Search_part() ISearch_partContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISearch_partContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ISearch_partContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -1822,7 +1955,13 @@ func (s *Quoted_search_partContext) RPAREN() antlr.TerminalNode {
 }
 
 func (s *Quoted_search_partContext) Boolean_op() IBoolean_opContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IBoolean_opContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IBoolean_opContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -1832,7 +1971,13 @@ func (s *Quoted_search_partContext) Boolean_op() IBoolean_opContext {
 }
 
 func (s *Quoted_search_partContext) Quoted_search_part() IQuoted_search_partContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IQuoted_search_partContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IQuoted_search_partContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil

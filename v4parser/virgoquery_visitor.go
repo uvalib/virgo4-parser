@@ -1,7 +1,7 @@
-// Code generated from VirgoQuery.g4 by ANTLR 4.9.3. DO NOT EDIT.
+// Code generated from VirgoQuery.g4 by ANTLR 4.10.1. DO NOT EDIT.
 
 package v4parser // VirgoQuery
-import "github.com/antlr/antlr4/runtime/Go/antlr"
+import "github.com/uvalib/antlr4/runtime/Go/antlr"
 
 // A complete Visitor for a parse tree produced by VirgoQuery.
 type VirgoQueryVisitor interface {
