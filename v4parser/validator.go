@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr4-go/antlr/v4"
 )
 
 //virgoErrorListener implements the antlr.ErrorListener interface
@@ -51,17 +51,17 @@ func (eh *virgoErrorListener) SyntaxError(recognizer antlr.Recognizer, offending
 }
 
 func (eh *virgoErrorListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex,
-	stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
+	stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs *antlr.ATNConfigSet) {
 	eh.LogWarning("Ambiguous query")
 }
 
 func (eh *virgoErrorListener) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA,
-	startIndex, stopIndex int, conflictingAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
+	startIndex, stopIndex int, conflictingAlts *antlr.BitSet, configs *antlr.ATNConfigSet) {
 	eh.LogWarning("Lexer full context")
 }
 
 func (eh *virgoErrorListener) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA,
-	startIndex, stopIndex, prediction int, configs antlr.ATNConfigSet) {
+	startIndex, stopIndex, prediction int, configs *antlr.ATNConfigSet) {
 	eh.LogWarning("Lexer context sensitivity")
 }
 

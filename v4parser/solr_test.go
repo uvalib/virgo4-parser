@@ -352,6 +352,10 @@ func TestSolrShouldSucceed(t *testing.T) {
 			query: `fulltext:{Frank C.  MCCUE}`,
 			solr:  `_query_:"{!edismax qf=$fulltext_qf pf=$fulltext_pf}(Frank C. MCCUE)"`,
 		},
+		{
+			query: `series:{Early imprints}`,
+			solr:  `_query_:"{!edismax qf=$series_qf pf=$series_pf}(Early imprints)"`,
+		},
 	}
 
 	for _, test := range tests {

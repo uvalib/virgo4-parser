@@ -1,5 +1,9 @@
 module github.com/uvalib/virgo4-parser
 
-go 1.12
+go 1.23.0
 
-require github.com/antlr/antlr4/runtime/Go/antlr v0.0.0-20220527190237-ee62e23da966
+toolchain go1.24.0
+
+require github.com/antlr4-go/antlr/v4 v4.13.1
+
+require golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr4-go/antlr/v4"
 )
 
 const escapeQuote = `\"`
@@ -280,7 +280,7 @@ func (v *SolrParser) visitFieldType(ctx antlr.RuleNode) interface{} {
 	v.enterFunction("visitFieldType()")
 	defer v.exitFunction()
 
-	// field_type : TITLE | AUTHOR | SUBJECT | KEYWORD | PUBLISHED | FULLTEXT | FILTER | IDENTIFIER
+	// field_type : TITLE | AUTHOR | SUBJECT | KEYWORD | PUBLISHED | FULLTEXT | SERIES | FILTER | IDENTIFIER
 	childTree := ctx.GetChild(0)
 	t := childTree.GetPayload().(*antlr.CommonToken)
 	fieldType := t.GetText()
