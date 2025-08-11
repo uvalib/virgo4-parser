@@ -356,6 +356,10 @@ func TestSolrShouldSucceed(t *testing.T) {
 			query: `series:{Early imprints}`,
 			solr:  `_query_:"{!edismax qf=$series_qf pf=$series_pf}(Early imprints)"`,
 		},
+		{
+			query: `collection: {UVA Press Collection }`,
+			solr:  `_query_:"{!edismax qf=$collection_qf pf=$collection_pf}(UVA Press Collection)"`,
+		},
 	}
 
 	for _, test := range tests {
