@@ -33,15 +33,15 @@ func virgoqueryParserInit() {
 	staticData := &VirgoQueryParserStaticData
 	staticData.LiteralNames = []string{
 		"", "", "", "", "", "'title'", "'journal_title'", "'author'", "'subject'",
-		"'keyword'", "'fulltext'", "'series'", "'collection'", "'published'",
-		"'identifier'", "'filter'", "'date'", "", "", "", "", "'['", "']'",
+		"'keyword'", "'fulltext'", "'series'", "'published'", "'identifier'",
+		"'filter'", "'date'", "", "", "", "", "'['", "']'",
 	}
 	staticData.SymbolicNames = []string{
 		"", "LPAREN", "RPAREN", "BOOLEAN", "COLON", "TITLE", "JOURNAL_TITLE",
-		"AUTHOR", "SUBJECT", "KEYWORD", "FULLTEXT", "SERIES", "COLLECTION",
-		"PUBLISHED", "IDENTIFIER", "FILTER", "DATE", "LBRACE", "WS1", "ERROR_CHARACTER",
-		"QUOTE", "LBRACKET", "RBRACKET", "RBRACE", "SEARCH_WORD", "WS2", "TO",
-		"AFTER", "BEFORE", "DATE_STRING", "WS3", "QUOTE_STR",
+		"AUTHOR", "SUBJECT", "KEYWORD", "FULLTEXT", "SERIES", "PUBLISHED", "IDENTIFIER",
+		"FILTER", "DATE", "LBRACE", "WS1", "ERROR_CHARACTER", "QUOTE", "LBRACKET",
+		"RBRACKET", "RBRACE", "SEARCH_WORD", "WS2", "TO", "AFTER", "BEFORE",
+		"DATE_STRING", "WS3", "QUOTE_STR",
 	}
 	staticData.RuleNames = []string{
 		"query", "query_parts", "field_query", "field_type", "range_field_type",
@@ -50,7 +50,7 @@ func virgoqueryParserInit() {
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 31, 133, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 30, 133, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 32, 8,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 38, 8, 1, 10, 1, 12, 1, 41, 9, 1, 1, 2,
@@ -63,7 +63,7 @@ func virgoqueryParserInit() {
 		9, 111, 9, 9, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 3, 10, 118, 8, 10, 1,
 		10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 5, 10, 128, 8, 10,
 		10, 10, 12, 10, 131, 9, 10, 1, 10, 0, 4, 2, 16, 18, 20, 11, 0, 2, 4, 6,
-		8, 10, 12, 14, 16, 18, 20, 0, 1, 1, 0, 5, 15, 140, 0, 22, 1, 0, 0, 0, 2,
+		8, 10, 12, 14, 16, 18, 20, 0, 1, 1, 0, 5, 14, 140, 0, 22, 1, 0, 0, 0, 2,
 		31, 1, 0, 0, 0, 4, 59, 1, 0, 0, 0, 6, 61, 1, 0, 0, 0, 8, 63, 1, 0, 0, 0,
 		10, 65, 1, 0, 0, 0, 12, 76, 1, 0, 0, 0, 14, 78, 1, 0, 0, 0, 16, 89, 1,
 		0, 0, 0, 18, 102, 1, 0, 0, 0, 20, 117, 1, 0, 0, 0, 22, 23, 3, 2, 1, 0,
@@ -73,33 +73,33 @@ func virgoqueryParserInit() {
 		0, 33, 34, 10, 3, 0, 0, 34, 35, 3, 10, 5, 0, 35, 36, 3, 2, 1, 4, 36, 38,
 		1, 0, 0, 0, 37, 33, 1, 0, 0, 0, 38, 41, 1, 0, 0, 0, 39, 37, 1, 0, 0, 0,
 		39, 40, 1, 0, 0, 0, 40, 3, 1, 0, 0, 0, 41, 39, 1, 0, 0, 0, 42, 43, 3, 6,
-		3, 0, 43, 44, 5, 4, 0, 0, 44, 45, 5, 17, 0, 0, 45, 46, 3, 16, 8, 0, 46,
-		47, 5, 23, 0, 0, 47, 60, 1, 0, 0, 0, 48, 49, 3, 6, 3, 0, 49, 50, 5, 4,
-		0, 0, 50, 51, 5, 17, 0, 0, 51, 52, 5, 23, 0, 0, 52, 60, 1, 0, 0, 0, 53,
-		54, 3, 8, 4, 0, 54, 55, 5, 4, 0, 0, 55, 56, 5, 17, 0, 0, 56, 57, 3, 12,
-		6, 0, 57, 58, 5, 23, 0, 0, 58, 60, 1, 0, 0, 0, 59, 42, 1, 0, 0, 0, 59,
+		3, 0, 43, 44, 5, 4, 0, 0, 44, 45, 5, 16, 0, 0, 45, 46, 3, 16, 8, 0, 46,
+		47, 5, 22, 0, 0, 47, 60, 1, 0, 0, 0, 48, 49, 3, 6, 3, 0, 49, 50, 5, 4,
+		0, 0, 50, 51, 5, 16, 0, 0, 51, 52, 5, 22, 0, 0, 52, 60, 1, 0, 0, 0, 53,
+		54, 3, 8, 4, 0, 54, 55, 5, 4, 0, 0, 55, 56, 5, 16, 0, 0, 56, 57, 3, 12,
+		6, 0, 57, 58, 5, 22, 0, 0, 58, 60, 1, 0, 0, 0, 59, 42, 1, 0, 0, 0, 59,
 		48, 1, 0, 0, 0, 59, 53, 1, 0, 0, 0, 60, 5, 1, 0, 0, 0, 61, 62, 7, 0, 0,
-		0, 62, 7, 1, 0, 0, 0, 63, 64, 5, 16, 0, 0, 64, 9, 1, 0, 0, 0, 65, 66, 5,
-		3, 0, 0, 66, 11, 1, 0, 0, 0, 67, 68, 3, 14, 7, 0, 68, 69, 5, 26, 0, 0,
-		69, 70, 3, 14, 7, 0, 70, 77, 1, 0, 0, 0, 71, 72, 5, 28, 0, 0, 72, 77, 3,
-		14, 7, 0, 73, 74, 5, 27, 0, 0, 74, 77, 3, 14, 7, 0, 75, 77, 3, 14, 7, 0,
+		0, 62, 7, 1, 0, 0, 0, 63, 64, 5, 15, 0, 0, 64, 9, 1, 0, 0, 0, 65, 66, 5,
+		3, 0, 0, 66, 11, 1, 0, 0, 0, 67, 68, 3, 14, 7, 0, 68, 69, 5, 25, 0, 0,
+		69, 70, 3, 14, 7, 0, 70, 77, 1, 0, 0, 0, 71, 72, 5, 27, 0, 0, 72, 77, 3,
+		14, 7, 0, 73, 74, 5, 26, 0, 0, 74, 77, 3, 14, 7, 0, 75, 77, 3, 14, 7, 0,
 		76, 67, 1, 0, 0, 0, 76, 71, 1, 0, 0, 0, 76, 73, 1, 0, 0, 0, 76, 75, 1,
-		0, 0, 0, 77, 13, 1, 0, 0, 0, 78, 79, 5, 29, 0, 0, 79, 15, 1, 0, 0, 0, 80,
-		81, 6, 8, -1, 0, 81, 82, 5, 20, 0, 0, 82, 83, 5, 31, 0, 0, 83, 90, 5, 20,
+		0, 0, 0, 77, 13, 1, 0, 0, 0, 78, 79, 5, 28, 0, 0, 79, 15, 1, 0, 0, 0, 80,
+		81, 6, 8, -1, 0, 81, 82, 5, 19, 0, 0, 82, 83, 5, 30, 0, 0, 83, 90, 5, 19,
 		0, 0, 84, 85, 5, 1, 0, 0, 85, 86, 3, 16, 8, 0, 86, 87, 5, 2, 0, 0, 87,
 		90, 1, 0, 0, 0, 88, 90, 3, 18, 9, 0, 89, 80, 1, 0, 0, 0, 89, 84, 1, 0,
 		0, 0, 89, 88, 1, 0, 0, 0, 90, 99, 1, 0, 0, 0, 91, 92, 10, 3, 0, 0, 92,
 		93, 3, 10, 5, 0, 93, 94, 3, 16, 8, 4, 94, 98, 1, 0, 0, 0, 95, 96, 10, 2,
 		0, 0, 96, 98, 3, 16, 8, 3, 97, 91, 1, 0, 0, 0, 97, 95, 1, 0, 0, 0, 98,
 		101, 1, 0, 0, 0, 99, 97, 1, 0, 0, 0, 99, 100, 1, 0, 0, 0, 100, 17, 1, 0,
-		0, 0, 101, 99, 1, 0, 0, 0, 102, 103, 6, 9, -1, 0, 103, 104, 5, 24, 0, 0,
-		104, 109, 1, 0, 0, 0, 105, 106, 10, 2, 0, 0, 106, 108, 5, 24, 0, 0, 107,
+		0, 0, 101, 99, 1, 0, 0, 0, 102, 103, 6, 9, -1, 0, 103, 104, 5, 23, 0, 0,
+		104, 109, 1, 0, 0, 0, 105, 106, 10, 2, 0, 0, 106, 108, 5, 23, 0, 0, 107,
 		105, 1, 0, 0, 0, 108, 111, 1, 0, 0, 0, 109, 107, 1, 0, 0, 0, 109, 110,
 		1, 0, 0, 0, 110, 19, 1, 0, 0, 0, 111, 109, 1, 0, 0, 0, 112, 113, 6, 10,
-		-1, 0, 113, 118, 5, 24, 0, 0, 114, 118, 5, 1, 0, 0, 115, 118, 5, 2, 0,
+		-1, 0, 113, 118, 5, 23, 0, 0, 114, 118, 5, 1, 0, 0, 115, 118, 5, 2, 0,
 		0, 116, 118, 3, 10, 5, 0, 117, 112, 1, 0, 0, 0, 117, 114, 1, 0, 0, 0, 117,
 		115, 1, 0, 0, 0, 117, 116, 1, 0, 0, 0, 118, 129, 1, 0, 0, 0, 119, 120,
-		10, 8, 0, 0, 120, 128, 5, 24, 0, 0, 121, 122, 10, 7, 0, 0, 122, 128, 5,
+		10, 8, 0, 0, 120, 128, 5, 23, 0, 0, 121, 122, 10, 7, 0, 0, 122, 128, 5,
 		1, 0, 0, 123, 124, 10, 6, 0, 0, 124, 128, 5, 2, 0, 0, 125, 126, 10, 5,
 		0, 0, 126, 128, 3, 10, 5, 0, 127, 119, 1, 0, 0, 0, 127, 121, 1, 0, 0, 0,
 		127, 123, 1, 0, 0, 0, 127, 125, 1, 0, 0, 0, 128, 131, 1, 0, 0, 0, 129,
@@ -154,26 +154,25 @@ const (
 	VirgoQueryKEYWORD         = 9
 	VirgoQueryFULLTEXT        = 10
 	VirgoQuerySERIES          = 11
-	VirgoQueryCOLLECTION      = 12
-	VirgoQueryPUBLISHED       = 13
-	VirgoQueryIDENTIFIER      = 14
-	VirgoQueryFILTER          = 15
-	VirgoQueryDATE            = 16
-	VirgoQueryLBRACE          = 17
-	VirgoQueryWS1             = 18
-	VirgoQueryERROR_CHARACTER = 19
-	VirgoQueryQUOTE           = 20
-	VirgoQueryLBRACKET        = 21
-	VirgoQueryRBRACKET        = 22
-	VirgoQueryRBRACE          = 23
-	VirgoQuerySEARCH_WORD     = 24
-	VirgoQueryWS2             = 25
-	VirgoQueryTO              = 26
-	VirgoQueryAFTER           = 27
-	VirgoQueryBEFORE          = 28
-	VirgoQueryDATE_STRING     = 29
-	VirgoQueryWS3             = 30
-	VirgoQueryQUOTE_STR       = 31
+	VirgoQueryPUBLISHED       = 12
+	VirgoQueryIDENTIFIER      = 13
+	VirgoQueryFILTER          = 14
+	VirgoQueryDATE            = 15
+	VirgoQueryLBRACE          = 16
+	VirgoQueryWS1             = 17
+	VirgoQueryERROR_CHARACTER = 18
+	VirgoQueryQUOTE           = 19
+	VirgoQueryLBRACKET        = 20
+	VirgoQueryRBRACKET        = 21
+	VirgoQueryRBRACE          = 22
+	VirgoQuerySEARCH_WORD     = 23
+	VirgoQueryWS2             = 24
+	VirgoQueryTO              = 25
+	VirgoQueryAFTER           = 26
+	VirgoQueryBEFORE          = 27
+	VirgoQueryDATE_STRING     = 28
+	VirgoQueryWS3             = 29
+	VirgoQueryQUOTE_STR       = 30
 )
 
 // VirgoQuery rules.
@@ -525,7 +524,7 @@ func (p *VirgoQuery) query_parts(_p int) (localctx IQuery_partsContext) {
 			}
 		}
 
-	case VirgoQueryTITLE, VirgoQueryJOURNAL_TITLE, VirgoQueryAUTHOR, VirgoQuerySUBJECT, VirgoQueryKEYWORD, VirgoQueryFULLTEXT, VirgoQuerySERIES, VirgoQueryCOLLECTION, VirgoQueryPUBLISHED, VirgoQueryIDENTIFIER, VirgoQueryFILTER, VirgoQueryDATE:
+	case VirgoQueryTITLE, VirgoQueryJOURNAL_TITLE, VirgoQueryAUTHOR, VirgoQuerySUBJECT, VirgoQueryKEYWORD, VirgoQueryFULLTEXT, VirgoQuerySERIES, VirgoQueryPUBLISHED, VirgoQueryIDENTIFIER, VirgoQueryFILTER, VirgoQueryDATE:
 		{
 			p.SetState(30)
 			p.Field_query()
@@ -895,7 +894,6 @@ type IField_typeContext interface {
 	PUBLISHED() antlr.TerminalNode
 	FULLTEXT() antlr.TerminalNode
 	SERIES() antlr.TerminalNode
-	COLLECTION() antlr.TerminalNode
 	IDENTIFIER() antlr.TerminalNode
 	FILTER() antlr.TerminalNode
 
@@ -967,10 +965,6 @@ func (s *Field_typeContext) SERIES() antlr.TerminalNode {
 	return s.GetToken(VirgoQuerySERIES, 0)
 }
 
-func (s *Field_typeContext) COLLECTION() antlr.TerminalNode {
-	return s.GetToken(VirgoQueryCOLLECTION, 0)
-}
-
 func (s *Field_typeContext) IDENTIFIER() antlr.TerminalNode {
 	return s.GetToken(VirgoQueryIDENTIFIER, 0)
 }
@@ -1019,7 +1013,7 @@ func (p *VirgoQuery) Field_type() (localctx IField_typeContext) {
 		p.SetState(61)
 		_la = p.GetTokenStream().LA(1)
 
-		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&65504) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&32736) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
