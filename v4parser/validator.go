@@ -10,8 +10,8 @@ import (
 	"github.com/antlr4-go/antlr/v4"
 )
 
-//virgoErrorListener implements the antlr.ErrorListener interface
-//and is used by both the lexer and the parser
+// virgoErrorListener implements the antlr.ErrorListener interface
+// and is used by both the lexer and the parser
 type virgoErrorListener struct {
 	name     string
 	quiet    bool
@@ -45,9 +45,9 @@ func (eh *virgoErrorListener) Warnings() string {
 	return strings.Join(eh.warnings, "; ")
 }
 
-func (eh *virgoErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{},
+func (eh *virgoErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol any,
 	line, column int, msg string, e antlr.RecognitionException) {
-	eh.LogError(fmt.Sprintf("Line %d, Column %d: %s", line, column, msg))
+	log.Printf("INFO: [V4QUERY] (%s) Line %d, Column %d: %s", eh.name, line, column, msg)
 }
 
 func (eh *virgoErrorListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex,
